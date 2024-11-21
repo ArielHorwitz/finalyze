@@ -1,72 +1,68 @@
-import arrow
+import argparse
+from pathlib import Path
 
-import polars as pl
-
-
-BALANCE_RAW_SCHEMA = {
-    "person": pl.String,
-    "date": pl.Date,
-    "amount": pl.Float64,
-    "category1": pl.String,
-    "category2": pl.String,
-}
-
-BALANCE_FULL_SCHEMA = {
-    "year": pl.Int32,
-    "month": pl.Int8,
-}
-NULLABLE_COLUMNS = ("category2",)
-
-
-def read_data():
-    df = pl.read_csv("balance.csv", schema=BALANCE_RAW_SCHEMA)
-    df = df.with_columns(
-        [
-            pl.col("date").dt.year().alias("year"),
-            pl.col("date").dt.month().alias("month"),
-        ]
-    )
-    with pl.Config(set_tbl_rows=20):
-        print(df)
-    # validate
-    expected_columns = set(BALANCE_RAW_SCHEMA.keys()) | set(BALANCE_FULL_SCHEMA.keys())
-    actual_columns = set(df.columns)
-    incompatible_columns = expected_columns ^ actual_columns
-    if incompatible_columns:
-        raise ValueError(f"{incompatible_columns=}")
-    for col in actual_columns:
-        if col in NULLABLE_COLUMNS:
-            continue
-        if indices := tuple(df[col].is_null().arg_true()):
-            raise ValueError(f"column {col!r} has nulls at indices: {indices}")
-    return df
-
-
-def filter_last_month(df):
-    last_month = arrow.now().shift(months=-1)
-    return df.filter(
-        pl.col("month") == last_month.month,
-        pl.col("year") == last_month.year,
-    )
-
-
-def category_amount(df):
-    return (
-        df.group_by("category1")
-        .agg(pl.col("amount").sum())
-        .sort("amount", descending=False)
-    )
+import analyze
+import bank_leumi
 
 
 def main():
-    raw_data = read_data()
-    print(raw_data.describe())
-    pl.Config.set_tbl_rows(1_000_000)
+    parser = argparse.ArgumentParser(description="Finnancial analysis and projection")
+    parser.add_argument(
+        "--output-file",
+        default="data/history.csv",
+        help="Output file",
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        help="Be verbose (can be used multiple times)",
+        action="count",
+        default=0,
+    )
+    parser.add_argument(
+        "--import-dir",
+        default="data",
+        help="Directory containing source data files",
+    )
+    parser.add_argument(
+        "--balance-pattern",
+        default="*balance*.xls",
+        help="File name pattern for account balance files exported from Bank Leumi",
+    )
+    parser.add_argument(
+        "--credit-pattern",
+        default="*credit*.xls",
+        help="File name pattern for credit card files exported from Bank Leumi",
+    )
+    args = parser.parse_args()
 
-    lf = raw_data.lazy()
-    last_month = filter_last_month(lf)
-    print(last_month.select(pl.col("amount").sum()).collect())
-    print(category_amount(last_month).collect())
+    verbose = args.verbose
+    if verbose:
+        print(f"{args=}")
+    import_dir = Path(args.import_dir)
+    balance_pattern = args.balance_pattern
+    credit_pattern = args.credit_pattern
+    output_file = Path(args.output_file)
+
+    balance_files = tuple(import_dir.glob(balance_pattern))
+    credit_files = tuple(import_dir.glob(credit_pattern))
+    if len(balance_files) + len(credit_files) == 0:
+        raise FileNotFoundError(
+            f"Did not find any source files in {import_dir}"
+            f" (using pattern for account balance files: '{balance_pattern}'"
+            f" and pattern for credit card files: '{credit_pattern}')"
+        )
+    if verbose:
+        print(f"{balance_files=}")
+        print(f"{credit_files=}")
+
+    historical_data = bank_leumi.parse_sources(
+        balance_files=balance_files,
+        credit_files=credit_files,
+        verbose=verbose,
+    )
+
+    analyze.analyze(historical_data)
 
 
 if __name__ == "__main__":
