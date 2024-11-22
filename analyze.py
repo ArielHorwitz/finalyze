@@ -1,19 +1,16 @@
 import arrow
 import polars as pl
 
-BALANCE_RAW_SCHEMA = {
-    # "person": pl.String,
+HISTORICAL_SCHEMA = {
     "date": pl.Date,
     "balance": pl.Float64,
     "description": pl.String,
-    "source": pl.String,
     "category1": pl.String,
-    # "category2": pl.String,
-}
-
-BALANCE_FULL_SCHEMA = {
+    "category2": pl.String,
+    "source": pl.String,
     "year": pl.Int32,
     "month": pl.Int8,
+    "hash": pl.UInt64,
 }
 NULLABLE_COLUMNS = ("category2",)
 
@@ -35,12 +32,11 @@ def add_metadata(df):
     return df.with_columns(
         pl.col("date").dt.year().alias("year"),
         pl.col("date").dt.month().alias("month"),
-        pl.col("description").alias("category1"),
     )
 
 
 def validate_historical_data(df):
-    expected_columns = set(BALANCE_RAW_SCHEMA.keys()) | set(BALANCE_FULL_SCHEMA.keys())
+    expected_columns = set(HISTORICAL_SCHEMA.keys())
     actual_columns = set(df.columns)
     incompatible_columns = expected_columns ^ actual_columns
     if incompatible_columns:

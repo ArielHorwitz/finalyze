@@ -3,6 +3,7 @@ from pathlib import Path
 
 import analyze
 import bank_leumi
+import tag
 
 
 def main():
@@ -44,6 +45,7 @@ def main():
     credit_pattern = args.credit_pattern
     output_file = Path(args.output_file)
 
+    tags_file = import_dir / "tags.csv"
     balance_files = tuple(import_dir.glob(balance_pattern))
     credit_files = tuple(import_dir.glob(credit_pattern))
     if len(balance_files) + len(credit_files) == 0:
@@ -55,12 +57,17 @@ def main():
     if verbose:
         print(f"{balance_files=}")
         print(f"{credit_files=}")
+        print(f"{tags_file=}")
 
     historical_data = bank_leumi.parse_sources(
         balance_files=balance_files,
         credit_files=credit_files,
         verbose=verbose,
     )
+    historical_data = tag.tag_transactions(historical_data, tags_file, True)
+    print(historical_data)
+    print(historical_data.describe())
+    return
 
     analyze.analyze(historical_data)
 
