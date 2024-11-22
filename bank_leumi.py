@@ -3,29 +3,13 @@ import math
 import pandas as pd
 import polars as pl
 
-PD_OPTIONS = (
-    "display.max_rows",
-    1_000_000,
-    "display.max_columns",
-    1_000,
-    "display.width",
-    1_000,
-)
-
-
-def _print_table(table, description, enable):
-    if not enable:
-        return
-    print(f"Showing table: {description}")
-    with pl.Config(tbl_rows=1_000_000, tbl_cols=1_000):
-        with pd.option_context(*PD_OPTIONS):
-            print(table)
+from plutil import print_table
 
 
 def parse_credit(*, input_file, verbose=False):
     def inner_parse(raw_pd_df, source_name):
         validate(raw_pd_df)
-        _print_table(raw_pd_df, f"raw {source_name}", verbose > 2)
+        print_table(raw_pd_df, f"raw {source_name}", verbose > 2)
         table = pl.from_pandas(raw_pd_df.iloc[2:-1])
         parsed = pl.DataFrame(
             {
@@ -38,7 +22,7 @@ def parse_credit(*, input_file, verbose=False):
                 # "notes": table.select(pl.col("4").cast(pl.String)),
             }
         )
-        _print_table(parsed.sort("date"), f"parsed {source_name}", verbose > 1)
+        print_table(parsed.sort("date"), f"parsed {source_name}", verbose > 1)
         return parsed
 
     def validate(raw_pd_df):
@@ -60,7 +44,7 @@ def parse_credit(*, input_file, verbose=False):
 
     # combine
     parsed = pl.concat((credit_raw, debit_raw))
-    _print_table(parsed, "parsed credit", verbose > 1)
+    print_table(parsed, "parsed credit", verbose > 1)
     return parsed
 
 
@@ -71,7 +55,7 @@ def parse_balance(*, input_file, verbose=False):
         assert balances_raw_pd.iloc[1, 0] == "תאריך"
     except AssertionError:
         raise ImportError(f"Unexpected format for {input_file}")
-    _print_table(balances_raw_pd, "raw balance", verbose > 2)
+    print_table(balances_raw_pd, "raw balance", verbose > 2)
     raw = pl.from_pandas(balances_raw_pd.iloc[2:])
     data = {
         "source": "Account txn",
@@ -83,10 +67,10 @@ def parse_balance(*, input_file, verbose=False):
         # "notes": raw.select(pl.col("7").cast(pl.String)),.
     }
     parsed = pl.DataFrame(data)
-    _print_table(parsed.sort("date"), "parsed balance", verbose > 1)
+    print_table(parsed.sort("date"), "parsed balance", verbose > 1)
     # remove direct credit card transactions
     filtered = parsed.filter(pl.col("description") != "לאומי ויזה")
-    _print_table(filtered.sort("date"), "filtered balance", verbose > 1)
+    print_table(filtered.sort("date"), "filtered balance", verbose > 1)
     return filtered
 
 
@@ -105,8 +89,8 @@ def parse_sources(*, balance_files, credit_files, verbose):
         .unique()
         .sort("date")
     )
-    _print_table(balance, "Balance", verbose)
-    _print_table(credit, "Credit", verbose)
+    print_table(balance, "Balance", verbose)
+    print_table(credit, "Credit", verbose)
     final = pl.concat((balance, credit))
-    _print_table(final.sort("date"), "Final", verbose)
+    print_table(final.sort("date"), "Final", verbose)
     return final
