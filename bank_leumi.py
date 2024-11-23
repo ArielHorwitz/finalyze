@@ -75,22 +75,14 @@ def parse_balance(*, input_file, verbose=False):
 
 
 def parse_sources(*, balance_files, credit_files, verbose):
-    balance = (
-        pl.concat(
-            parse_balance(input_file=file, verbose=verbose) for file in balance_files
-        )
-        .unique()
-        .sort("date")
-    )
-    credit = (
-        pl.concat(
-            parse_credit(input_file=file, verbose=verbose) for file in credit_files
-        )
-        .unique()
-        .sort("date")
-    )
-    print_table(balance, "Balance", verbose)
-    print_table(credit, "Credit", verbose)
-    final = pl.concat((balance, credit))
-    print_table(final.sort("date"), "Final", verbose)
+    balance = pl.concat(
+        parse_balance(input_file=file, verbose=verbose) for file in balance_files
+    ).unique()
+    credit = pl.concat(
+        parse_credit(input_file=file, verbose=verbose) for file in credit_files
+    ).unique()
+    print_table(balance.sort("date", "balance"), "Balance", verbose)
+    print_table(credit.sort("date", "balance"), "Credit", verbose)
+    final = pl.concat((balance, credit)).sort("date", "balance")
+    print_table(final, "Final", verbose)
     return final

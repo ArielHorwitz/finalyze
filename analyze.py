@@ -6,9 +6,9 @@ from utils import print_table
 HISTORICAL_SCHEMA = {
     "date": pl.Date,
     "balance": pl.Float64,
-    "description": pl.String,
     "category1": pl.String,
     "category2": pl.String,
+    "description": pl.String,
     "source": pl.String,
     "year": pl.Int32,
     "month": pl.Int8,
