@@ -1,13 +1,15 @@
 import argparse
 from pathlib import Path
 
+import arrow
+
 import analyze
 import bank_leumi
 import tag
 import utils
 
 
-def main():
+def parse_args():
     parser = argparse.ArgumentParser(description="Finnancial analysis and projection")
     parser.add_argument(
         "--output-file",
@@ -46,16 +48,29 @@ def main():
         action="store_true",
         help="Clear saved tags",
     )
-    args = parser.parse_args()
+    parser.add_argument(
+        "--flip-rtl",
+        action="store_true",
+        help="Flip non-English (RTL) text",
+    )
+    return parser.parse_args()
 
+
+def main():
+    args = parse_args()
     verbose = args.verbose
     if verbose:
         print(f"{args=}")
+    # Extract argument data
     import_dir = Path(args.import_dir)
     balance_pattern = args.balance_pattern
     credit_pattern = args.credit_pattern
     output_file = Path(args.output_file)
+    clear_tags = args.clear_tags
+    auto_cache_tags = args.auto_cache_tags
+    flip_rtl = args.flip_rtl
 
+    # Derive from argument data
     tags_file = import_dir / "tags.csv"
     balance_files = tuple(import_dir.glob(balance_pattern))
     credit_files = tuple(import_dir.glob(credit_pattern))
@@ -69,16 +84,18 @@ def main():
         print(f"{balance_files=}")
         print(f"{credit_files=}")
         print(f"{tags_file=}")
-    if args.clear_tags:
+    if clear_tags:
         tags_file.unlink()
 
+    # Main logic
     historical_data = bank_leumi.parse_sources(
         balance_files=balance_files,
         credit_files=credit_files,
         verbose=verbose,
     )
-    historical_data = utils.flip_rtl_column(historical_data, "description")
-    historical_data = tag.tag_transactions(historical_data, tags_file, args.auto_cache_tags)
+    if flip_rtl:
+        historical_data = utils.flip_rtl_column(historical_data, "description")
+    historical_data = tag.tag_transactions(historical_data, tags_file, auto_cache_tags)
     analyze.analyze(historical_data)
 
 
