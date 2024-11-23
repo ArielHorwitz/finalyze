@@ -8,71 +8,7 @@ import bank_leumi
 import tag
 import utils
 
-
-def parse_args():
-    parser = argparse.ArgumentParser(description="Finnancial analysis and projection")
-    parser.add_argument(
-        "--output-file",
-        default="data/history.csv",
-        help="Output file",
-    )
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        help="Be verbose (can be used multiple times)",
-        action="count",
-        default=0,
-    )
-    parser.add_argument(
-        "--full",
-        action="store_true",
-        help="Analyze full historical data (no date filters)",
-    )
-    parser.add_argument(
-        "-M",
-        "--month",
-        type=int,
-        default=arrow.now().shift(months=-1).month,
-        help="Month to analyze",
-    )
-    parser.add_argument(
-        "-Y",
-        "--year",
-        type=int,
-        default=arrow.now().shift(months=-1).year,
-        help="Year to analyze",
-    )
-    parser.add_argument(
-        "--import-dir",
-        default="data",
-        help="Directory containing source data files",
-    )
-    parser.add_argument(
-        "--balance-pattern",
-        default="*balance*.xls",
-        help="File name pattern for account balance files exported from Bank Leumi",
-    )
-    parser.add_argument(
-        "--credit-pattern",
-        default="*credit*.xls",
-        help="File name pattern for credit card files exported from Bank Leumi",
-    )
-    parser.add_argument(
-        "--auto-cache-tags",
-        action="store_true",
-        help="Used cached values for tags",
-    )
-    parser.add_argument(
-        "--clear-tags",
-        action="store_true",
-        help="Clear saved tags",
-    )
-    parser.add_argument(
-        "--flip-rtl",
-        action="store_true",
-        help="Flip non-English (RTL) text",
-    )
-    return parser.parse_args()
+DESCRIPTION = "Personal financial analysis tool"
 
 
 def main():
@@ -123,6 +59,75 @@ def main():
     else:
         filtered_month = arrow.Arrow(year, month, 1)
     analyze.analyze(historical_data, month=filtered_month)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
+    parser.add_argument(
+        "--output-file",
+        default="data/history.csv",
+        help="Output file",
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        help="Be verbose (can be used multiple times)",
+        action="count",
+        default=0,
+    )
+    # Analysis
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help="Analyze full historical data (no date filters)",
+    )
+    parser.add_argument(
+        "-M",
+        "--month",
+        type=int,
+        default=arrow.now().shift(months=-1).month,
+        help="Month to analyze",
+    )
+    parser.add_argument(
+        "-Y",
+        "--year",
+        type=int,
+        default=arrow.now().shift(months=-1).year,
+        help="Year to analyze",
+    )
+    # Source data importing
+    parser.add_argument(
+        "--import-dir",
+        default="data",
+        help="Directory containing source data files",
+    )
+    parser.add_argument(
+        "--balance-pattern",
+        default="*balance*.xls",
+        help="File name pattern for account balance files exported from Bank Leumi",
+    )
+    parser.add_argument(
+        "--credit-pattern",
+        default="*credit*.xls",
+        help="File name pattern for credit card files exported from Bank Leumi",
+    )
+    # Source data tagging
+    parser.add_argument(
+        "--auto-cache-tags",
+        action="store_true",
+        help="Used cached values for tags",
+    )
+    parser.add_argument(
+        "--clear-tags",
+        action="store_true",
+        help="Clear saved tags",
+    )
+    parser.add_argument(
+        "--flip-rtl",
+        action="store_true",
+        help="Flip non-English (RTL) text",
+    )
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
