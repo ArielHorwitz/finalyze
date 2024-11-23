@@ -144,9 +144,12 @@ def write_tags(source_data, tags_file):
         if use_guess:
             tag1, tag2 = guess1, guess2
         else:
-            if "," not in user_input:
-                user_input += ","
-            tag1, tag2 = user_input.split(",", 1)
-            tag1 = tag1.strip()
-            tag2 = tag2.strip()
+            tag1, tag2 = split_tag_text(user_input, ",")
         tagger.apply_tags(index, tag1, tag2)
+
+
+def split_tag_text(text, separator: str = ","):
+    if separator not in text:
+        text += separator
+    tag1, tag2 = text.split(separator, 1)
+    return tag1.strip(), tag2.strip()
