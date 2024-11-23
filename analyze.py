@@ -6,12 +6,12 @@ import polars as pl
 from utils import print_table
 
 HISTORICAL_SCHEMA = {
+    "source": pl.String,
     "date": pl.Date,
     "balance": pl.Float64,
     "tag1": pl.String,
     "tag2": pl.String,
     "description": pl.String,
-    "source": pl.String,
     "year": pl.Int32,
     "month": pl.Int8,
     "hash": pl.UInt64,
