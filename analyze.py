@@ -3,33 +3,90 @@ from typing import Optional
 import arrow
 import polars as pl
 
+from source import get_source_data
+from tag import apply_tags
 from utils import print_table
 
-HISTORICAL_SCHEMA = {
-    "source": pl.String,
-    "date": pl.Date,
-    "balance": pl.Float64,
-    "tag1": pl.String,
-    "tag2": pl.String,
-    "description": pl.String,
-    "year": pl.Int32,
-    "month": pl.Int8,
-    "hash": pl.UInt64,
-}
-NULLABLE_COLUMNS = ("tag1", "tag2")
+COLUMN_ORDER = (
+    "source",
+    "date",
+    "amount",
+    "tag1",
+    "tag2",
+    "description",
+    "year",
+    "month",
+    "hash",
+)
 
 
-def analyze(historical_data, *, month: Optional[arrow.Arrow] = None):
-    historical_data = add_metadata(historical_data).select(*HISTORICAL_SCHEMA.keys())
+def add_subparser(subparsers):
+    parser = subparsers.add_parser("analyze", help="Analyze historical data")
+    parser.set_defaults(func=run)
+    parser.add_argument(
+        "-T",
+        "--lenient",
+        action="store_true",
+        help="Do not perform strict data validation",
+    )
+    filters = parser.add_argument_group("FILTERS")
+    filters.add_argument(
+        "--full",
+        action="store_true",
+        help="Analyze full historical data (no date filters)",
+    )
+    filters.add_argument(
+        "-M",
+        "--month",
+        type=int,
+        default=arrow.now().shift(months=-1).month,
+        help="Month to analyze",
+    )
+    filters.add_argument(
+        "-Y",
+        "--year",
+        type=int,
+        default=arrow.now().shift(months=-1).year,
+        help="Year to analyze",
+    )
+
+
+def run(args):
+    verbose = args.verbose
+    tags_file = args.tags_file
+    strict = not args.lenient
+    analyze_full = args.full
+    year = args.year
+    month = args.month
+    flip_rtl = args.flip_rtl
+    if analyze_full:
+        filtered_month = None
+    else:
+        filtered_month = arrow.Arrow(year, month, 1)
+    source_data = get_source_data(args)
+    tagged_data = apply_tags(source_data, tags_file)
+    analyze(tagged_data, strict=strict, verbose=verbose, month=filtered_month)
+
+
+def analyze(
+    source_data,
+    *,
+    verbose: bool = False,
+    strict: bool = True,
+    month: Optional[arrow.Arrow] = None,
+):
+    source_data = add_metadata(source_data).select(*COLUMN_ORDER)
+    print_table(source_data, "prefilter source", verbose > 1)
     if month is not None:
-        historical_data = filter_month(historical_data, month)
+        source_data = filter_month(source_data, month)
+    print_table(source_data, "source")
+    if strict:
+        validate_tags(source_data)
 
-    print_table(historical_data, "historical")
-    validate_historical_data(historical_data)
-
-    lf = historical_data.lazy()
-    print_table(lf.select(pl.col("balance").sum()).collect(), "Total balance")
+    lf = source_data.lazy()
+    total_sum = lf.select(pl.col("amount").sum()).collect()["amount"][0]
     print_table(tag_amount(lf).collect(), "By tags")
+    print(f"Total sum: {total_sum}")
 
 
 def add_metadata(df):
@@ -46,37 +103,28 @@ def filter_month(df, month):
     )
 
 
-def validate_historical_data(df):
-    expected_columns = set(HISTORICAL_SCHEMA.keys())
-    actual_columns = set(df.columns)
-    incompatible_columns = expected_columns ^ actual_columns
-    if incompatible_columns:
-        raise ValueError(f"Found incompatible columns: {incompatible_columns}")
-    for col in actual_columns:
-        if col in NULLABLE_COLUMNS:
-            continue
-        if indices := tuple(df[col].is_null().arg_true()):
-            raise ValueError(f"Column {col!r} has nulls at indices: {indices}")
+def validate_tags(source_data):
+    missing_tag_indices = tuple(source_data["tag1"].is_null().arg_true())
+    if missing_tag_indices:
+        raise ValueError(f"Missing tags at indices: {missing_tag_indices}")
 
 
 def tag_amount(df):
     by_tag1 = (
-        df.group_by("tag1")
-        .agg(pl.col("balance").sum())
-        .sort("balance", descending=False)
+        df.group_by("tag1").agg(pl.col("amount").sum()).sort("amount", descending=False)
     )
     return (
         df.group_by("tag1", "tag2")
-        .agg(pl.col("balance").sum())
+        .agg(pl.col("amount").sum())
         .join(by_tag1, on="tag1", how="left")
-        .rename({"balance_right": "balance1", "balance": "balance2"})
-        .sort(("balance1", "balance2"), descending=False)
+        .rename({"amount_right": "amount1", "amount": "amount2"})
+        .sort(("amount1", "amount2"), descending=False)
         # Nullify all but first of duplicate tag1
         .with_columns(
             pl.when(pl.col("tag1") == pl.col("tag1").shift(1))
             .then(None)
-            .otherwise(pl.col("balance1"))
-            .alias("balance1")
+            .otherwise(pl.col("amount1"))
+            .alias("amount1")
         )
-        .select(("balance1", "tag1", "tag2", "balance2"))
+        .select(("amount1", "tag1", "tag2", "amount2"))
     )

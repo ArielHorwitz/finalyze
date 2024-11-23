@@ -1,72 +1,20 @@
 import argparse
+import sys
 from pathlib import Path
 
 import arrow
 
 import analyze
-import bank_leumi
+import source
 import tag
 import utils
 
+APP_NAME = "finproj"
 DESCRIPTION = "Personal financial analysis tool"
 
 
 def main():
-    args = parse_args()
-    verbose = args.verbose
-    if verbose:
-        print(f"{args=}")
-    # Extract argument data
-    # Analysis
-    month = args.month
-    year = args.year
-    analyze_full = args.full
-    # Source data
-    account_files = tuple(Path(f).resolve() for f in args.account_files)
-    credit_files = tuple(Path(f).resolve() for f in args.credit_files)
-    flip_rtl = args.flip_rtl
-    # Tagging
-    tags_file = Path(args.tags_file).resolve()
-    tag_missing = args.tag_missing
-    clear_tags = args.clear_tags
-    auto_cache_tags = args.auto_cache_tags
-
-    if verbose:
-        print("Account files:")
-        for f in account_files:
-            print(f"  {f}")
-        print("Credit files:")
-        for f in credit_files:
-            print(f"  {f}")
-        print(f"{tags_file=}")
-    if clear_tags and tags_file.is_file():
-        tags_file.replace(f"{tags_file}.bak")
-
-    # Main logic
-    if len(account_files) + len(credit_files) == 0:
-        raise FileNotFoundError("No source files provided")
-    historical_data = bank_leumi.parse_sources(
-        balance_files=account_files,
-        credit_files=credit_files,
-        verbose=verbose,
-    )
-    if flip_rtl:
-        historical_data = utils.flip_rtl_column(historical_data, "description")
-    historical_data = tag.tag_transactions(
-        historical_data,
-        tags_file=tags_file,
-        auto_cache=auto_cache_tags,
-        tag_missing=tag_missing,
-    )
-    if analyze_full:
-        filtered_month = None
-    else:
-        filtered_month = arrow.Arrow(year, month, 1)
-    analyze.analyze(historical_data, month=filtered_month)
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(description=DESCRIPTION)
+    parser = argparse.ArgumentParser(prog=APP_NAME, description=DESCRIPTION)
     parser.add_argument(
         "-v",
         "--verbose",
@@ -74,67 +22,49 @@ def parse_args():
         action="count",
         default=0,
     )
-    # Analysis
-    analysis_group = parser.add_argument_group("ANALYSIS")
-    analysis_group.add_argument(
-        "--full",
+    parser.add_argument(
+        "-d",
+        "--dataset-name",
+        default="default",
+        help="Dataset name (default: 'default')",
+    )
+    parser.add_argument(
+        "--data-dir",
+        help=f"Data directory (default: ~/.local/{APP_NAME}/data)",
+    )
+    parser.add_argument(
+        "--isolate-tags",
         action="store_true",
-        help="Analyze full historical data (no date filters)",
+        help="Use separate dataset-specific tag data file",
     )
-    analysis_group.add_argument(
-        "-M",
-        "--month",
-        type=int,
-        default=arrow.now().shift(months=-1).month,
-        help="Month to analyze",
-    )
-    analysis_group.add_argument(
-        "-Y",
-        "--year",
-        type=int,
-        default=arrow.now().shift(months=-1).year,
-        help="Year to analyze",
-    )
-    # Source data importing
-    source_group = parser.add_argument_group("SOURCES")
-    source_group.add_argument(
-        "--account-files",
-        nargs="*",
-        help="Account balance .xls files exported from Bank Leumi",
-    )
-    source_group.add_argument(
-        "--credit-files",
-        nargs="*",
-        help="Credit card .xls files exported from Bank Leumi",
-    )
-    source_group.add_argument(
+    parser.add_argument(
         "--flip-rtl",
         action="store_true",
         help="Flip non-English (RTL) text",
     )
-    # Source data tagging
-    tag_group = parser.add_argument_group("TAGGING")
-    tag_group.add_argument(
-        "--tags-file",
-        required=True,
-        help="Tag data file",
-    )
-    tag_group.add_argument(
-        "--tag-missing",
-        action="store_true",
-        help="Prompt for missing tags",
-    )
-    tag_group.add_argument(
-        "--auto-cache-tags",
-        action="store_true",
-        help="Used cached values for tags",
-    )
-    tag_group.add_argument(
-        "--clear-tags",
-        action="store_true",
-        help="Clear saved tags",
-    )
-    return parser.parse_args()
+    subparsers = parser.add_subparsers(dest="subcommand")
+    source.add_subparser(subparsers)
+    tag.add_subparser(subparsers)
+    analyze.add_subparser(subparsers)
+    args = parser.parse_args()
+
+    default_data_dir = Path.home() / ".local" / APP_NAME.lower() / "data"
+    args.data_dir = Path(args.data_dir or default_data_dir).resolve()
+    args.dataset_dir = args.data_dir / args.dataset_name
+    args.dataset_dir.mkdir(parents=True, exist_ok=True)
+    args.source_file = args.dataset_dir / "source.csv"
+    if args.isolate_tags:
+        args.tags_file = args.dataset_dir / "tags.csv"
+    else:
+        args.tags_file = args.data_dir / "global_tags.csv"
+
+    if args.verbose:
+        print(f"{args=}")
+    if args.subcommand is None:
+        parser.print_help(file=sys.stderr)
+        print("\n\nNo subcommand selected.", file=sys.stderr)
+        exit(1)
+    args.func(args)
 
 
 if __name__ == "__main__":

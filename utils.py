@@ -27,15 +27,9 @@ def print_table(table, description: str = "unnamed", enable: bool = True):
             print(table)
 
 
-def flip_rtl(text):
-    if set(text) - ENGLISH:
-        return text[::-1]
-    return text
-
-
 def flip_rtl_column(df, column_name):
     fixed_column = pl.col(column_name).map_elements(
-        lambda x: flip_rtl(x),
+        lambda text: text[::-1] if set(text) - ENGLISH else text,
         return_dtype=pl.String,
     )
     return df.with_columns(fixed_column)
