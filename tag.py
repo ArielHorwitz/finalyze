@@ -2,21 +2,21 @@ import polars as pl
 
 TAG_SCHEMA = {
     "hash": pl.UInt64,
-    "category1": pl.String,
-    "category2": pl.String,
+    "tag1": pl.String,
+    "tag2": pl.String,
 }
 
 
 def write_tags(historical_data, tags_file, auto_cache: bool = False):
     existing_tags = pl.read_csv(tags_file, schema=TAG_SCHEMA)
-    untagged_indices = historical_data["category1"].is_null().arg_true()
+    untagged_indices = historical_data["tag1"].is_null().arg_true()
     new_hashes = []
-    new_category1 = []
-    new_category2 = []
+    new_tag1 = []
+    new_tag2 = []
     cached_map = {}
     for row in historical_data.iter_rows(named=True):
-        if row["category1"]:
-            cached_map[row["description"]] = (row["category1"], row["category2"])
+        if row["tag1"]:
+            cached_map[row["description"]] = (row["tag1"], row["tag2"])
     cached1, cached2 = None, None
     cached_repr = ""
     for index in untagged_indices:
@@ -34,28 +34,28 @@ def write_tags(historical_data, tags_file, auto_cache: bool = False):
             cached_repr = ""
         print(f"[{description[:30]:<30}] {date}  {amount:<10} {cached_repr}")
         if cached_values is not None and auto_cache:
-            category1 = cached1
-            category2 = cached2
+            tag1 = cached1
+            tag2 = cached2
             print(f"Using cached values: {cached_repr}")
         else:
-            category1 = input(f"Category 1: ")
-            cache_shoot_and_miss = category1 == "" and cached_values is None
-            if category1 in ("quit", "stop") or cache_shoot_and_miss:
+            tag1 = input(f"Tag 1: ")
+            cache_shoot_and_miss = tag1 == "" and cached_values is None
+            if tag1 in ("quit", "stop") or cache_shoot_and_miss:
                 break
-            elif category1 == "":
-                category1 = cached1
-                category2 = cached2
+            elif tag1 == "":
+                tag1 = cached1
+                tag2 = cached2
             else:
-                category2 = input(f"Category 2: ")
-        cached_map[description] = (category1, category2)
+                tag2 = input(f"Tag 2: ")
+        cached_map[description] = (tag1, tag2)
         new_hashes.append(row_hash)
-        new_category1.append(category1)
-        new_category2.append(category2)
+        new_tag1.append(tag1)
+        new_tag2.append(tag2)
 
     new_tag_data = {
         "hash": new_hashes,
-        "category1": new_category1,
-        "category2": new_category2,
+        "tag1": new_tag1,
+        "tag2": new_tag2,
     }
     new_tags = pl.DataFrame(new_tag_data, schema=TAG_SCHEMA)
     all_tags = pl.concat([existing_tags, new_tags])

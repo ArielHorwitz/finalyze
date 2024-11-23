@@ -8,15 +8,15 @@ from utils import print_table
 HISTORICAL_SCHEMA = {
     "date": pl.Date,
     "balance": pl.Float64,
-    "category1": pl.String,
-    "category2": pl.String,
+    "tag1": pl.String,
+    "tag2": pl.String,
     "description": pl.String,
     "source": pl.String,
     "year": pl.Int32,
     "month": pl.Int8,
     "hash": pl.UInt64,
 }
-NULLABLE_COLUMNS = ("category2",)
+NULLABLE_COLUMNS = ("tag2",)
 
 
 def analyze(historical_data, *, month: Optional[arrow.Arrow] = None):
@@ -30,7 +30,7 @@ def analyze(historical_data, *, month: Optional[arrow.Arrow] = None):
 
     lf = historical_data.lazy()
     print_table(lf.select(pl.col("balance").sum()).collect(), "Total balance")
-    print_table(category_amount(lf).collect(), "By category")
+    print_table(tag_amount(lf).collect(), "By tags")
 
 
 def add_metadata(df):
@@ -60,9 +60,9 @@ def validate_historical_data(df):
             raise ValueError(f"Column {col!r} has nulls at indices: {indices}")
 
 
-def category_amount(df):
+def tag_amount(df):
     return (
-        df.group_by("category1")
+        df.group_by("tag1")
         .agg(pl.col("balance").sum())
         .sort("balance", descending=False)
     )
