@@ -71,5 +71,12 @@ def tag_amount(df):
         .join(by_tag1, on="tag1", how="left")
         .rename({"balance_right": "balance1", "balance": "balance2"})
         .sort(("balance1", "balance2"), descending=False)
-        .select(("tag1", "balance1", "tag2", "balance2"))
+        # Nullify all but first of duplicate tag1
+        .with_columns(
+            pl.when(pl.col("tag1") == pl.col("tag1").shift(1))
+            .then(None)
+            .otherwise(pl.col("balance1"))
+            .alias("balance1")
+        )
+        .select(("balance1", "tag1", "tag2", "balance2"))
     )
