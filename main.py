@@ -41,8 +41,8 @@ def main():
         print(f"{balance_files=}")
         print(f"{credit_files=}")
         print(f"{tags_file=}")
-    if clear_tags:
-        tags_file.unlink()
+    if clear_tags and tags_file.is_file():
+        tags_file.replace(tags_file.parent / "tags.csv.bak")
 
     # Main logic
     historical_data = bank_leumi.parse_sources(
