@@ -14,11 +14,6 @@ def add_subparser(subparsers):
     parser = subparsers.add_parser("tag", help="Tag source data")
     parser.set_defaults(func=run)
     parser.add_argument(
-        "--auto-cache",
-        action="store_true",
-        help="Automatically use cached values for tags",
-    )
-    parser.add_argument(
         "--clear",
         action="store_true",
         help="Clear saved tags and quit",
@@ -32,7 +27,6 @@ def add_subparser(subparsers):
 
 def run(args):
     tags_file = args.tags_file
-    auto_cache = args.auto_cache
     clear = args.clear
     flip_rtl = args.flip_rtl
     print_path = args.path
@@ -46,11 +40,7 @@ def run(args):
     if not tags_file.is_file():
         tags_file.write_text(",".join(TAG_SCHEMA.keys()))
     source_data = get_source_data(args)
-    write_tags(
-        source_data,
-        tags_file=tags_file,
-        auto_cache=auto_cache,
-    )
+    write_tags(source_data, tags_file)
 
 
 def apply_tags(data, tags_file):
@@ -60,79 +50,103 @@ def apply_tags(data, tags_file):
     return data.join(tags, on="hash", how="left")
 
 
-def write_tags(source_data, tags_file, auto_cache: bool = False):
-    source_data = apply_tags(source_data, tags_file)
-    existing_tags = pl.read_csv(tags_file, schema=TAG_SCHEMA)
-    untagged_indices = source_data["tag1"].is_null().arg_true()
-    new_hashes = []
-    new_tag1 = []
-    new_tag2 = []
-    cached_map = {}
-    for row in source_data.iter_rows(named=True):
-        if row["tag1"]:
-            cached_map[row["description"]] = (row["tag1"], row["tag2"])
-    cached1, cached2 = None, None
-    cached_repr = ""
-    for index in untagged_indices:
-        row = source_data.row(index, named=True)
-        row_hash = row["hash"]
-        description = row["description"]
-        date = row["date"]
-        amount = row["amount"]
-        cached_values = cached_map.get(description)
-        skip_caching = False
-        if cached_values is not None:
-            cached1, cached2 = cached_values
-            cached_repr = f"[{cached1} / {cached2}]"
-        else:
-            cached1, cached2 = None, None
-            cached_repr = ""
-        print("Start with '-' to skip caching this entry.")
-        print("Up to 2 tags (comma-separated).")
-        print("Enter 'quit' to finish.")
-        print()
-        print(f"Applying tags for:")
-        print(f"    Date: {date}")
-        print(f"  Amount: {amount}")
-        print(f"    Desc: {description}")
-        print()
-        if cached_values is not None and auto_cache:
-            tag1 = cached1
-            tag2 = cached2
-            print(f"Using cached values: {cached_repr}")
-        else:
-            if cached_values is not None:
-                print(f"Cached as: {cached_repr}")
-            tags = input(f"Tags: ")
-            cache_shoot_and_miss = tags == "" and cached_values is None
-            if tags == "quit" or cache_shoot_and_miss:
-                break
-            elif tags == "":
-                tag1 = cached1
-                tag2 = cached2
-            else:
-                if tags.startswith("-"):
-                    tags = tags[1:]
-                    skip_caching = True
-                if "," in tags:
-                    tag1, tag2 = tags.split(",", 1)
-                    tag1 = tag1.strip()
-                    tag2 = tag2.strip()
-                else:
-                    tag1 = tags
-                    tag2 = ""
-        if not skip_caching:
-            cached_map[description] = (tag1, tag2)
-        new_hashes.append(row_hash)
-        new_tag1.append(tag1)
-        new_tag2.append(tag2)
+class Tagger:
+    def __init__(self, *, source_data, tags_file):
+        self.tags_file = tags_file
+        self.source = apply_tags(source_data, tags_file)
+        self.tags = pl.read_csv(tags_file, schema=TAG_SCHEMA)
 
-    new_tag_data = {
-        "hash": new_hashes,
-        "tag1": new_tag1,
-        "tag2": new_tag2,
-    }
-    new_tags = pl.DataFrame(new_tag_data, schema=TAG_SCHEMA)
-    all_tags = pl.concat([existing_tags, new_tags])
-    all_tags = all_tags.unique(subset="hash", keep="last")
-    all_tags.sort("tag1", "tag2", "hash").write_csv(tags_file)
+    def apply_tags(self, index, tag1, tag2):
+        row_hash = self.get_row(index)["hash"]
+        new_tag_data = {"hash": row_hash, "tag1": tag1, "tag2": tag2}
+        new_tags_row = pl.DataFrame(new_tag_data, schema=TAG_SCHEMA)
+        all_tags = pl.concat([self.tags, new_tags_row])
+        all_tags = all_tags.unique(subset="hash", keep="last")
+        self.tags = all_tags.sort("tag1", "tag2", "hash")
+        self.tags.write_csv(self.tags_file)
+        source = self.source.drop("hash").drop("tag1").drop("tag2")
+        self.source = apply_tags(source, self.tags_file)
+
+    def describe_row(self, index):
+        row = self.get_row(index)
+        lines = [
+            f"Applying tags for:",
+            f"  Source: {row['source']}",
+            f"    Date: {row['date']}",
+            f"  Amount: {row['amount']}",
+            f"    Desc: {row['description']}",
+        ]
+        return "\n".join(lines)
+
+    def describe_all_tags(self):
+        all_tags = {}
+        for row in self.source.iter_rows(named=True):
+            key = (row["tag1"], row["tag2"])
+            all_tags.setdefault(key, 0)
+            all_tags[key] += 1
+        all_tags.pop((None, None), None)
+        lines = ["All existing tags:"] + [
+            f"  [ {count:>3} ]  {tag1:>20} :: {tag2}"
+            for (tag1, tag2), count in sorted(all_tags.items())
+        ]
+        return "\n".join(lines)
+
+    def guess_tags(self, index):
+        tag_descriptions = {}
+        target_description = self.get_row(index)["description"]
+        for row in self.source.sort("date", descending=True).iter_rows(named=True):
+            if row["tag1"] is None:
+                continue
+            key = (row["tag1"], row["tag2"])
+            row_description = row["description"]
+            tag_descriptions.setdefault(key, set())
+            tag_descriptions[key].add(row_description)
+            if row_description == target_description:
+                return key
+        if not tag_descriptions:
+            return ("unknown", "")
+        description_counts = {
+            len(descriptions): tags for tags, descriptions in tag_descriptions.items()
+        }
+        greatest_count = max(description_counts.keys())
+        return description_counts[greatest_count]
+
+    def get_row(self, index):
+        return self.source.row(index, named=True)
+
+    def get_untagged_index(self):
+        indices = tuple(self.source["tag1"].is_null().arg_true())
+        if indices:
+            return indices[0]
+        return None
+
+
+def write_tags(source_data, tags_file):
+    tagger = Tagger(source_data=source_data, tags_file=tags_file)
+    line_separator = "===================="
+    while True:
+        index = tagger.get_untagged_index()
+        if index is None:
+            break
+        guess1, guess2 = tagger.guess_tags(index)
+        guess_repr = guess1
+        if guess2:
+            guess_repr = f"{guess_repr} [{guess2}]"
+        print()
+        print(line_separator)
+        print(tagger.describe_all_tags())
+        print()
+        print(tagger.describe_row(index))
+        print(f"   Guess: {guess_repr}")
+        print()
+        user_input = input(f"Tags: ")
+        use_guess = user_input == ""
+        if use_guess:
+            tag1, tag2 = guess1, guess2
+        else:
+            if "," not in user_input:
+                user_input += ","
+            tag1, tag2 = user_input.split(",", 1)
+            tag1 = tag1.strip()
+            tag2 = tag2.strip()
+        tagger.apply_tags(index, tag1, tag2)
