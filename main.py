@@ -17,44 +17,47 @@ def main():
     if verbose:
         print(f"{args=}")
     # Extract argument data
-    import_dir = Path(args.import_dir)
-    balance_pattern = args.balance_pattern
-    credit_pattern = args.credit_pattern
-    clear_tags = args.clear_tags
-    auto_cache_tags = args.auto_cache_tags
-    flip_rtl = args.flip_rtl
+    # Analysis
     month = args.month
     year = args.year
     analyze_full = args.full
-    tag = args.tag
+    # Source data
+    account_files = tuple(Path(f).resolve() for f in args.account_files)
+    credit_files = tuple(Path(f).resolve() for f in args.credit_files)
+    flip_rtl = args.flip_rtl
+    # Tagging
+    tags_file = Path(args.tags_file).resolve()
+    tag_missing = args.tag_missing
+    clear_tags = args.clear_tags
+    auto_cache_tags = args.auto_cache_tags
 
-    # Derive from argument data
-    tags_file = import_dir / "tags.csv"
-    balance_files = tuple(import_dir.glob(balance_pattern))
-    credit_files = tuple(import_dir.glob(credit_pattern))
-    if len(balance_files) + len(credit_files) == 0:
-        raise FileNotFoundError(
-            f"Did not find any source files in {import_dir}"
-            f" (using pattern for account balance files: '{balance_pattern}'"
-            f" and pattern for credit card files: '{credit_pattern}')"
-        )
     if verbose:
-        print(f"{sorted(balance_files)=}")
-        print(f"{sorted(credit_files)=}")
+        print("Account files:")
+        for f in account_files:
+            print(f"  {f}")
+        print("Credit files:")
+        for f in credit_files:
+            print(f"  {f}")
         print(f"{tags_file=}")
     if clear_tags and tags_file.is_file():
-        tags_file.replace(tags_file.parent / "tags.csv.bak")
+        tags_file.replace(f"{tags_file}.bak")
 
     # Main logic
+    if len(account_files) + len(credit_files) == 0:
+        raise FileNotFoundError("No source files provided")
     historical_data = bank_leumi.parse_sources(
-        balance_files=balance_files,
+        balance_files=account_files,
         credit_files=credit_files,
         verbose=verbose,
     )
     if flip_rtl:
         historical_data = utils.flip_rtl_column(historical_data, "description")
-    if tag:
-        historical_data = tag.tag_transactions(historical_data, tags_file, auto_cache_tags)
+    historical_data = tag.tag_transactions(
+        historical_data,
+        tags_file=tags_file,
+        auto_cache=auto_cache_tags,
+        tag_missing=tag_missing,
+    )
     if analyze_full:
         filtered_month = None
     else:
@@ -72,19 +75,20 @@ def parse_args():
         default=0,
     )
     # Analysis
-    parser.add_argument(
+    analysis_group = parser.add_argument_group("ANALYSIS")
+    analysis_group.add_argument(
         "--full",
         action="store_true",
         help="Analyze full historical data (no date filters)",
     )
-    parser.add_argument(
+    analysis_group.add_argument(
         "-M",
         "--month",
         type=int,
         default=arrow.now().shift(months=-1).month,
         help="Month to analyze",
     )
-    parser.add_argument(
+    analysis_group.add_argument(
         "-Y",
         "--year",
         type=int,
@@ -92,41 +96,43 @@ def parse_args():
         help="Year to analyze",
     )
     # Source data importing
-    parser.add_argument(
-        "--import-dir",
-        default="data",
-        help="Directory containing source data files",
+    source_group = parser.add_argument_group("SOURCES")
+    source_group.add_argument(
+        "--account-files",
+        nargs="*",
+        help="Account balance .xls files exported from Bank Leumi",
     )
-    parser.add_argument(
-        "--balance-pattern",
-        default="*balance*.xls",
-        help="File name pattern for account balance files exported from Bank Leumi",
+    source_group.add_argument(
+        "--credit-files",
+        nargs="*",
+        help="Credit card .xls files exported from Bank Leumi",
     )
-    parser.add_argument(
-        "--credit-pattern",
-        default="*credit*.xls",
-        help="File name pattern for credit card files exported from Bank Leumi",
+    source_group.add_argument(
+        "--flip-rtl",
+        action="store_true",
+        help="Flip non-English (RTL) text",
     )
     # Source data tagging
-    parser.add_argument(
-        "--tag",
+    tag_group = parser.add_argument_group("TAGGING")
+    tag_group.add_argument(
+        "--tags-file",
+        required=True,
+        help="Tag data file",
+    )
+    tag_group.add_argument(
+        "--tag-missing",
         action="store_true",
         help="Prompt for missing tags",
     )
-    parser.add_argument(
+    tag_group.add_argument(
         "--auto-cache-tags",
         action="store_true",
         help="Used cached values for tags",
     )
-    parser.add_argument(
+    tag_group.add_argument(
         "--clear-tags",
         action="store_true",
         help="Clear saved tags",
-    )
-    parser.add_argument(
-        "--flip-rtl",
-        action="store_true",
-        help="Flip non-English (RTL) text",
     )
     return parser.parse_args()
 

@@ -63,12 +63,13 @@ def write_tags(historical_data, tags_file, auto_cache: bool = False):
     all_tags.sort("tag1", "tag2", "hash").write_csv(tags_file)
 
 
-def tag_transactions(historical_data, tags_file, auto_cache: bool = False):
+def tag_transactions(historical_data, tags_file, auto_cache: bool = False, tag_missing: bool = False):
     hash_column = pl.concat_str(("date", "balance")).hash()
     historical_data = historical_data.with_columns(hash_column.alias("hash"))
     tagged_data = identify_transactions(historical_data, tags_file)
-    write_tags(tagged_data, tags_file, auto_cache)
-    tagged_data = identify_transactions(historical_data, tags_file)
+    if tag_missing:
+        write_tags(tagged_data, tags_file, auto_cache)
+        tagged_data = identify_transactions(historical_data, tags_file)
     return tagged_data
 
 
