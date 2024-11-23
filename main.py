@@ -38,8 +38,8 @@ def main():
             f" and pattern for credit card files: '{credit_pattern}')"
         )
     if verbose:
-        print(f"{balance_files=}")
-        print(f"{credit_files=}")
+        print(f"{sorted(balance_files)=}")
+        print(f"{sorted(credit_files)=}")
         print(f"{tags_file=}")
     if clear_tags and tags_file.is_file():
         tags_file.replace(tags_file.parent / "tags.csv.bak")
