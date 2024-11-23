@@ -14,6 +14,10 @@ def add_subparser(subparsers):
     parser = subparsers.add_parser("tag", help="Tag source data")
     parser.set_defaults(func=run)
     parser.add_argument(
+        "--default",
+        help="Default tags",
+    )
+    parser.add_argument(
         "--clear",
         action="store_true",
         help="Clear saved tags and quit",
@@ -27,6 +31,7 @@ def add_subparser(subparsers):
 
 def run(args):
     tags_file = args.tags_file
+    default_tag = args.default
     clear = args.clear
     flip_rtl = args.flip_rtl
     print_path = args.path
@@ -40,7 +45,7 @@ def run(args):
     if not tags_file.is_file():
         tags_file.write_text(",".join(TAG_SCHEMA.keys()))
     source_data = get_source_data(args)
-    write_tags(source_data, tags_file)
+    write_tags(source_data, tags_file, default_tag)
 
 
 def apply_tags(data, tags_file):
@@ -91,7 +96,7 @@ class Tagger:
         ]
         return "\n".join(lines)
 
-    def guess_tags(self, index):
+    def guess_tags(self, index, default):
         tag_descriptions = {}
         target_description = self.get_row(index)["description"]
         for row in self.source.sort("date", descending=True).iter_rows(named=True):
@@ -103,6 +108,8 @@ class Tagger:
             tag_descriptions[key].add(row_description)
             if row_description == target_description:
                 return key
+        if default is not None:
+            return split_tag_text(default)
         if not tag_descriptions:
             return ("unknown", "")
         description_counts = {
@@ -121,14 +128,14 @@ class Tagger:
         return None
 
 
-def write_tags(source_data, tags_file):
+def write_tags(source_data, tags_file, default_tags):
     tagger = Tagger(source_data=source_data, tags_file=tags_file)
     line_separator = "===================="
     while True:
         index = tagger.get_untagged_index()
         if index is None:
             break
-        guess1, guess2 = tagger.guess_tags(index)
+        guess1, guess2 = tagger.guess_tags(index, default_tags)
         guess_repr = guess1
         if guess2:
             guess_repr = f"{guess_repr} [{guess2}]"
