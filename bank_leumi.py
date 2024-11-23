@@ -3,7 +3,7 @@ import math
 import pandas as pd
 import polars as pl
 
-from plutil import print_table
+from utils import print_table
 
 
 def parse_credit(*, input_file, verbose=False):

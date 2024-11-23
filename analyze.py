@@ -1,6 +1,8 @@
 import arrow
 import polars as pl
 
+from utils import print_table
+
 HISTORICAL_SCHEMA = {
     "date": pl.Date,
     "balance": pl.Float64,
@@ -17,15 +19,14 @@ NULLABLE_COLUMNS = ("category2",)
 
 def analyze(historical_data):
     historical_data = add_metadata(historical_data)
+    print_table(historical_data, "historical", True)
     validate_historical_data(historical_data)
     print(historical_data.describe())
 
-    pl.Config.set_tbl_rows(1_000_000)
-
     lf = historical_data.lazy()
     last_month = filter_last_month(lf, historical_data["date"].max())
-    print(last_month.select(pl.col("balance").sum()).collect())
-    print(category_amount(last_month).collect())
+    print_table(last_month.select(pl.col("balance").sum()).collect())
+    print_table(category_amount(last_month).collect())
 
 
 def add_metadata(df):

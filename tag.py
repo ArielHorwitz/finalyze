@@ -1,5 +1,3 @@
-import string
-
 import polars as pl
 
 TAG_SCHEMA = {
@@ -7,7 +5,6 @@ TAG_SCHEMA = {
     "category1": pl.String,
     "category2": pl.String,
 }
-ENGLISH = frozenset(string.printable)
 
 
 def write_tags(historical_data, tags_file):
@@ -19,7 +16,7 @@ def write_tags(historical_data, tags_file):
     for index in untagged_indices:
         row = historical_data.row(index, named=True)
         row_hash = row["hash"]
-        description = flip_hebrew(row["description"][:30])
+        description = row["description"][:30]
         date = row["date"]
         amount = row["balance"]
         print(f"[{description:<30}] {date}  {amount:<10}")
@@ -40,12 +37,6 @@ def write_tags(historical_data, tags_file):
     all_tags = pl.concat([existing_tags, new_tags])
     all_tags = all_tags.unique(subset="hash", keep="last")
     all_tags.write_csv(tags_file)
-
-
-def flip_hebrew(text):
-    if set(text) - ENGLISH:
-        return text[::-1]
-    return text
 
 
 def tag_transactions(historical_data, tags_file, user_tagging):

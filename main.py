@@ -4,7 +4,7 @@ from pathlib import Path
 import analyze
 import bank_leumi
 import tag
-from plutil import print_table
+import utils
 
 
 def main():
@@ -65,11 +65,8 @@ def main():
         credit_files=credit_files,
         verbose=verbose,
     )
+    historical_data = utils.flip_rtl_column(historical_data, "description")
     historical_data = tag.tag_transactions(historical_data, tags_file, True)
-    print_table(historical_data, "historical", True)
-    print(historical_data.describe())
-    return
-
     analyze.analyze(historical_data)
 
 
