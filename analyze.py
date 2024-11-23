@@ -25,7 +25,6 @@ def analyze(historical_data, *, month: Optional[arrow.Arrow] = None):
         historical_data = filter_month(historical_data, month)
 
     print_table(historical_data, "historical")
-    print_table(historical_data.describe(), "historical describe")
     validate_historical_data(historical_data)
 
     lf = historical_data.lazy()
@@ -61,8 +60,16 @@ def validate_historical_data(df):
 
 
 def tag_amount(df):
-    return (
+    by_tag1 = (
         df.group_by("tag1")
         .agg(pl.col("balance").sum())
         .sort("balance", descending=False)
+    )
+    return (
+        df.group_by("tag1", "tag2")
+        .agg(pl.col("balance").sum())
+        .join(by_tag1, on="tag1", how="left")
+        .rename({"balance_right": "balance1", "balance": "balance2"})
+        .sort(("balance1", "balance2"), descending=False)
+        .select(("tag1", "balance1", "tag2", "balance2"))
     )
