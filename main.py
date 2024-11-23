@@ -20,7 +20,6 @@ def main():
     import_dir = Path(args.import_dir)
     balance_pattern = args.balance_pattern
     credit_pattern = args.credit_pattern
-    output_file = Path(args.output_file)
     clear_tags = args.clear_tags
     auto_cache_tags = args.auto_cache_tags
     flip_rtl = args.flip_rtl
@@ -63,11 +62,6 @@ def main():
 
 def parse_args():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
-    parser.add_argument(
-        "--output-file",
-        default="data/history.csv",
-        help="Output file",
-    )
     parser.add_argument(
         "-v",
         "--verbose",
