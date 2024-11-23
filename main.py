@@ -26,6 +26,7 @@ def main():
     month = args.month
     year = args.year
     analyze_full = args.full
+    tag = args.tag
 
     # Derive from argument data
     tags_file = import_dir / "tags.csv"
@@ -52,7 +53,8 @@ def main():
     )
     if flip_rtl:
         historical_data = utils.flip_rtl_column(historical_data, "description")
-    historical_data = tag.tag_transactions(historical_data, tags_file, auto_cache_tags)
+    if tag:
+        historical_data = tag.tag_transactions(historical_data, tags_file, auto_cache_tags)
     if analyze_full:
         filtered_month = None
     else:
@@ -106,6 +108,11 @@ def parse_args():
         help="File name pattern for credit card files exported from Bank Leumi",
     )
     # Source data tagging
+    parser.add_argument(
+        "--tag",
+        action="store_true",
+        help="Prompt for missing tags",
+    )
     parser.add_argument(
         "--auto-cache-tags",
         action="store_true",
