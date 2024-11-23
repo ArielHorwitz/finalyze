@@ -44,6 +44,7 @@ def run(args):
 
 
 def apply_tags(data, tags_file):
+    data = data.drop("hash", "tag1", "tag2", strict=False)
     hash_column = pl.concat_str(("date", "amount")).hash()
     data = data.with_columns(hash_column.alias("hash"))
     tags = pl.read_csv(tags_file, schema=TAG_SCHEMA)
@@ -64,8 +65,7 @@ class Tagger:
         all_tags = all_tags.unique(subset="hash", keep="last")
         self.tags = all_tags.sort("tag1", "tag2", "hash")
         self.tags.write_csv(self.tags_file)
-        source = self.source.drop("hash").drop("tag1").drop("tag2")
-        self.source = apply_tags(source, self.tags_file)
+        self.source = apply_tags(self.source, self.tags_file)
 
     def describe_row(self, index):
         row = self.get_row(index)
