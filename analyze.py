@@ -14,8 +14,6 @@ COLUMN_ORDER = (
     "tag1",
     "tag2",
     "description",
-    "year",
-    "month",
     "hash",
 )
 
@@ -31,23 +29,14 @@ def add_subparser(subparsers):
     )
     filters = parser.add_argument_group("FILTERS")
     filters.add_argument(
-        "--full",
-        action="store_true",
-        help="Analyze full historical data (no date filters)",
+        "-S",
+        "--start-date",
+        help="Filter since date (YYYY-MM-DD)",
     )
     filters.add_argument(
-        "-M",
-        "--month",
-        type=int,
-        default=arrow.now().shift(months=-1).month,
-        help="Month to analyze",
-    )
-    filters.add_argument(
-        "-Y",
-        "--year",
-        type=int,
-        default=arrow.now().shift(months=-1).year,
-        help="Year to analyze",
+        "-E",
+        "--end-date",
+        help="Filter until date (YYYY-MM-DD)",
     )
 
 
@@ -55,17 +44,21 @@ def run(args):
     verbose = args.verbose
     tags_file = args.tags_file
     strict = not args.lenient
-    analyze_full = args.full
-    year = args.year
-    month = args.month
-    flip_rtl = args.flip_rtl
-    if analyze_full:
-        filtered_month = None
-    else:
-        filtered_month = arrow.Arrow(year, month, 1)
+    start_date = None
+    if args.start_date:
+        start_date = arrow.get(args.start_date, "YYYY-MM-DD")
+    end_date = None
+    if args.end_date:
+        end_date = arrow.get(args.end_date, "YYYY-MM-DD")
     source_data = get_source_data(args)
     tagged_data = apply_tags(source_data, tags_file)
-    analyze(tagged_data, strict=strict, verbose=verbose, month=filtered_month)
+    analyze(
+        tagged_data,
+        strict=strict,
+        verbose=verbose,
+        start_date=start_date,
+        end_date=end_date,
+    )
 
 
 def analyze(
@@ -73,12 +66,12 @@ def analyze(
     *,
     verbose: bool = False,
     strict: bool = True,
-    month: Optional[arrow.Arrow] = None,
+    start_date: Optional[arrow.Arrow] = None,
+    end_date: Optional[arrow.Arrow] = None,
 ):
-    source_data = add_metadata(source_data).select(*COLUMN_ORDER)
+    source_data = source_data.select(*COLUMN_ORDER)
     print_table(source_data, "prefilter source", verbose > 1)
-    if month is not None:
-        source_data = filter_month(source_data, month)
+    source_data = filter_date_range(source_data, start_date, end_date)
     print_table(source_data, "source")
     if strict:
         validate_tags(source_data)
@@ -89,18 +82,12 @@ def analyze(
     print(f"Total sum: {total_sum}")
 
 
-def add_metadata(df):
-    return df.with_columns(
-        pl.col("date").dt.year().alias("year"),
-        pl.col("date").dt.month().alias("month"),
-    )
-
-
-def filter_month(df, month):
-    return df.filter(
-        pl.col("month") == month.month,
-        pl.col("year") == month.year,
-    )
+def filter_date_range(df, start, end):
+    if start:
+        df = df.filter(pl.col("date").dt.date() >= start.date())
+    if end:
+        df = df.filter(pl.col("date").dt.date() < end.date())
+    return df
 
 
 def validate_tags(source_data):
