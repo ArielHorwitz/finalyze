@@ -24,6 +24,25 @@ def parse_args():
         default=0,
     )
     parser.add_argument(
+        "--full",
+        action="store_true",
+        help="Analyze full historical data (no date filters)",
+    )
+    parser.add_argument(
+        "-M",
+        "--month",
+        type=int,
+        default=arrow.now().shift(months=-1).month,
+        help="Month to analyze",
+    )
+    parser.add_argument(
+        "-Y",
+        "--year",
+        type=int,
+        default=arrow.now().shift(months=-1).year,
+        help="Year to analyze",
+    )
+    parser.add_argument(
         "--import-dir",
         default="data",
         help="Directory containing source data files",
@@ -69,6 +88,9 @@ def main():
     clear_tags = args.clear_tags
     auto_cache_tags = args.auto_cache_tags
     flip_rtl = args.flip_rtl
+    month = args.month
+    year = args.year
+    analyze_full = args.full
 
     # Derive from argument data
     tags_file = import_dir / "tags.csv"
@@ -96,7 +118,11 @@ def main():
     if flip_rtl:
         historical_data = utils.flip_rtl_column(historical_data, "description")
     historical_data = tag.tag_transactions(historical_data, tags_file, auto_cache_tags)
-    analyze.analyze(historical_data)
+    if analyze_full:
+        filtered_month = None
+    else:
+        filtered_month = arrow.Arrow(year, month, 1)
+    analyze.analyze(historical_data, month=filtered_month)
 
 
 if __name__ == "__main__":
