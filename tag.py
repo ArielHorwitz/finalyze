@@ -38,15 +38,21 @@ def write_tags(historical_data, tags_file, auto_cache: bool = False):
             tag2 = cached2
             print(f"Using cached values: {cached_repr}")
         else:
-            tag1 = input(f"Tag 1: ")
-            cache_shoot_and_miss = tag1 == "" and cached_values is None
-            if tag1 in ("quit", "stop") or cache_shoot_and_miss:
+            tags = input(f"Tags (comma-separated, 'quit' to finish): ")
+            cache_shoot_and_miss = tags == "" and cached_values is None
+            if tags == "quit" or cache_shoot_and_miss:
                 break
-            elif tag1 == "":
+            elif tags == "":
                 tag1 = cached1
                 tag2 = cached2
             else:
-                tag2 = input(f"Tag 2: ")
+                if ',' in tags:
+                    tag1, tag2 = tags.split(',', 1)
+                    tag1 = tag1.strip()
+                    tag2 = tag2.strip()
+                else:
+                    tag1 = tags
+                    tag2 = ""
         cached_map[description] = (tag1, tag2)
         new_hashes.append(row_hash)
         new_tag1.append(tag1)
