@@ -36,6 +36,16 @@ def main():
         default="*credit*.xls",
         help="File name pattern for credit card files exported from Bank Leumi",
     )
+    parser.add_argument(
+        "--auto-cache-tags",
+        action="store_true",
+        help="Used cached values for tags",
+    )
+    parser.add_argument(
+        "--clear-tags",
+        action="store_true",
+        help="Clear saved tags",
+    )
     args = parser.parse_args()
 
     verbose = args.verbose
@@ -59,6 +69,8 @@ def main():
         print(f"{balance_files=}")
         print(f"{credit_files=}")
         print(f"{tags_file=}")
+    if args.clear_tags:
+        tags_file.unlink()
 
     historical_data = bank_leumi.parse_sources(
         balance_files=balance_files,
@@ -66,7 +78,7 @@ def main():
         verbose=verbose,
     )
     historical_data = utils.flip_rtl_column(historical_data, "description")
-    historical_data = tag.tag_transactions(historical_data, tags_file, True)
+    historical_data = tag.tag_transactions(historical_data, tags_file, args.auto_cache_tags)
     analyze.analyze(historical_data)
 
 
