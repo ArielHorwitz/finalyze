@@ -16,7 +16,7 @@ HISTORICAL_SCHEMA = {
     "month": pl.Int8,
     "hash": pl.UInt64,
 }
-NULLABLE_COLUMNS = ("tag2",)
+NULLABLE_COLUMNS = ("tag1", "tag2")
 
 
 def analyze(historical_data, *, month: Optional[arrow.Arrow] = None):
