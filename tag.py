@@ -1,9 +1,9 @@
 import polars as pl
 
 TAG_SCHEMA = {
-    "hash": pl.UInt64,
     "tag1": pl.String,
     "tag2": pl.String,
+    "hash": pl.UInt64,
 }
 
 
@@ -60,7 +60,7 @@ def write_tags(historical_data, tags_file, auto_cache: bool = False):
     new_tags = pl.DataFrame(new_tag_data, schema=TAG_SCHEMA)
     all_tags = pl.concat([existing_tags, new_tags])
     all_tags = all_tags.unique(subset="hash", keep="last")
-    all_tags.write_csv(tags_file)
+    all_tags.sort("tag1", "tag2", "hash").write_csv(tags_file)
 
 
 def tag_transactions(historical_data, tags_file, auto_cache: bool = False):
