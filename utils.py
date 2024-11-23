@@ -18,7 +18,7 @@ PL_OPTIONS = {
 }
 
 
-def print_table(table, description, enable):
+def print_table(table, description: str = "unnamed", enable: bool = True):
     if not enable:
         return
     print(f"Showing table: {description}")
