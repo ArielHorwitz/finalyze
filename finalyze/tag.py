@@ -164,8 +164,7 @@ def write_tags(source_data, tags_file, default_tags):
         print(f"   Guess: {guess_repr}")
         print()
         user_input = input("Tags: ")
-        use_guess = user_input == ""
-        if use_guess:
+        if user_input == "":
             tag1, tag2 = guess1, guess2
         else:
             tag1, tag2 = split_tag_text(user_input, ",")
