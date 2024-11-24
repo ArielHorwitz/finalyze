@@ -38,6 +38,18 @@ def add_subparser(subparsers):
         "--end-date",
         help="Filter until date (YYYY-MM-DD)",
     )
+    filters.add_argument(
+        "-1",
+        "--filter-tag1",
+        nargs="*",
+        help="Filter by tags",
+    )
+    filters.add_argument(
+        "-2",
+        "--filter-tag2",
+        nargs="*",
+        help="Filter by subtags",
+    )
 
 
 def run(args):
@@ -50,12 +62,16 @@ def run(args):
     end_date = None
     if args.end_date:
         end_date = arrow.get(args.end_date, "YYYY-MM-DD")
+    filter_tags1 = args.filter_tag1
+    filter_tags2 = args.filter_tag2
     source_data = get_source_data(args)
     tagged_data = apply_tags(source_data, tags_file)
     analyze(
         tagged_data,
         strict=strict,
         verbose=verbose,
+        filter_tags1=filter_tags1,
+        filter_tags2=filter_tags2,
         start_date=start_date,
         end_date=end_date,
     )
@@ -66,21 +82,24 @@ def analyze(
     *,
     verbose: bool = False,
     strict: bool = True,
+    filter_tags1,
+    filter_tags2,
     start_date: Optional[arrow.Arrow] = None,
     end_date: Optional[arrow.Arrow] = None,
 ):
-    source_data = source_data.select(*COLUMN_ORDER)
-    print_table(source_data, "prefilter source", verbose > 1)
+    print_table(source_data, "unfiltered source data", verbose > 1)
+    source_data = source_data.select(*COLUMN_ORDER).lazy()
     source_data = filter_date_range(source_data, start_date, end_date)
-    print_table(source_data, "source")
+    source_data = filter_tags(source_data, filter_tags1, filter_tags2)
+    filtered_data = source_data.collect()
+    print_table(filtered_data, "filtered source data")
     if strict:
-        validate_tags(source_data)
+        validate_tags(filtered_data)
 
-    lf = source_data.lazy()
-    total_sum = lf.select(pl.col("amount").sum()).collect()["amount"][0]
-    tag1, tag2 = tag_tables(lf)
+    tag1, tag2 = tag_tables(source_data)
     print_table(tag2.collect(), "By subtags")
     print_table(tag1.collect(), "By tags")
+    total_sum = source_data.select(pl.col("amount").sum()).collect()["amount"][0]
     print(f"Total sum: {total_sum}")
 
 
@@ -90,6 +109,18 @@ def filter_date_range(df, start, end):
     if end:
         df = df.filter(pl.col("date").dt.date() < end.date())
     return df
+
+
+def filter_tags(df, tags1, tags2):
+    predicates = [pl.lit(True)]
+    if tags1 is not None:
+        predicates.append(pl.col("tag1").is_in(pl.Series(tags1)))
+    if tags2 is not None:
+        predicates.append(pl.col("tag2").is_in(pl.Series(tags2)))
+    predicate = predicates[0]
+    for p in predicates[1:]:
+        predicate = predicate & p
+    return df.filter(predicate)
 
 
 def validate_tags(source_data):
