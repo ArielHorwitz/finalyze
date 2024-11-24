@@ -129,6 +129,7 @@ class Tagger:
 
 def write_tags(source_data, tags_file, default_tags):
     tagger = Tagger(source_data=source_data, tags_file=tags_file)
+    print(tagger.describe_all_tags())
     line_separator = "===================="
     while True:
         index = tagger.get_untagged_index()
