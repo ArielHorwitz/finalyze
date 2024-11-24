@@ -174,7 +174,7 @@ def write_tags(source_data, tags_file, default_tags):
 
 def delete_tags(tags_file, *, filter_tag1, filter_tag2):
     tags_data = read_tags_file(tags_file)
-    predicates = [~pl.col("hash").is_null()]
+    predicates = [pl.lit(True)]
     if filter_tag1 is not None:
         predicates.append(pl.col("tag1").is_in(pl.Series(filter_tag1)))
     if filter_tag2 is not None:
