@@ -6,7 +6,7 @@ import analyze
 import source
 import tag
 
-APP_NAME = "finproj"
+APP_NAME = "finalyze"
 DESCRIPTION = "Personal financial analysis tool"
 
 
