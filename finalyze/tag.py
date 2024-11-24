@@ -105,11 +105,12 @@ class Tagger:
             key = (row["tag1"], row["tag2"])
             all_tags.setdefault(key, 0)
             all_tags[key] += 1
-        all_tags.pop((None, None), None)
+        nulls = all_tags.pop((None, None), 0)
         lines = ["All existing tags:"] + [
             f"  [ {count:>3} ]  {tag1:>20} :: {tag2}"
             for (tag1, tag2), count in sorted(all_tags.items())
         ]
+        lines.extend(["", f"  [[ {nulls:>3} Untagged entries   ]]"])
         return "\n".join(lines)
 
     def guess_tags(self, index, default):
