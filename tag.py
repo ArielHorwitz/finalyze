@@ -14,6 +14,11 @@ def add_subparser(subparsers):
     parser = subparsers.add_parser("tag", help="Tag source data")
     parser.set_defaults(func=run)
     parser.add_argument(
+        "--path",
+        action="store_true",
+        help="Print path to tags file and quit",
+    )
+    parser.add_argument(
         "--default",
         help="Default tags",
     )
@@ -22,19 +27,13 @@ def add_subparser(subparsers):
         action="store_true",
         help="Clear saved tags and quit",
     )
-    parser.add_argument(
-        "--path",
-        action="store_true",
-        help="Print path to tags file and quit",
-    )
 
 
 def run(args):
     tags_file = args.tags_file
+    print_path = args.path
     default_tag = args.default
     clear = args.clear
-    flip_rtl = args.flip_rtl
-    print_path = args.path
     if print_path:
         print(tags_file)
         return
