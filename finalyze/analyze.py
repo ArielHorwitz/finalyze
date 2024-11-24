@@ -72,10 +72,10 @@ def run(args):
     filter_description = args.description
     source_data = get_source_data(args)
     tagged_data = apply_tags(source_data, tags_file)
+    print_table(tagged_data, "unfiltered source data", verbose > 1)
     analyze(
         tagged_data,
         strict=strict,
-        verbose=verbose,
         filter_tags1=filter_tags1,
         filter_tags2=filter_tags2,
         start_date=start_date,
@@ -87,7 +87,6 @@ def run(args):
 def analyze(
     source_data,
     *,
-    verbose: bool = False,
     strict: bool = True,
     filter_tags1,
     filter_tags2,
@@ -95,7 +94,6 @@ def analyze(
     end_date: Optional[arrow.Arrow] = None,
     filter_description=None,
 ):
-    print_table(source_data, "unfiltered source data", verbose > 1)
     source_data = source_data.select(*COLUMN_ORDER).lazy()
     source_data = filter_date_range(source_data, start_date, end_date)
     source_data = filter_tags(source_data, filter_tags1, filter_tags2)
