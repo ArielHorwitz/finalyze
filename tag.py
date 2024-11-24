@@ -1,3 +1,5 @@
+import shutil
+
 import polars as pl
 
 import utils
@@ -23,9 +25,22 @@ def add_subparser(subparsers):
         help="Default tags",
     )
     parser.add_argument(
-        "--clear",
+        "-D",
+        "--delete",
         action="store_true",
-        help="Clear saved tags and quit",
+        help="Delete tags and quit",
+    )
+    parser.add_argument(
+        "-1",
+        "--filter-tag1",
+        nargs="*",
+        help="Filter tags for deletion (with --delete)",
+    )
+    parser.add_argument(
+        "-2",
+        "--filter-tag2",
+        nargs="*",
+        help="Filter subtags for deletion (with --delete)",
     )
 
 
@@ -33,13 +48,14 @@ def run(args):
     tags_file = args.tags_file
     print_path = args.path
     default_tag = args.default
-    clear = args.clear
+    delete = args.delete
+    filter_tag1 = args.filter_tag1
+    filter_tag2 = args.filter_tag2
     if print_path:
         print(tags_file)
         return
-    if clear:
-        if tags_file.is_file():
-            tags_file.replace(f"{tags_file}.bak")
+    if delete:
+        delete_tags(tags_file, filter_tag1=filter_tag1, filter_tag2=filter_tag2)
         return
     if not tags_file.is_file():
         tags_file.write_text(",".join(TAG_SCHEMA.keys()))
@@ -153,6 +169,33 @@ def write_tags(source_data, tags_file, default_tags):
         else:
             tag1, tag2 = split_tag_text(user_input, ",")
         tagger.apply_tags(index, tag1, tag2)
+
+
+def delete_tags(tags_file, *, filter_tag1, filter_tag2):
+    tags_data = read_tags_file(tags_file)
+    predicates = [~pl.col("hash").is_null()]
+    if filter_tag1 is not None:
+        predicates.append(pl.col("tag1").is_in(pl.Series(filter_tag1)))
+    if filter_tag2 is not None:
+        predicates.append(pl.col("tag2").is_in(pl.Series(filter_tag2)))
+    predicate = predicates[0]
+    for p in predicates[1:]:
+        predicate = predicate & p
+    filtered_data = (
+        tags_data.filter(predicate)
+        .group_by(["tag1", "tag2"])
+        .len()
+        .rename({"len": "entries"})
+        .sort(["tag1", "tag2"])
+    )
+    utils.print_table(filtered_data, "Tags to delete")
+    if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
+        print("Aborted.")
+        return
+    if tags_file.is_file():
+        shutil.copy2(tags_file, f"{tags_file}.bak")
+    tags_data = tags_data.filter(~predicate)
+    write_tags_file(tags_data, tags_file)
 
 
 def read_tags_file(tags_file):
