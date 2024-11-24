@@ -50,6 +50,11 @@ def add_subparser(subparsers):
         nargs="*",
         help="Filter by subtags",
     )
+    filters.add_argument(
+        "-D",
+        "--description",
+        help="Filter by description (regex pattern)",
+    )
 
 
 def run(args):
@@ -64,6 +69,7 @@ def run(args):
         end_date = arrow.get(args.end_date, "YYYY-MM-DD")
     filter_tags1 = args.filter_tag1
     filter_tags2 = args.filter_tag2
+    filter_description = args.description
     source_data = get_source_data(args)
     tagged_data = apply_tags(source_data, tags_file)
     analyze(
@@ -74,6 +80,7 @@ def run(args):
         filter_tags2=filter_tags2,
         start_date=start_date,
         end_date=end_date,
+        filter_description=filter_description,
     )
 
 
@@ -86,11 +93,13 @@ def analyze(
     filter_tags2,
     start_date: Optional[arrow.Arrow] = None,
     end_date: Optional[arrow.Arrow] = None,
+    filter_description=None,
 ):
     print_table(source_data, "unfiltered source data", verbose > 1)
     source_data = source_data.select(*COLUMN_ORDER).lazy()
     source_data = filter_date_range(source_data, start_date, end_date)
     source_data = filter_tags(source_data, filter_tags1, filter_tags2)
+    source_data = filter_description_regex(source_data, filter_description)
     filtered_data = source_data.collect()
     print_table(filtered_data, "filtered source data")
     if strict:
@@ -121,6 +130,12 @@ def filter_tags(df, tags1, tags2):
     for p in predicates[1:]:
         predicate = predicate & p
     return df.filter(predicate)
+
+
+def filter_description_regex(df, pattern):
+    if pattern:
+        df = df.filter(pl.col("description").str.contains(pattern))
+    return df
 
 
 def validate_tags(source_data):
