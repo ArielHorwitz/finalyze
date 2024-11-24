@@ -90,7 +90,7 @@ class Tagger:
     def describe_row(self, index):
         row = self.get_row(index)
         lines = [
-            f"Applying tags for:",
+            "Applying tags for:",
             f"  Source: {row['source']}",
             f"    Date: {row['date']}",
             f"  Amount: {row['amount']}",
@@ -162,7 +162,7 @@ def write_tags(source_data, tags_file, default_tags):
         print(tagger.describe_row(index))
         print(f"   Guess: {guess_repr}")
         print()
-        user_input = input(f"Tags: ")
+        user_input = input("Tags: ")
         use_guess = user_input == ""
         if use_guess:
             tag1, tag2 = guess1, guess2

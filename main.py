@@ -2,12 +2,9 @@ import argparse
 import sys
 from pathlib import Path
 
-import arrow
-
 import analyze
 import source
 import tag
-import utils
 
 APP_NAME = "finproj"
 DESCRIPTION = "Personal financial analysis tool"
