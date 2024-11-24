@@ -2,9 +2,7 @@ import argparse
 import sys
 from pathlib import Path
 
-import analyze
-import source
-import tag
+from finalyze import analyze, source, tag
 
 APP_NAME = "finalyze"
 DESCRIPTION = "Personal financial analysis tool"
@@ -62,7 +60,3 @@ def main():
         print("\n\nNo subcommand selected.", file=sys.stderr)
         exit(1)
     args.func(args)
-
-
-if __name__ == "__main__":
-    main()

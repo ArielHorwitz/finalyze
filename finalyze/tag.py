@@ -2,8 +2,8 @@ import shutil
 
 import polars as pl
 
-import utils
-from source import get_source_data
+from finalyze import utils
+from finalyze.source import get_source_data
 
 TAG_SCHEMA = {
     "tag1": pl.String,

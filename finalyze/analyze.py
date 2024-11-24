@@ -3,9 +3,9 @@ from typing import Optional
 import arrow
 import polars as pl
 
-from source import get_source_data
-from tag import apply_tags
-from utils import print_table
+from finalyze.source import get_source_data
+from finalyze.tag import apply_tags
+from finalyze.utils import print_table
 
 COLUMN_ORDER = (
     "source",

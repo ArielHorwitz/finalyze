@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import polars as pl
 
-from utils import flip_rtl_column, print_table
+from finalyze.utils import flip_rtl_column, print_table
 
 SOURCE_SCHEMA = {
     "source": pl.String,
