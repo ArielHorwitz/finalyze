@@ -78,7 +78,9 @@ def analyze(
 
     lf = source_data.lazy()
     total_sum = lf.select(pl.col("amount").sum()).collect()["amount"][0]
-    print_table(tag_amount(lf).collect(), "By tags")
+    tag1, tag2 = tag_tables(lf)
+    print_table(tag2.collect(), "By subtags")
+    print_table(tag1.collect(), "By tags")
     print(f"Total sum: {total_sum}")
 
 
@@ -96,22 +98,28 @@ def validate_tags(source_data):
         raise ValueError(f"Missing tags at indices: {missing_tag_indices}")
 
 
-def tag_amount(df):
-    by_tag1 = (
-        df.group_by("tag1").agg(pl.col("amount").sum()).sort("amount", descending=False)
-    )
-    return (
-        df.group_by("tag1", "tag2")
-        .agg(pl.col("amount").sum())
-        .join(by_tag1, on="tag1", how="left")
-        .rename({"amount_right": "amount1", "amount": "amount2"})
-        .sort(("amount1", "amount2"), descending=False)
-        # Nullify all but first of duplicate tag1
-        .with_columns(
-            pl.when(pl.col("tag1") == pl.col("tag1").shift(1))
-            .then(None)
-            .otherwise(pl.col("amount1"))
-            .alias("amount1")
+def tag_tables(df):
+    tag1 = (
+        df.group_by("tag1")
+        .agg(
+            [
+                pl.len().alias("txn"),
+                pl.col("amount").sum(),
+            ]
         )
-        .select(("amount1", "tag1", "tag2", "amount2"))
+        .sort(("amount"), descending=False)
+        .select("tag1", "amount", "txn")
     )
+    tag2 = (
+        df.group_by("tag1", "tag2")
+        .agg(
+            [
+                pl.len().alias("txn"),
+                pl.col("amount").sum(),
+            ]
+        )
+        .join(tag1, on="tag1", how="left")
+        .sort(("amount_right", "amount"), descending=False)
+        .select(("tag1", "tag2", "amount", "txn"))
+    )
+    return tag1, tag2
