@@ -21,8 +21,9 @@ def add_subparser(subparsers):
         help="Print path to tags file and quit",
     )
     parser.add_argument(
+        "-d",
         "--default",
-        help="Default tags",
+        help="Set default tags (instead of using best guess suggestion)",
     )
     parser.add_argument(
         "-D",
