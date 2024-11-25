@@ -7,6 +7,7 @@ import polars as pl
 from finalyze.utils import flip_rtl_column, print_table
 
 SOURCE_SCHEMA = {
+    "account": pl.String,
     "source": pl.String,
     "date": pl.Date,
     "amount": pl.Float64,
@@ -17,6 +18,11 @@ SOURCE_SCHEMA = {
 def add_subparser(subparsers):
     parser = subparsers.add_parser("import", help="Import source data")
     parser.set_defaults(func=run)
+    parser.add_argument(
+        "-n",
+        "--account-name",
+        help="Name of account",
+    )
     parser.add_argument(
         "-a",
         "--account-files",
@@ -47,6 +53,7 @@ def run(args):
     verbose = args.verbose
     account_files = [Path(f).resolve() for f in args.account_files]
     credit_files = [Path(f).resolve() for f in args.credit_files]
+    account_name = args.account_name or args.dataset_name
     if args.account_files_dir is not None:
         account_files.extend(Path(args.account_files_dir).glob("*.xls"))
     if args.credit_files_dir is not None:
@@ -62,6 +69,7 @@ def run(args):
     if len(account_files) + len(credit_files) == 0:
         raise RuntimeError("No source files provided")
     parsed_data = parse_sources(
+        account_name=account_name,
         balance_files=account_files,
         credit_files=credit_files,
         verbose=verbose,
@@ -77,7 +85,7 @@ def get_source_data(args):
     return source_data
 
 
-def parse_sources(*, balance_files, credit_files, verbose):
+def parse_sources(*, account_name, balance_files, credit_files, verbose):
     balance_dfs = [
         parse_balance(input_file=file, verbose=verbose) for file in balance_files
     ]
@@ -92,6 +100,7 @@ def parse_sources(*, balance_files, credit_files, verbose):
         pl.concat(balance_dfs + credit_dfs)
         .unique()
         .sort("date", "amount")
+        .with_columns(pl.lit(account_name).alias("account"))
         .select(SOURCE_SCHEMA.keys())
     )
     print_table(final, "Parsed data", verbose)

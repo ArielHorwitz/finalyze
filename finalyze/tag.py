@@ -92,6 +92,7 @@ class Tagger:
         row = self.get_row(index)
         lines = [
             "Applying tags for:",
+            f" Account: {row['account']}",
             f"  Source: {row['source']}",
             f"    Date: {row['date']}",
             f"  Amount: {row['amount']}",

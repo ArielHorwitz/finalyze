@@ -8,6 +8,7 @@ from finalyze.tag import apply_tags
 from finalyze.utils import print_table
 
 COLUMN_ORDER = (
+    "account",
     "source",
     "date",
     "amount",
