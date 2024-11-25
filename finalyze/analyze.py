@@ -106,6 +106,7 @@ def analyze(
     tag1, tag2 = tag_tables(source_data)
     print_table(tag2.collect(), "By subtags")
     print_table(tag1.collect(), "By tags")
+    print_table(monthly(source_data, tag1.collect()["tag1"]), "By month")
     total_sum = source_data.select(pl.col("amount").sum()).collect()["amount"][0]
     print(f"Total sum: {total_sum}")
 
@@ -167,3 +168,14 @@ def tag_tables(df):
         .select(("tag1", "tag2", "amount", "txn"))
     )
     return tag1, tag2
+
+
+def monthly(df, tag_order):
+    year = pl.col("date").dt.year().cast(str)
+    month = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
+    df = df.with_columns((year + "-" + month).alias("month"))
+    df = df.group_by(("month", "tag1")).agg(pl.col("amount").sum()).sort("month")
+    df = df.collect().pivot(index="tag1", columns="month", values="amount").fill_null(0)
+    sort_ref = pl.DataFrame({"tag1": tag_order, "tag_order": range(len(tag_order))})
+    df = df.join(sort_ref, on="tag1", how="left").sort("tag_order").drop("tag_order")
+    return df
