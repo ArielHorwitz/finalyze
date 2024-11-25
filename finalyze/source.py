@@ -78,23 +78,22 @@ def get_source_data(args):
 
 
 def parse_sources(*, balance_files, credit_files, verbose):
-    balance = (
-        pl.concat(
-            parse_balance(input_file=file, verbose=verbose) for file in balance_files
-        )
+    balance_dfs = [
+        parse_balance(input_file=file, verbose=verbose) for file in balance_files
+    ]
+    credit_dfs = [
+        parse_credit(input_file=file, verbose=verbose) for file in credit_files
+    ]
+    if balance_dfs:
+        print_table(pl.concat(balance_dfs), "Balance", verbose > 1)
+    if credit_dfs:
+        print_table(pl.concat(credit_dfs), "Credit", verbose > 1)
+    final = (
+        pl.concat(balance_dfs + credit_dfs)
         .unique()
         .sort("date", "amount")
+        .select(SOURCE_SCHEMA.keys())
     )
-    credit = (
-        pl.concat(
-            parse_credit(input_file=file, verbose=verbose) for file in credit_files
-        )
-        .unique()
-        .sort("date", "amount")
-    )
-    print_table(balance, "Balance", verbose > 1)
-    print_table(credit, "Credit", verbose > 1)
-    final = pl.concat((balance, credit)).sort("date", "amount")
     print_table(final, "Parsed data", verbose)
     return final
 
@@ -132,23 +131,28 @@ def parse_credit(*, input_file, verbose=False):
 
     # parse parts
     raw_html = pd.read_html(input_file, encoding="utf-8")
-    credit_raw = inner_parse(raw_html[2], "Credit card")
-    debit_raw = inner_parse(raw_html[3], "Debit")
+    raw_tables = [inner_parse(raw_html[2], "Credit card")]
+    if len(raw_html) >= 4:
+        debit_table = inner_parse(raw_html[3], "Debit")
+        raw_tables.append(debit_table)
 
     # combine
-    parsed = pl.concat((credit_raw, debit_raw))
+    parsed = pl.concat(raw_tables)
     print_table(parsed, "parsed credit", verbose > 1)
     return parsed
 
 
 def parse_balance(*, input_file, verbose=False):
     balances_raw_pd = pd.read_html(input_file, encoding="utf-8")[2]
+    balances_raw_pd[0] = balances_raw_pd[0].str.replace("** ", "", regex=False)
     try:
         assert balances_raw_pd.iloc[0, 0] == "תנועות בחשבון"
         assert balances_raw_pd.iloc[1, 0] == "תאריך"
     except AssertionError:
         raise ImportError(f"Unexpected format for {input_file}")
     print_table(balances_raw_pd, "raw balance", verbose > 1)
+    if balances_raw_pd.iloc[-1, 0].startswith("**"):
+        balances_raw_pd = balances_raw_pd.iloc[:-1]
     raw = pl.from_pandas(balances_raw_pd.iloc[2:])
     data = {
         "source": "Account txn",
