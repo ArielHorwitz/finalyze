@@ -58,7 +58,7 @@ def run(args):
         account_files.extend(Path(args.account_files_dir).glob("*.xls"))
     if args.credit_files_dir is not None:
         credit_files.extend(Path(args.credit_files_dir).glob("*.xls"))
-    output_file = args.source_file
+    output_file = args.source_dir / f"{account_name}.csv"
     if verbose:
         print("Account files:")
         for f in sorted(account_files):
@@ -75,11 +75,15 @@ def run(args):
         verbose=verbose,
     )
     print(f"Writing output to: {output_file}")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     parsed_data.write_csv(output_file)
 
 
 def get_source_data(args):
-    source_data = pl.read_csv(args.source_file, schema=SOURCE_SCHEMA)
+    source_data = pl.concat(
+        pl.read_csv(file, schema=SOURCE_SCHEMA)
+        for file in args.source_dir.glob("*.csv")
+    )
     if args.flip_rtl:
         source_data = flip_rtl_column(source_data, "description")
     return source_data

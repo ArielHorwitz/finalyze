@@ -47,7 +47,7 @@ def main():
     args.data_dir = Path(args.data_dir or default_data_dir).resolve()
     args.dataset_dir = args.data_dir / args.dataset_name
     args.dataset_dir.mkdir(parents=True, exist_ok=True)
-    args.source_file = args.dataset_dir / "source.csv"
+    args.source_dir = args.dataset_dir / "sources"
     if args.isolate_tags:
         args.tags_file = args.dataset_dir / "tags.csv"
     else:
