@@ -56,6 +56,11 @@ def add_subparser(subparsers):
         "--description",
         help="Filter by description (regex pattern)",
     )
+    filters.add_argument(
+        "-A",
+        "--filter-account",
+        help="Filter by account name",
+    )
 
 
 def run(args):
@@ -71,7 +76,8 @@ def run(args):
     filter_tags1 = args.filter_tag1
     filter_tags2 = args.filter_tag2
     filter_description = args.description
-    source_data = get_source_data(args)
+    filter_account = args.filter_account
+    source_data = get_source_data(args).sort("date", "amount")
     tagged_data = apply_tags(source_data, tags_file)
     print_table(tagged_data, "unfiltered source data", verbose > 1)
     analyze(
@@ -82,6 +88,7 @@ def run(args):
         start_date=start_date,
         end_date=end_date,
         filter_description=filter_description,
+        filter_account=filter_account,
     )
 
 
@@ -94,11 +101,12 @@ def analyze(
     start_date: Optional[arrow.Arrow] = None,
     end_date: Optional[arrow.Arrow] = None,
     filter_description=None,
+    filter_account=None,
 ):
     source_data = source_data.select(*COLUMN_ORDER).lazy()
     source_data = filter_date_range(source_data, start_date, end_date)
     source_data = filter_tags(source_data, filter_tags1, filter_tags2)
-    source_data = filter_description_regex(source_data, filter_description)
+    source_data = filter_patterns(source_data, filter_description, filter_account)
     filtered_data = source_data.collect()
     print_table(filtered_data, "filtered source data")
     if strict:
@@ -132,9 +140,11 @@ def filter_tags(df, tags1, tags2):
     return df.filter(predicate)
 
 
-def filter_description_regex(df, pattern):
-    if pattern:
-        df = df.filter(pl.col("description").str.contains(pattern))
+def filter_patterns(df, description_regex, account_name):
+    if description_regex:
+        df = df.filter(pl.col("description").str.contains(description_regex))
+    if account_name:
+        df = df.filter(pl.col("account") == account_name)
     return df
 
 
