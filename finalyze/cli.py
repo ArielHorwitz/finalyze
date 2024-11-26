@@ -28,9 +28,9 @@ def main():
         help=f"Data directory (default: ~/.local/{APP_NAME}/data)",
     )
     parser.add_argument(
-        "--isolate-tags",
+        "--global-tags",
         action="store_true",
-        help="Use separate dataset-specific tag data file",
+        help="Use global tag data file",
     )
     parser.add_argument(
         "--flip-rtl",
@@ -48,10 +48,10 @@ def main():
     args.dataset_dir = args.data_dir / args.dataset_name
     args.dataset_dir.mkdir(parents=True, exist_ok=True)
     args.source_dir = args.dataset_dir / "sources"
-    if args.isolate_tags:
-        args.tags_file = args.dataset_dir / "tags.csv"
+    if args.global_tags:
+        args.tags_file = args.data_dir / "tags.csv"
     else:
-        args.tags_file = args.data_dir / "global_tags.csv"
+        args.tags_file = args.dataset_dir / "tags.csv"
 
     if args.verbose:
         print(f"{args=}")
