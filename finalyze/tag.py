@@ -58,8 +58,6 @@ def run(args):
     if delete:
         delete_tags(tags_file, filter_tag1=filter_tag1, filter_tag2=filter_tag2)
         return
-    if not tags_file.is_file():
-        tags_file.write_text(",".join(TAG_SCHEMA.keys()))
     source_data = get_source_data(args)
     write_tags(source_data, tags_file, default_tag)
 
@@ -201,6 +199,8 @@ def delete_tags(tags_file, *, filter_tag1, filter_tag2):
 
 
 def read_tags_file(tags_file):
+    if not tags_file.is_file():
+        tags_file.write_text(",".join(TAG_SCHEMA.keys()))
     return pl.read_csv(tags_file, schema=TAG_SCHEMA)
 
 
