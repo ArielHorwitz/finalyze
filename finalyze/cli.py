@@ -43,7 +43,7 @@ def main():
     analyze.add_subparser(subparsers)
     args = parser.parse_args()
 
-    default_data_dir = Path.home() / ".local" / APP_NAME.lower() / "data"
+    default_data_dir = Path.home() / ".local" / "share" / APP_NAME.lower() / "data"
     args.data_dir = Path(args.data_dir or default_data_dir).resolve()
     args.dataset_dir = args.data_dir / args.dataset_name
     args.dataset_dir.mkdir(parents=True, exist_ok=True)
