@@ -113,9 +113,13 @@ def analyze(
         validate_tags(filtered_data)
 
     tag1, tag2 = tag_tables(source_data)
-    print_table(tag2.collect(), "By subtags")
-    print_table(tag1.collect(), "By tags")
-    print_table(monthly(source_data, tag1.collect()["tag1"]), "By month")
+    by_subtags = with_totals(tag2.collect(), "tag1", ["amount", "txn"])
+    by_tags = with_totals(tag1.collect(), "tag1", ["amount", "txn"])
+    print_table(by_subtags, "By subtags")
+    print_table(by_tags, "By tags")
+    monthly_df = monthly(source_data, tag1.collect()["tag1"])
+    monthly_df = with_totals(monthly_df, "tag1")
+    print_table(monthly_df, "By month")
     total_sum = source_data.select(pl.col("amount").sum()).collect()["amount"][0]
     print(f"Total sum: {total_sum}")
 
@@ -190,3 +194,16 @@ def monthly(df, tag_order):
     sort_ref = pl.DataFrame({"tag1": tag_order, "tag_order": range(len(tag_order))})
     df = df.join(sort_ref, on="tag1", how="left").sort("tag_order").drop("tag_order")
     return df
+
+
+def with_totals(df, label_col, numeric_cols=None):
+    unused_cols = set(df.columns) - {label_col}
+    if numeric_cols is None:
+        numeric_cols = set(unused_cols)
+    unused_cols = unused_cols - set(numeric_cols)
+    totals = df.select(pl.col(numeric_cols).sum())
+    labeled_totals = totals.with_columns(pl.lit("<< TOTAL >>").alias(label_col))
+    labeled_totals = labeled_totals.with_columns(
+        pl.lit(None).alias(col) for col in unused_cols
+    )
+    return pl.concat([df, labeled_totals.select(df.columns)])
