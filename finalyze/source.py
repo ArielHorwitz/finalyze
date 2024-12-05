@@ -113,8 +113,8 @@ def parse_sources(*, account_name, balance_files, credit_files, verbose):
 
 def parse_credit(*, input_file, verbose=False):
     def inner_parse(raw_pd_df, source_name):
-        validate(raw_pd_df)
         print_table(raw_pd_df, f"raw {source_name}", verbose > 1)
+        validate(raw_pd_df)
         table = pl.from_pandas(raw_pd_df.iloc[2:-1])
         parsed = pl.DataFrame(
             {
@@ -158,12 +158,12 @@ def parse_credit(*, input_file, verbose=False):
 def parse_balance(*, input_file, verbose=False):
     balances_raw_pd = pd.read_html(input_file, encoding="utf-8")[2]
     balances_raw_pd[0] = balances_raw_pd[0].str.replace("** ", "", regex=False)
+    print_table(balances_raw_pd, "raw balance", verbose > 1)
     try:
         assert balances_raw_pd.iloc[0, 0] == "תנועות בחשבון"
         assert balances_raw_pd.iloc[1, 0] == "תאריך"
     except AssertionError:
         raise ImportError(f"Unexpected format for {input_file}")
-    print_table(balances_raw_pd, "raw balance", verbose > 1)
     if balances_raw_pd.iloc[-1, 0].startswith("**"):
         balances_raw_pd = balances_raw_pd.iloc[:-1]
     raw = pl.from_pandas(balances_raw_pd.iloc[2:])
