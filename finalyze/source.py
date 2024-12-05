@@ -16,7 +16,7 @@ SOURCE_SCHEMA = {
 
 
 def add_subparser(subparsers):
-    parser = subparsers.add_parser("import", help="Import source data")
+    parser = subparsers.add_parser("source", help="Import source data")
     parser.set_defaults(func=run)
     parser.add_argument(
         "-n",
