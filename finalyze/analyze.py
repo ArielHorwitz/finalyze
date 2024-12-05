@@ -117,9 +117,10 @@ def analyze(
     by_tags = with_totals(tag1.collect(), "tag1", ["amount", "txn"])
     print_table(by_subtags, "By subtags")
     print_table(by_tags, "By tags")
-    monthly_df = monthly(source_data, tag1.collect()["tag1"])
-    monthly_df = with_totals(monthly_df, "tag1")
-    print_table(monthly_df, "By month")
+    monthly_txns = monthly(source_data, tag1.collect()["tag1"], aggregate_counts=True)
+    print_table(with_totals(monthly_txns, "tag1"), "Txn by month")
+    monthly_amounts = monthly(source_data, tag1.collect()["tag1"])
+    print_table(with_totals(monthly_amounts, "tag1"), "Amount by month")
     total_sum = source_data.select(pl.col("amount").sum()).collect()["amount"][0]
     print(f"Total sum: {total_sum}")
 
@@ -185,12 +186,19 @@ def tag_tables(df):
     return tag1, tag2
 
 
-def monthly(df, tag_order):
+def monthly(df, tag_order, aggregate_counts=False):
     year = pl.col("date").dt.year().cast(str)
     month = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
     df = df.with_columns((year + "-" + month).alias("month"))
-    df = df.group_by(("month", "tag1")).agg(pl.col("amount").sum()).sort("month")
-    df = df.collect().pivot(index="tag1", columns="month", values="amount").fill_null(0)
+    df = df.with_columns(pl.len().alias("txn"))
+    aggregation = pl.len().alias("txn") if aggregate_counts else pl.col("amount").sum()
+    aggregation_name = "txn" if aggregate_counts else "amount"
+    df = df.group_by(("month", "tag1")).agg(aggregation).sort("month")
+    df = (
+        df.collect()
+        .pivot(index="tag1", columns="month", values=aggregation_name)
+        .fill_null(0)
+    )
     sort_ref = pl.DataFrame({"tag1": tag_order, "tag_order": range(len(tag_order))})
     df = df.join(sort_ref, on="tag1", how="left").sort("tag_order").drop("tag_order")
     return df
