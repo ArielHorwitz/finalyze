@@ -2,7 +2,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from finalyze import analyze, source, tag
+from finalyze import analysis, source, tag
 
 APP_NAME = "finalyze"
 DESCRIPTION = "Personal financial analysis tool"
@@ -40,7 +40,7 @@ def main():
     subparsers = parser.add_subparsers(dest="subcommand")
     source.add_subparser(subparsers)
     tag.add_subparser(subparsers)
-    analyze.add_subparser(subparsers)
+    analysis.add_subparser(subparsers)
     args = parser.parse_args()
 
     default_data_dir = Path.home() / ".local" / "share" / APP_NAME.lower() / "data"
