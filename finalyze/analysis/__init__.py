@@ -1,5 +1,7 @@
 import functools
 import operator
+import subprocess
+import tomllib
 
 import arrow
 import polars as pl
@@ -8,7 +10,8 @@ from finalyze.source import get_source_data
 from finalyze.tag import apply_tags
 from finalyze.utils import print_table
 
-from . import tables
+from . import plot
+from .tables import get_tables
 
 COLUMN_ORDER = (
     "account",
@@ -35,6 +38,23 @@ def add_subparser(subparsers):
         "--lenient",
         action="store_true",
         help="Do not perform strict data validation",
+    )
+    parser.add_argument(
+        "-g",
+        "--open-graphs",
+        action="store_true",
+        help="Open graphs in browser",
+    )
+    parser.add_argument(
+        "-p",
+        "--print-tables",
+        action="store_true",
+        help="Print tables to stdout",
+    )
+    parser.add_argument(
+        "--plotly-template",
+        default="plotly_dark",
+        help="Select template/theme for plotly",
     )
     filters = parser.add_argument_group("FILTERS")
     filters.add_argument(
@@ -75,6 +95,15 @@ def run(args):
     verbose = args.verbose
     tags_file = args.tags_file
     strict = not args.lenient
+    print_tables = args.print_tables
+    open_graphs = args.open_graphs
+    plotly_template = args.plotly_template
+    plots_files = args.data_dir / "plots.html"
+    color_map_file = args.data_dir / "tag_colors.toml"
+    if not color_map_file.is_file():
+        color_map_file.write_text('other = "#000000"')
+    color_map = tomllib.loads(color_map_file.read_text())
+    # Source data
     source_data = get_source_data(args).sort("date", "amount")
     tagged_data = apply_tags(source_data, tags_file)
     print_table(tagged_data, "unfiltered source data", verbose > 1)
@@ -88,30 +117,23 @@ def run(args):
         account=args.filter_account,
     )
     source_data = filtered_data.select(*COLUMN_ORDER)
-    print_table(source_data.collect(), "filtered source data")
-    analyze(filtered_data, strict=strict)
-
-
-def analyze(source_data, *, strict: bool = True):
     if strict:
-        validate_tags(source_data.collect())
-    tag1, tag2 = tables.tag_tables(source_data)
-    tag1, tag2 = tag1.collect(), tag2.collect()
-    by_subtags = tables.with_totals(tag2)
-    by_tags = tables.with_totals(tag1)
-    print_table(by_subtags, "By subtags")
-    print_table(by_tags, "By tags")
-    monthly_amounts, monthly_txns = tables.monthly(source_data, tag1["tag1"])
-    print_table(tables.with_totals(monthly_txns), "Txn by month")
-    print_table(tables.with_totals(monthly_amounts), "Amount by month")
-    total_sum = source_data.select(pl.col("amount").sum()).collect()["amount"][0]
-    print(f"Total sum: {total_sum}")
-
-
-def validate_tags(source_data):
-    missing_tag_indices = tuple(source_data["tag1"].is_null().arg_true())
-    if missing_tag_indices:
-        raise ValueError(f"Missing tags at indices: {missing_tag_indices}")
+        validate_tags(source_data)
+    if print_tables:
+        print_table(source_data.collect(), "filtered source data")
+    # Tables
+    tables = get_tables(source_data)
+    for table in tables:
+        if verbose:
+            print(table)
+        if print_tables:
+            print_table(table.with_totals(), table.title)
+    # Plots
+    if verbose:
+        print(f"{plots_files=}")
+    plot.write_html(tables, plots_files, template=plotly_template, color_map=color_map)
+    if open_graphs:
+        subprocess.run(["xdg-open", plots_files])
 
 
 def filter_data(
@@ -156,3 +178,9 @@ def _parse_date(raw_date):
     raise arrow.parser.ParserMatchError(
         f"Failed to match date {raw_date!r} against patterns: {DATE_PATTERNS}"
     )
+
+
+def validate_tags(df):
+    missing_tag_indices = tuple(df.collect()["tag1"].is_null().arg_true())
+    if missing_tag_indices:
+        raise ValueError(f"Missing tags at indices: {missing_tag_indices}")
