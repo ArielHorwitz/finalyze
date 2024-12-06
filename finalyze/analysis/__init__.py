@@ -1,4 +1,5 @@
-from typing import Optional
+import functools
+import operator
 
 import arrow
 import polars as pl
@@ -6,6 +7,8 @@ import polars as pl
 from finalyze.source import get_source_data
 from finalyze.tag import apply_tags
 from finalyze.utils import print_table
+
+from . import tables
 
 COLUMN_ORDER = (
     "account",
@@ -16,6 +19,11 @@ COLUMN_ORDER = (
     "tag2",
     "description",
     "hash",
+)
+DATE_PATTERNS = (
+    "YYYY-MM-DD",
+    "YYYY-MM",
+    "YYYY",
 )
 
 
@@ -32,12 +40,12 @@ def add_subparser(subparsers):
     filters.add_argument(
         "-S",
         "--start-date",
-        help="Filter since date (YYYY-MM-DD)",
+        help="Filter since date (inclusive)",
     )
     filters.add_argument(
         "-E",
         "--end-date",
-        help="Filter until date (YYYY-MM-DD)",
+        help="Filter until date (non-inclusive)",
     )
     filters.add_argument(
         "-1",
@@ -67,90 +75,37 @@ def run(args):
     verbose = args.verbose
     tags_file = args.tags_file
     strict = not args.lenient
-    start_date = None
-    if args.start_date:
-        start_date = arrow.get(args.start_date, "YYYY-MM-DD")
-    end_date = None
-    if args.end_date:
-        end_date = arrow.get(args.end_date, "YYYY-MM-DD")
-    filter_tags1 = args.filter_tag1
-    filter_tags2 = args.filter_tag2
-    filter_description = args.description
-    filter_account = args.filter_account
     source_data = get_source_data(args).sort("date", "amount")
     tagged_data = apply_tags(source_data, tags_file)
     print_table(tagged_data, "unfiltered source data", verbose > 1)
-    analyze(
-        tagged_data,
-        strict=strict,
-        filter_tags1=filter_tags1,
-        filter_tags2=filter_tags2,
-        start_date=start_date,
-        end_date=end_date,
-        filter_description=filter_description,
-        filter_account=filter_account,
+    filtered_data = filter_data(
+        tagged_data.lazy(),
+        start_date=args.start_date,
+        end_date=args.end_date,
+        tags1=args.filter_tag1,
+        tags2=args.filter_tag2,
+        description=args.description,
+        account=args.filter_account,
     )
+    source_data = filtered_data.select(*COLUMN_ORDER)
+    print_table(source_data.collect(), "filtered source data")
+    analyze(filtered_data, strict=strict)
 
 
-def analyze(
-    source_data,
-    *,
-    strict: bool = True,
-    filter_tags1,
-    filter_tags2,
-    start_date: Optional[arrow.Arrow] = None,
-    end_date: Optional[arrow.Arrow] = None,
-    filter_description=None,
-    filter_account=None,
-):
-    source_data = source_data.select(*COLUMN_ORDER).lazy()
-    source_data = filter_date_range(source_data, start_date, end_date)
-    source_data = filter_tags(source_data, filter_tags1, filter_tags2)
-    source_data = filter_patterns(source_data, filter_description, filter_account)
-    filtered_data = source_data.collect()
-    print_table(filtered_data, "filtered source data")
+def analyze(source_data, *, strict: bool = True):
     if strict:
-        validate_tags(filtered_data)
-
-    tag1, tag2 = tag_tables(source_data)
-    by_subtags = with_totals(tag2.collect(), "tag1", ["amount", "txn"])
-    by_tags = with_totals(tag1.collect(), "tag1", ["amount", "txn"])
+        validate_tags(source_data.collect())
+    tag1, tag2 = tables.tag_tables(source_data)
+    tag1, tag2 = tag1.collect(), tag2.collect()
+    by_subtags = tables.with_totals(tag2, "tag1", ["amount", "txn"])
+    by_tags = tables.with_totals(tag1, "tag1", ["amount", "txn"])
     print_table(by_subtags, "By subtags")
     print_table(by_tags, "By tags")
-    monthly_txns = monthly(source_data, tag1.collect()["tag1"], aggregate_counts=True)
-    print_table(with_totals(monthly_txns, "tag1"), "Txn by month")
-    monthly_amounts = monthly(source_data, tag1.collect()["tag1"])
-    print_table(with_totals(monthly_amounts, "tag1"), "Amount by month")
+    monthly_amounts, monthly_txns = tables.monthly(source_data, tag1["tag1"])
+    print_table(tables.with_totals(monthly_txns, "tag1"), "Txn by month")
+    print_table(tables.with_totals(monthly_amounts, "tag1"), "Amount by month")
     total_sum = source_data.select(pl.col("amount").sum()).collect()["amount"][0]
     print(f"Total sum: {total_sum}")
-
-
-def filter_date_range(df, start, end):
-    if start:
-        df = df.filter(pl.col("date").dt.date() >= start.date())
-    if end:
-        df = df.filter(pl.col("date").dt.date() < end.date())
-    return df
-
-
-def filter_tags(df, tags1, tags2):
-    predicates = [pl.lit(True)]
-    if tags1 is not None:
-        predicates.append(pl.col("tag1").is_in(pl.Series(tags1)))
-    if tags2 is not None:
-        predicates.append(pl.col("tag2").is_in(pl.Series(tags2)))
-    predicate = predicates[0]
-    for p in predicates[1:]:
-        predicate = predicate & p
-    return df.filter(predicate)
-
-
-def filter_patterns(df, description_regex, account_name):
-    if description_regex:
-        df = df.filter(pl.col("description").str.contains(description_regex))
-    if account_name:
-        df = df.filter(pl.col("account") == account_name)
-    return df
 
 
 def validate_tags(source_data):
@@ -159,59 +114,45 @@ def validate_tags(source_data):
         raise ValueError(f"Missing tags at indices: {missing_tag_indices}")
 
 
-def tag_tables(df):
-    tag1 = (
-        df.group_by("tag1")
-        .agg(
-            [
-                pl.len().alias("txn"),
-                pl.col("amount").sum(),
-            ]
-        )
-        .sort(("amount"), descending=False)
-        .select("tag1", "amount", "txn")
-    )
-    tag2 = (
-        df.group_by("tag1", "tag2")
-        .agg(
-            [
-                pl.len().alias("txn"),
-                pl.col("amount").sum(),
-            ]
-        )
-        .join(tag1, on="tag1", how="left")
-        .sort(("amount_right", "amount"), descending=False)
-        .select(("tag1", "tag2", "amount", "txn"))
-    )
-    return tag1, tag2
+def filter_data(
+    df,
+    *,
+    start_date,
+    end_date,
+    tags1,
+    tags2,
+    description,
+    account,
+):
+    predicates = []
+    # dates
+    if start_date is not None:
+        predicates.append(pl.col("date").dt.date() >= _parse_date(start_date))
+    if end_date is not None:
+        predicates.append(pl.col("date").dt.date() < _parse_date(end_date))
+    # tags
+    if tags1 is not None:
+        predicates.append(pl.col("tag1").is_in(pl.Series(tags1)))
+    if tags2 is not None:
+        predicates.append(pl.col("tag2").is_in(pl.Series(tags2)))
+    # patterns
+    if description is not None:
+        predicates.append(pl.col("description").str.contains(description))
+    if account is not None:
+        predicates.append(pl.col("account") == account)
+    # filter
+    predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
+    return df.filter(predicate)
 
 
-def monthly(df, tag_order, aggregate_counts=False):
-    year = pl.col("date").dt.year().cast(str)
-    month = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
-    df = df.with_columns((year + "-" + month).alias("month"))
-    df = df.with_columns(pl.len().alias("txn"))
-    aggregation = pl.len().alias("txn") if aggregate_counts else pl.col("amount").sum()
-    aggregation_name = "txn" if aggregate_counts else "amount"
-    df = df.group_by(("month", "tag1")).agg(aggregation).sort("month")
-    df = (
-        df.collect()
-        .pivot(index="tag1", columns="month", values=aggregation_name)
-        .fill_null(0)
+def _parse_date(raw_date):
+    if not raw_date:
+        return None
+    for pattern in DATE_PATTERNS:
+        try:
+            return arrow.get(raw_date, pattern).date()
+        except arrow.parser.ParserMatchError:
+            pass
+    raise arrow.parser.ParserMatchError(
+        f"Failed to match date {raw_date!r} against patterns: {DATE_PATTERNS}"
     )
-    sort_ref = pl.DataFrame({"tag1": tag_order, "tag_order": range(len(tag_order))})
-    df = df.join(sort_ref, on="tag1", how="left").sort("tag_order").drop("tag_order")
-    return df
-
-
-def with_totals(df, label_col, numeric_cols=None):
-    unused_cols = set(df.columns) - {label_col}
-    if numeric_cols is None:
-        numeric_cols = set(unused_cols)
-    unused_cols = unused_cols - set(numeric_cols)
-    totals = df.select(pl.col(numeric_cols).sum())
-    labeled_totals = totals.with_columns(pl.lit("<< TOTAL >>").alias(label_col))
-    labeled_totals = labeled_totals.with_columns(
-        pl.lit(None).alias(col) for col in unused_cols
-    )
-    return pl.concat([df, labeled_totals.select(df.columns)])
