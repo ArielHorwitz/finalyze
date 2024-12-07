@@ -46,13 +46,19 @@ def _monthly(df, tag_order, aggregate_counts=False):
     return df
 
 
-def with_totals(df, label_col, numeric_cols=None):
-    unused_cols = set(df.columns) - {label_col}
-    numeric_cols = numeric_cols or set(unused_cols)
-    unused_cols = unused_cols - set(numeric_cols)
-    totals = df.select(pl.col(numeric_cols).sum())
-    labeled_totals = totals.with_columns(
-        pl.lit("<< TOTAL >>").alias(label_col),
-        *(pl.lit(None).alias(col) for col in unused_cols),
-    ).select(df.columns)
-    return pl.concat([df, labeled_totals])
+def with_totals(df, collect=True):
+    schema = df.collect_schema()
+    dtypes = dict(zip(schema.names(), schema.dtypes()))
+    totals_row = {}
+    for name, dtype in dtypes.items():
+        if dtype.is_numeric():
+            col = df.lazy().select(pl.col(name).sum()).collect()
+        elif dtype.to_python() == str:
+            col = "<< TOTAL >>"
+        else:
+            col = None
+        totals_row[name] = col
+    final = pl.concat([df.lazy(), pl.LazyFrame(totals_row)])
+    if collect or isinstance(df, pl.DataFrame):
+        return final.collect()
+    return final

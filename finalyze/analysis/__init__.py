@@ -97,13 +97,13 @@ def analyze(source_data, *, strict: bool = True):
         validate_tags(source_data.collect())
     tag1, tag2 = tables.tag_tables(source_data)
     tag1, tag2 = tag1.collect(), tag2.collect()
-    by_subtags = tables.with_totals(tag2, "tag1", ["amount", "txn"])
-    by_tags = tables.with_totals(tag1, "tag1", ["amount", "txn"])
+    by_subtags = tables.with_totals(tag2)
+    by_tags = tables.with_totals(tag1)
     print_table(by_subtags, "By subtags")
     print_table(by_tags, "By tags")
     monthly_amounts, monthly_txns = tables.monthly(source_data, tag1["tag1"])
-    print_table(tables.with_totals(monthly_txns, "tag1"), "Txn by month")
-    print_table(tables.with_totals(monthly_amounts, "tag1"), "Amount by month")
+    print_table(tables.with_totals(monthly_txns), "Txn by month")
+    print_table(tables.with_totals(monthly_amounts), "Amount by month")
     total_sum = source_data.select(pl.col("amount").sum()).collect()["amount"][0]
     print(f"Total sum: {total_sum}")
 
