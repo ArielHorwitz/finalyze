@@ -15,16 +15,20 @@ PD_OPTIONS = (
 PL_OPTIONS = {
     "tbl_rows": 1_000_000,
     "tbl_cols": 1_000,
+    "tbl_width_chars": 1_000,
+    "tbl_hide_dataframe_shape": True,
 }
 
 
-def print_table(table, description: str = "unnamed", enable: bool = True):
+def print_table(table, description: str = "Unnamed table", enable: bool = True):
     if not enable:
         return
-    print(f"Showing table: {description}")
+    print()
+    print(description)
     with pl.Config(**PL_OPTIONS):
         with pd.option_context(*PD_OPTIONS):
             print(table)
+    print()
 
 
 def flip_rtl_column(df, column_name):
