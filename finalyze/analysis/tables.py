@@ -11,7 +11,7 @@ class Table:
     source: pl.DataFrame = dataclasses.field(repr=False)
     title: str
     figure_constructor: Optional[Callable[[Any], Figure]] = None
-    figure_arguments: Optional[dict[str, Any]] = None
+    figure_arguments: dict[str, Any] = dataclasses.field(default_factory=dict)
 
     def __post_init__(self):
         if isinstance(self.source, pl.LazyFrame):
