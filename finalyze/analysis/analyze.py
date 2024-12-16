@@ -1,14 +1,9 @@
 import dataclasses
-import functools
-import operator
 import subprocess
 import tomllib
-from typing import Optional
-
-import arrow
-import polars as pl
 
 from finalyze.display import print_table
+from finalyze.filters import Filters
 from finalyze.source.source import get_source_data
 from finalyze.tag import apply_tags
 
@@ -25,65 +20,6 @@ COLUMN_ORDER = (
     "description",
     "hash",
 )
-DATE_PATTERNS = (
-    "YYYY-MM-DD",
-    "YYYY-MM",
-    "YYYY",
-)
-
-
-@dataclasses.dataclass
-class Filters:
-    start_date: Optional[str]
-    end_date: Optional[str]
-    tags: Optional[list[str]]
-    subtags: Optional[list[str]]
-    description: Optional[str]
-    account: Optional[str]
-
-    @staticmethod
-    def configure_parser(parser):
-        parser.add_argument(
-            "-S",
-            "--start-date",
-            help="Filter since date (inclusive)",
-        )
-        parser.add_argument(
-            "-E",
-            "--end-date",
-            help="Filter until date (non-inclusive)",
-        )
-        parser.add_argument(
-            "-1",
-            "--tags",
-            nargs="*",
-            help="Filter by tags",
-        )
-        parser.add_argument(
-            "-2",
-            "--subtags",
-            nargs="*",
-            help="Filter by subtags",
-        )
-        parser.add_argument(
-            "-D",
-            "--description",
-            help="Filter by description (regex pattern)",
-        )
-        parser.add_argument(
-            "-A",
-            "--account",
-            help="Filter by account name",
-        )
-
-    @classmethod
-    def from_args(cls, args):
-        return cls(
-            **{
-                field.name: getattr(args, field.name)
-                for field in dataclasses.fields(cls)
-            }
-        )
 
 
 @dataclasses.dataclass
@@ -144,7 +80,7 @@ def run(command_args, global_args):
     tagged_data = apply_tags(source_data, global_args.tags_file)
     if command_args.print_tables:
         print_table(tagged_data, "unfiltered source data")
-    filtered_data = filter_data(tagged_data.lazy(), command_args.filters)
+    filtered_data = command_args.filters.filter_data(tagged_data.lazy())
     source_data = filtered_data.select(*COLUMN_ORDER)
     if not command_args.lenient:
         validate_tags(source_data)
@@ -166,41 +102,6 @@ def run(command_args, global_args):
     )
     if command_args.open_graphs:
         subprocess.run(["xdg-open", plots_files])
-
-
-def filter_data(df, filters):
-    predicates = []
-    # dates
-    if filters.start_date is not None:
-        predicates.append(pl.col("date").dt.date() >= _parse_date(filters.start_date))
-    if filters.end_date is not None:
-        predicates.append(pl.col("date").dt.date() < _parse_date(filters.end_date))
-    # tags
-    if filters.tags is not None:
-        predicates.append(pl.col("tag1").is_in(pl.Series(filters.tags)))
-    if filters.subtags is not None:
-        predicates.append(pl.col("tag2").is_in(pl.Series(filters.subtags)))
-    # patterns
-    if filters.description is not None:
-        predicates.append(pl.col("description").str.contains(filters.description))
-    if filters.account is not None:
-        predicates.append(pl.col("account") == filters.account)
-    # filter
-    predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
-    return df.filter(predicate)
-
-
-def _parse_date(raw_date):
-    if not raw_date:
-        return None
-    for pattern in DATE_PATTERNS:
-        try:
-            return arrow.get(raw_date, pattern).date()
-        except arrow.parser.ParserMatchError:
-            pass
-    raise arrow.parser.ParserMatchError(
-        f"Failed to match date {raw_date!r} against patterns: {DATE_PATTERNS}"
-    )
 
 
 def validate_tags(df):
