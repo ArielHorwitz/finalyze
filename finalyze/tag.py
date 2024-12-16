@@ -1,4 +1,6 @@
+import dataclasses
 import shutil
+from typing import Optional
 
 import polars as pl
 
@@ -12,54 +14,61 @@ TAG_SCHEMA = {
 }
 
 
-def add_subparser(subparsers):
-    parser = subparsers.add_parser("tag", help="Tag source data")
-    parser.set_defaults(func=run)
-    parser.add_argument(
-        "--path",
-        action="store_true",
-        help="Print path to tags file and quit",
-    )
-    parser.add_argument(
-        "-d",
-        "--default",
-        help="Set default tags (instead of using best guess suggestion)",
-    )
-    parser.add_argument(
-        "-D",
-        "--delete",
-        action="store_true",
-        help="Delete tags and quit",
-    )
-    parser.add_argument(
-        "-1",
-        "--filter-tag1",
-        nargs="*",
-        help="Filter tags for deletion (with --delete)",
-    )
-    parser.add_argument(
-        "-2",
-        "--filter-tag2",
-        nargs="*",
-        help="Filter subtags for deletion (with --delete)",
-    )
+@dataclasses.dataclass
+class Args:
+    default_tags: bool
+    delete: bool
+    tags: Optional[list[str]]
+    subtags: Optional[list[str]]
+
+    @classmethod
+    def configure_parser(cls, parser):
+        parser.set_defaults(command_class=cls, run=run)
+        parser.add_argument(
+            "-d",
+            "--default-tags",
+            help="Set default tags (instead of using best guess suggestion)",
+        )
+        parser.add_argument(
+            "-D",
+            "--delete",
+            action="store_true",
+            help="Delete tags and quit",
+        )
+        parser.add_argument(
+            "-1",
+            "--tags",
+            nargs="*",
+            help="Filter tags for deletion (with --delete)",
+        )
+        parser.add_argument(
+            "-2",
+            "--subtags",
+            nargs="*",
+            help="Filter subtags for deletion (with --delete)",
+        )
+
+    @classmethod
+    def from_args(cls, args):
+        return cls(
+            **{
+                field.name: getattr(args, field.name)
+                for field in dataclasses.fields(cls)
+            }
+        )
 
 
-def run(args):
-    tags_file = args.tags_file
-    print_path = args.path
-    default_tag = args.default
-    delete = args.delete
-    filter_tag1 = args.filter_tag1
-    filter_tag2 = args.filter_tag2
-    if print_path:
-        print(tags_file)
+def run(command_args, global_args):
+    print(f"Tags file: {global_args.tags_file}")
+    if command_args.delete:
+        delete_tags(
+            global_args.tags_file,
+            filter_tag1=command_args.tags,
+            filter_tag2=command_args.subtags,
+        )
         return
-    if delete:
-        delete_tags(tags_file, filter_tag1=filter_tag1, filter_tag2=filter_tag2)
-        return
-    source_data = get_source_data(args)
-    write_tags(source_data, tags_file, default_tag)
+    source_data = get_source_data(global_args)
+    write_tags(source_data, global_args.tags_file, command_args.default_tags)
 
 
 def apply_tags(data, tags_file):
