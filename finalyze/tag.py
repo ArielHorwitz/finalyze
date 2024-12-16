@@ -4,7 +4,7 @@ from typing import Optional
 
 import polars as pl
 
-from finalyze import utils
+from finalyze.display import print_table
 from finalyze.source.source import get_source_data
 
 TAG_SCHEMA = {
@@ -197,7 +197,7 @@ def delete_tags(tags_file, *, filter_tag1, filter_tag2):
         .rename({"len": "entries"})
         .sort(["tag1", "tag2"])
     )
-    utils.print_table(filtered_data, "Tags to delete")
+    print_table(filtered_data, "Tags to delete")
     if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
         print("Aborted.")
         return

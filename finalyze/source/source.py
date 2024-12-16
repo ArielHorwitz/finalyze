@@ -3,8 +3,8 @@ from pathlib import Path
 
 import polars as pl
 
+from finalyze.display import flip_rtl_column, print_table
 from finalyze.source.leumi import parse_file
-from finalyze.utils import flip_rtl_column, print_table
 
 SOURCE_SCHEMA = {
     "account": pl.String,

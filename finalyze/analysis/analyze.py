@@ -8,9 +8,9 @@ from typing import Optional
 import arrow
 import polars as pl
 
+from finalyze.display import print_table
 from finalyze.source.source import get_source_data
 from finalyze.tag import apply_tags
-from finalyze.utils import print_table
 
 from . import plot
 from .tables import get_tables
