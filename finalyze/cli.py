@@ -3,7 +3,9 @@ import dataclasses
 import sys
 from pathlib import Path
 
-from finalyze import analysis, source, tag
+from finalyze import tag
+from finalyze.analysis import analyze
+from finalyze.source import source
 
 APP_NAME = "finalyze"
 DESCRIPTION = "Personal financial analysis tool"
@@ -78,7 +80,7 @@ def main():
         subparsers.add_parser("source", help="Import source data")
     )
     tag.Args.configure_parser(subparsers.add_parser("tag", help="Tag source data"))
-    analysis.Args.configure_parser(
+    analyze.Args.configure_parser(
         subparsers.add_parser("analyze", help="Analyze historical data")
     )
     # Parse and validate

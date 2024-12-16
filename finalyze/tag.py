@@ -5,7 +5,7 @@ from typing import Optional
 import polars as pl
 
 from finalyze import utils
-from finalyze.source import get_source_data
+from finalyze.source.source import get_source_data
 
 TAG_SCHEMA = {
     "tag1": pl.String,
