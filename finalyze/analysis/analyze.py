@@ -5,7 +5,7 @@ import tomllib
 from finalyze.display import print_table
 from finalyze.filters import Filters
 from finalyze.source.source import get_source_data
-from finalyze.tag import apply_tags
+from finalyze.tags.tagger import apply_tags
 
 from . import plot
 from .tables import get_tables

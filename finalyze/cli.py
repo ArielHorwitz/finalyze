@@ -3,9 +3,9 @@ import dataclasses
 import sys
 from pathlib import Path
 
-from finalyze import tag
 from finalyze.analysis import analyze
 from finalyze.source import source
+from finalyze.tags import tag
 
 APP_NAME = "finalyze"
 DESCRIPTION = "Personal financial analysis tool"
