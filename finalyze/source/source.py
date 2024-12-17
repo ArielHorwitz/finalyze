@@ -66,6 +66,12 @@ def get_source_data(data):
     return source_data
 
 
+def load_source_data(source_dir):
+    return pl.concat(
+        pl.read_csv(file, schema=SOURCE_SCHEMA) for file in source_dir.glob("*.csv")
+    )
+
+
 def parse_sources(*, files, account_name):
     raw_dfs = [parse_file(input_file=file) for file in files]
     final = (
