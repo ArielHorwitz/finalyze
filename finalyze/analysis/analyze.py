@@ -78,8 +78,6 @@ def run(command_args, global_args):
     # Source data
     source_data = get_source_data(global_args).sort("date", "amount")
     tagged_data = apply_tags(source_data, global_args.tags_file)
-    if command_args.print_tables:
-        print_table(tagged_data, "unfiltered source data")
     filtered_data = command_args.filters.filter_data(tagged_data.lazy())
     source_data = filtered_data.select(*COLUMN_ORDER)
     if not command_args.lenient:
@@ -93,7 +91,7 @@ def run(command_args, global_args):
         if command_args.print_tables:
             print_table(table.with_totals(), table.title)
     # Plots
-    print(f"Exporting plots to: {plots_files=}")
+    print(f"Exporting plots to: {plots_files}")
     plot.write_html(
         tables,
         plots_files,
