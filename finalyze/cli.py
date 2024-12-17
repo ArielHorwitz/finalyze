@@ -10,6 +10,8 @@ from finalyze.tags import tag
 APP_NAME = "finalyze"
 DESCRIPTION = "Personal financial analysis tool"
 TAGS_FILENAME = "tags.csv"
+COLORS_FILENAME = "colors.toml"
+PLOTS_FILENAME = "plots.html"
 DATA_DIR = Path.home() / ".local" / "share" / APP_NAME.lower() / "data"
 
 
@@ -25,14 +27,22 @@ class GlobalArgs:
         return self.data_dir / self.dataset_name
 
     @property
+    def source_dir(self):
+        return self.dataset_dir / "sources"
+
+    @property
     def tags_file(self):
         if self.use_dataset_tags:
             return self.dataset_dir / TAGS_FILENAME
         return self.data_dir / TAGS_FILENAME
 
     @property
-    def source_dir(self):
-        return self.dataset_dir / "sources"
+    def colors_file(self):
+        return self.data_dir / COLORS_FILENAME
+
+    @property
+    def plots_file(self):
+        return self.data_dir / PLOTS_FILENAME
 
     def __post_init__(self):
         for directory in (self.data_dir, self.dataset_dir, self.source_dir):

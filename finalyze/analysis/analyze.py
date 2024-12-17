@@ -70,11 +70,6 @@ class Args:
 
 
 def run(command_args, global_args):
-    plots_files = global_args.data_dir / "plots.html"
-    color_map_file = global_args.data_dir / "tag_colors.toml"
-    if not color_map_file.is_file():
-        color_map_file.write_text('other = "#000000"')
-    color_map = tomllib.loads(color_map_file.read_text())
     # Source data
     source_data = get_source_data(global_args).sort("date", "amount")
     tagged_data = apply_tags(source_data, global_args.tags_file)
@@ -91,6 +86,8 @@ def run(command_args, global_args):
         if command_args.print_tables:
             print_table(table.with_totals(), table.title)
     # Plots
+    plots_files = global_args.plots_file
+    color_map = load_colors(global_args.colors_file)
     print(f"Exporting plots to: {plots_files}")
     plot.write_html(
         tables,
@@ -106,3 +103,9 @@ def validate_tags(df):
     missing_tag_indices = tuple(df.collect()["tag"].is_null().arg_true())
     if missing_tag_indices:
         raise ValueError(f"Missing tags at indices: {missing_tag_indices}")
+
+
+def load_colors(colors_file):
+    if not colors_file.is_file():
+        colors_file.write_text('other = "#000000"')
+    return tomllib.loads(colors_file.read_text())
