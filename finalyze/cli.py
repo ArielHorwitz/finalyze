@@ -57,10 +57,6 @@ class GlobalArgs:
             help="Dataset name",
         )
         parser.add_argument(
-            "--data-dir",
-            help="Data directory",
-        )
-        parser.add_argument(
             "--dataset-tags",
             action="store_true",
             help="Use isolated tags file for dataset instead of global tags file",
