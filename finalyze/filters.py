@@ -75,9 +75,9 @@ class Filters:
             predicates.append(pl.col("date").dt.date() < _parse_date(self.end_date))
         # tags
         if self.tags is not None:
-            predicates.append(pl.col("tag1").is_in(pl.Series(self.tags)))
+            predicates.append(pl.col("tag").is_in(pl.Series(self.tags)))
         if self.subtags is not None:
-            predicates.append(pl.col("tag2").is_in(pl.Series(self.subtags)))
+            predicates.append(pl.col("subtag").is_in(pl.Series(self.subtags)))
         # patterns
         if self.description is not None:
             predicates.append(pl.col("description").str.contains(self.description))

@@ -15,8 +15,8 @@ COLUMN_ORDER = (
     "source",
     "date",
     "amount",
-    "tag1",
-    "tag2",
+    "tag",
+    "subtag",
     "description",
     "hash",
 )
@@ -105,6 +105,6 @@ def run(command_args, global_args):
 
 
 def validate_tags(df):
-    missing_tag_indices = tuple(df.collect()["tag1"].is_null().arg_true())
+    missing_tag_indices = tuple(df.collect()["tag"].is_null().arg_true())
     if missing_tag_indices:
         raise ValueError(f"Missing tags at indices: {missing_tag_indices}")

@@ -57,10 +57,10 @@ def delete_tags(source_data, tags_file, filters):
     remaining_tags = tags_data.filter(~pl.col("hash").is_in(delete_data.select("hash")))
 
     delete_summary = (
-        delete_data.group_by(["tag1", "tag2"])
+        delete_data.group_by(["tag", "subtag"])
         .len()
         .rename({"len": "entries"})
-        .sort(["tag1", "tag2"])
+        .sort(["tag", "subtag"])
     )
     print_table(delete_data, "Entries to delete")
     print_table(delete_summary, "Tags to delete")

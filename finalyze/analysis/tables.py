@@ -37,44 +37,44 @@ def get_tables(source_data: pl.DataFrame) -> list[Table]:
         Table(
             source.filter(pl.col("amount") < 0)
             .with_columns(pl.col("amount") * -1)
-            .group_by("tags", "tag1", "tag2")
+            .group_by("tags", "tag", "subtag")
             .agg(pl.col("amount").sum()),
             title="Expenses breakdown detailed",
             figure_constructor=px.sunburst,
             figure_arguments=dict(
-                path=["tag1", "tag2"],
+                path=["tag", "subtag"],
                 values="amount",
                 labels={
-                    "tag1": "Tag",
-                    "tag2": "Subtag",
+                    "tag": "Tag",
+                    "subtag": "Subtag",
                     "amount": "Amount",
                     "parent": "Tag",
                     "id": "Tags",
                 },
-                color="tag1",
+                color="tag",
             ),
         ),
         Table(
             source.filter(pl.col("amount") > 0)
-            .group_by("tags", "tag1", "tag2")
+            .group_by("tags", "tag", "subtag")
             .agg(pl.col("amount").sum()),
             title="Incomes breakdown detailed",
             figure_constructor=px.sunburst,
             figure_arguments=dict(
-                path=["tag1", "tag2"],
+                path=["tag", "subtag"],
                 values="amount",
                 labels={
-                    "tag1": "Tag",
-                    "tag2": "Subtag",
+                    "tag": "Tag",
+                    "subtag": "Subtag",
                     "amount": "Amount",
                     "parent": "Tag",
                     "id": "Tags",
                 },
-                color="tag1",
+                color="tag",
             ),
         ),
         Table(
-            source.group_by("month", "tag1", "tag2", "tags")
+            source.group_by("month", "tag", "subtag", "tags")
             .agg(pl.col("amount").sum())
             .sort("month", "tags"),
             title="Monthly breakdown",
@@ -82,13 +82,13 @@ def get_tables(source_data: pl.DataFrame) -> list[Table]:
             figure_arguments=dict(
                 x="month",
                 y="amount",
-                color="tag1",
+                color="tag",
                 hover_data=["tags", "amount"],
                 labels={
                     "tags": "Tags",
                     "month": "Month",
                     "amount": "Amount",
-                    "tag1": "Tag",
+                    "tag": "Tag",
                 },
             ),
         ),
@@ -103,7 +103,7 @@ def prepare_source(source: pl.DataFrame):
     month = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
     source = source.with_columns((year + "-" + month).alias("month"))
     # Combined tags column
-    combined_tags = pl.col("tag1") + " - " + pl.col("tag2")
+    combined_tags = pl.col("tag") + " - " + pl.col("subtag")
     source = source.with_columns(combined_tags.alias("tags"))
     return source
 

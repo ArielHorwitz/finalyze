@@ -1,14 +1,14 @@
 import polars as pl
 
 TAG_SCHEMA = {
-    "tag1": pl.String,
-    "tag2": pl.String,
+    "tag": pl.String,
+    "subtag": pl.String,
     "hash": pl.UInt64,
 }
 
 
 def apply_tags(data, tags_file):
-    data = data.drop("hash", "tag1", "tag2", strict=False)
+    data = data.drop("hash", "tag", "subtag", strict=False)
     hash_column = pl.concat_str(("date", "amount")).hash()
     data = data.with_columns(hash_column.alias("hash"))
     tags = read_tags_file(tags_file)
@@ -22,7 +22,7 @@ def read_tags_file(tags_file):
 
 
 def write_tags_file(data, tags_file):
-    data.sort("tag1", "tag2", "hash").write_csv(tags_file)
+    data.sort("tag", "subtag", "hash").write_csv(tags_file)
 
 
 class Tagger:
@@ -31,13 +31,13 @@ class Tagger:
         self.source = apply_tags(source_data, tags_file)
         self.tags = read_tags_file(tags_file)
 
-    def apply_tags(self, index, tag1, tag2):
+    def apply_tags(self, index, tag, subtag):
         row_hash = self.get_row(index)["hash"]
-        new_tag_data = {"hash": row_hash, "tag1": tag1, "tag2": tag2}
+        new_tag_data = {"hash": row_hash, "tag": tag, "subtag": subtag}
         new_tags_row = pl.DataFrame(new_tag_data, schema=TAG_SCHEMA)
         all_tags = pl.concat([self.tags, new_tags_row])
         all_tags = all_tags.unique(subset="hash", keep="last")
-        self.tags = all_tags.sort("tag1", "tag2", "hash")
+        self.tags = all_tags.sort("tag", "subtag", "hash")
         write_tags_file(self.tags, self.tags_file)
         self.source = apply_tags(self.source, self.tags_file)
 
@@ -56,13 +56,13 @@ class Tagger:
     def describe_all_tags(self):
         all_tags = {}
         for row in self.source.iter_rows(named=True):
-            key = (row["tag1"], row["tag2"])
+            key = (row["tag"], row["subtag"])
             all_tags.setdefault(key, 0)
             all_tags[key] += 1
         nulls = all_tags.pop((None, None), 0)
         lines = ["All existing tags:"] + [
-            f"  [ {count:>3} ]  {tag1:>20} :: {tag2}"
-            for (tag1, tag2), count in sorted(all_tags.items())
+            f"  [ {count:>3} ]  {tag:>20} :: {subtag}"
+            for (tag, subtag), count in sorted(all_tags.items())
         ]
         lines.extend(["", f"  [[ {nulls:>3} Untagged entries   ]]"])
         return "\n".join(lines)
@@ -71,9 +71,9 @@ class Tagger:
         tag_descriptions = {}
         target_description = self.get_row(index)["description"]
         for row in self.source.sort("date", descending=True).iter_rows(named=True):
-            if row["tag1"] is None:
+            if row["tag"] is None:
                 continue
-            key = (row["tag1"], row["tag2"])
+            key = (row["tag"], row["subtag"])
             row_description = row["description"]
             tag_descriptions.setdefault(key, set())
             tag_descriptions[key].add(row_description)
@@ -93,7 +93,7 @@ class Tagger:
         return self.source.row(index, named=True)
 
     def get_untagged_index(self):
-        indices = tuple(self.source["tag1"].is_null().arg_true())
+        indices = tuple(self.source["tag"].is_null().arg_true())
         if indices:
             return indices[0]
         return None
@@ -117,14 +117,14 @@ class Tagger:
             print()
             user_input = input("Tags: ")
             if user_input == "":
-                tag1, tag2 = guess1, guess2
+                tag, subtag = guess1, guess2
             else:
-                tag1, tag2 = _split_tag_text(user_input, ",")
-            self.apply_tags(index, tag1, tag2)
+                tag, subtag = _split_tag_text(user_input, ",")
+            self.apply_tags(index, tag, subtag)
 
 
 def _split_tag_text(text, separator: str = ","):
     if separator not in text:
         text += separator
-    tag1, tag2 = text.split(separator, 1)
-    return tag1.strip(), tag2.strip()
+    tag, subtag = text.split(separator, 1)
+    return tag.strip(), subtag.strip()
