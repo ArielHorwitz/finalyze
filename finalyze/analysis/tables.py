@@ -8,8 +8,8 @@ from plotly.graph_objects import Figure
 
 @dataclasses.dataclass
 class Table:
-    source: pl.DataFrame = dataclasses.field(repr=False)
     title: str
+    source: pl.DataFrame = dataclasses.field(repr=False)
     figure_constructor: Optional[Callable[[Any], Figure]] = None
     figure_arguments: dict[str, Any] = dataclasses.field(default_factory=dict)
 
@@ -35,11 +35,11 @@ def get_tables(source_data: pl.DataFrame) -> list[Table]:
     source = prepare_source(source_data)
     tables = [
         Table(
+            "Expenses breakdown detailed",
             source.filter(pl.col("amount") < 0)
             .with_columns(pl.col("amount") * -1)
             .group_by("tags", "tag", "subtag")
             .agg(pl.col("amount").sum()),
-            title="Expenses breakdown detailed",
             figure_constructor=px.sunburst,
             figure_arguments=dict(
                 path=["tag", "subtag"],
@@ -55,10 +55,10 @@ def get_tables(source_data: pl.DataFrame) -> list[Table]:
             ),
         ),
         Table(
+            "Incomes breakdown detailed",
             source.filter(pl.col("amount") > 0)
             .group_by("tags", "tag", "subtag")
             .agg(pl.col("amount").sum()),
-            title="Incomes breakdown detailed",
             figure_constructor=px.sunburst,
             figure_arguments=dict(
                 path=["tag", "subtag"],
@@ -74,10 +74,10 @@ def get_tables(source_data: pl.DataFrame) -> list[Table]:
             ),
         ),
         Table(
+            "Monthly breakdown",
             source.group_by("month", "tag", "subtag", "tags")
             .agg(pl.col("amount").sum())
             .sort("month", "tags"),
-            title="Monthly breakdown",
             figure_constructor=px.bar,
             figure_arguments=dict(
                 x="month",
