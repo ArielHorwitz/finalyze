@@ -5,6 +5,8 @@ import plotly.express as px
 import polars as pl
 from plotly.graph_objects import Figure
 
+from finalyze.source.data import ENRICHED_SCHEMA, validate_schema
+
 
 @dataclasses.dataclass
 class Table:
@@ -31,8 +33,8 @@ class Table:
         return add_totals(self.source)
 
 
-def get_tables(source_data: pl.DataFrame) -> list[Table]:
-    source = prepare_source(source_data)
+def get_tables(source: pl.DataFrame) -> list[Table]:
+    validate_schema(source, ENRICHED_SCHEMA)
     incomes = source.filter(pl.col("amount") > 0)
     expenses = source.filter(pl.col("amount") < 0).with_columns(pl.col("amount") * -1)
     tables = [
@@ -103,18 +105,6 @@ def get_tables(source_data: pl.DataFrame) -> list[Table]:
         ),
     ]
     return tables
-
-
-def prepare_source(source: pl.DataFrame):
-    source = source.lazy()
-    # Month column
-    year = pl.col("date").dt.year().cast(str)
-    month = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
-    source = source.with_columns((year + "-" + month).alias("month"))
-    # Combined tags column
-    combined_tags = pl.col("tag") + " - " + pl.col("subtag")
-    source = source.with_columns(combined_tags.alias("tags"))
-    return source
 
 
 def add_totals(df, collect=True):

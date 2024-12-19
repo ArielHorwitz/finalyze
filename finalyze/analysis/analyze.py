@@ -4,22 +4,12 @@ import tomllib
 
 from finalyze.display import print_table
 from finalyze.filters import Filters
+from finalyze.source.data import ENRICHED_SCHEMA, enrich_source
 from finalyze.source.source import load_source_data
-from finalyze.tags.tagger import apply_tags
+from finalyze.source.tag import apply_tags
 
 from . import plot
 from .tables import get_tables
-
-COLUMN_ORDER = (
-    "account",
-    "source",
-    "date",
-    "amount",
-    "tag",
-    "subtag",
-    "description",
-    "hash",
-)
 
 
 @dataclasses.dataclass
@@ -73,8 +63,8 @@ def run(command_args, global_args):
     # Source data
     source_data = load_source_data(global_args.source_dir).sort("date", "amount")
     tagged_data = apply_tags(source_data, global_args.tags_file)
-    filtered_data = command_args.filters.filter_data(tagged_data.lazy())
-    source_data = filtered_data.select(*COLUMN_ORDER)
+    enriched_data = enrich_source(tagged_data).select(*ENRICHED_SCHEMA.keys())
+    source_data = command_args.filters.filter_data(enriched_data.lazy())
     if not command_args.lenient:
         validate_tags(source_data)
     if command_args.print_tables:

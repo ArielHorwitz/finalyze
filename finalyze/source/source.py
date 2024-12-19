@@ -5,15 +5,8 @@ import polars as pl
 
 from finalyze.display import print_table
 from finalyze.filters import Filters
+from finalyze.source.data import RAW_SCHEMA, validate_schema
 from finalyze.source.leumi import parse_file
-
-SOURCE_SCHEMA = {
-    "account": pl.String,
-    "source": pl.String,
-    "date": pl.Date,
-    "amount": pl.Float64,
-    "description": pl.String,
-}
 
 
 @dataclasses.dataclass
@@ -60,16 +53,17 @@ def run(command_args, global_args):
         .with_columns(pl.lit(account_name).alias("account"))
         .unique()
         .sort("date", "amount")
-        .select(SOURCE_SCHEMA.keys())
     )
+    validate_schema(parsed_data, RAW_SCHEMA)
     filtered_data = command_args.filters.filter_data(parsed_data)
-    print_table(filtered_data, "Parsed data", flip_rtl=global_args.flip_rtl)
+    source_data = filtered_data.select(*RAW_SCHEMA.keys())
+    print_table(source_data, "Parsed data", flip_rtl=global_args.flip_rtl)
     print(f"Writing output to: {output_file}")
     output_file.parent.mkdir(parents=True, exist_ok=True)
-    filtered_data.write_csv(output_file)
+    source_data.write_csv(output_file)
 
 
 def load_source_data(source_dir):
     return pl.concat(
-        pl.read_csv(file, schema=SOURCE_SCHEMA) for file in source_dir.glob("*.csv")
+        pl.read_csv(file, schema=RAW_SCHEMA) for file in source_dir.glob("*.csv")
     )

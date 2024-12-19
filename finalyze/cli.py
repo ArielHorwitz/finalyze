@@ -5,8 +5,7 @@ import tomllib
 from pathlib import Path
 
 from finalyze.analysis import analyze
-from finalyze.source import source
-from finalyze.tags import tag
+from finalyze.source import source, tag
 
 APP_NAME = "finalyze"
 DESCRIPTION = "Personal financial analysis tool"
