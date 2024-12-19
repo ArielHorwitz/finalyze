@@ -23,7 +23,15 @@ class Filters:
     account: Optional[str]
 
     @staticmethod
-    def configure_parser(parser):
+    def configure_parser(
+        parser,
+        *,
+        group_name: Optional[str] = "filters",
+        tags: bool = True,
+        account: bool = True,
+    ):
+        if group_name:
+            parser = parser.add_argument_group(group_name)
         parser.add_argument(
             "-S",
             "--start-date",
@@ -35,33 +43,35 @@ class Filters:
             help="Filter until date (non-inclusive)",
         )
         parser.add_argument(
-            "-1",
-            "--tags",
-            nargs="*",
-            help="Filter by tags",
-        )
-        parser.add_argument(
-            "-2",
-            "--subtags",
-            nargs="*",
-            help="Filter by subtags",
-        )
-        parser.add_argument(
             "-D",
             "--description",
             help="Filter by description (regex pattern)",
         )
-        parser.add_argument(
-            "-A",
-            "--account",
-            help="Filter by account name",
-        )
+        if tags:
+            parser.add_argument(
+                "-1",
+                "--tags",
+                nargs="*",
+                help="Filter by tags",
+            )
+            parser.add_argument(
+                "-2",
+                "--subtags",
+                nargs="*",
+                help="Filter by subtags",
+            )
+        if account:
+            parser.add_argument(
+                "-A",
+                "--account",
+                help="Filter by account name",
+            )
 
     @classmethod
     def from_args(cls, args):
         return cls(
             **{
-                field.name: getattr(args, field.name)
+                field.name: getattr(args, field.name, None)
                 for field in dataclasses.fields(cls)
             }
         )

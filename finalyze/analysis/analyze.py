@@ -56,7 +56,7 @@ class Args:
             default="plotly_dark",
             help="Select template/theme for plotly",
         )
-        Filters.configure_parser(parser.add_argument_group("filters"))
+        Filters.configure_parser(parser)
 
     @classmethod
     def from_args(cls, args):

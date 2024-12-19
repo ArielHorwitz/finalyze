@@ -27,7 +27,7 @@ class Args:
             action="store_true",
             help="Delete tags and quit",
         )
-        Filters.configure_parser(parser.add_argument_group("filters"))
+        Filters.configure_parser(parser)
 
     @classmethod
     def from_args(cls, args):
