@@ -86,6 +86,21 @@ def get_tables(source_data: pl.DataFrame) -> list[Table]:
                 labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
             ),
         ),
+        Table(
+            "Total balance",
+            source.group_by("account", "month")
+            .agg(pl.col("amount").sum())
+            .sort("month", "account")
+            .with_columns(pl.col("amount").cum_sum().over("account").alias("amount")),
+            figure_constructor=px.line,
+            figure_arguments=dict(
+                x="month",
+                y="amount",
+                color="account",
+                hover_data=["amount"],
+                labels=dict(month="Month", amount="Amount"),
+            ),
+        ),
     ]
     return tables
 
