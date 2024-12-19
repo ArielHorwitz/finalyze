@@ -4,6 +4,7 @@ from pathlib import Path
 import polars as pl
 
 from finalyze.display import print_table
+from finalyze.filters import Filters
 from finalyze.source.leumi import parse_file
 
 SOURCE_SCHEMA = {
@@ -19,6 +20,7 @@ SOURCE_SCHEMA = {
 class Args:
     account_name: str
     files: list[Path]
+    filters: Filters
 
     @classmethod
     def configure_parser(cls, parser):
@@ -32,12 +34,14 @@ class Args:
             nargs="+",
             help="Account balance and credit card .xls files exported from Bank Leumi",
         )
+        Filters.configure_parser(parser, tags=False, account=False)
 
     @classmethod
     def from_args(cls, args):
         return cls(
             account_name=args.account_name,
             files=tuple(Path(f).resolve() for f in args.files),
+            filters=Filters.from_args(args),
         )
 
 
@@ -58,10 +62,11 @@ def run(command_args, global_args):
         .sort("date", "amount")
         .select(SOURCE_SCHEMA.keys())
     )
-    print_table(parsed_data, "Parsed data", flip_rtl=global_args.flip_rtl)
+    filtered_data = command_args.filters.filter_data(parsed_data)
+    print_table(filtered_data, "Parsed data", flip_rtl=global_args.flip_rtl)
     print(f"Writing output to: {output_file}")
     output_file.parent.mkdir(parents=True, exist_ok=True)
-    parsed_data.write_csv(output_file)
+    filtered_data.write_csv(output_file)
 
 
 def load_source_data(source_dir):
