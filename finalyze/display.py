@@ -20,9 +20,16 @@ PL_OPTIONS = {
 }
 
 
-def print_table(table, description: str = "Unnamed table", enable: bool = True):
+def print_table(
+    table,
+    description: str = "Unnamed table",
+    enable: bool = True,
+    flip_rtl: bool = False,
+):
     if not enable:
         return
+    if flip_rtl:
+        table = flip_rtl_columns(table)
     print()
     print(description)
     with pl.Config(**PL_OPTIONS):
@@ -31,9 +38,15 @@ def print_table(table, description: str = "Unnamed table", enable: bool = True):
     print()
 
 
-def flip_rtl_column(df, column_name):
-    fixed_column = pl.col(column_name).map_elements(
-        lambda text: text[::-1] if set(text) - ENGLISH else text,
-        return_dtype=pl.String,
-    )
-    return df.with_columns(fixed_column)
+def flip_rtl_columns(df):
+    schema = df.collect_schema()
+    dtypes = dict(zip(schema.names(), schema.dtypes()))
+    flipped_columns = []
+    for name, dtype in dtypes.items():
+        if dtype == pl.String:
+            flipped = pl.col(name).map_elements(
+                lambda text: text[::-1] if set(text) - ENGLISH else text,
+                return_dtype=pl.String,
+            )
+            flipped_columns.append(flipped)
+    return df.with_columns(*flipped_columns)

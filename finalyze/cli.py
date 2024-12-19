@@ -67,7 +67,7 @@ class GlobalArgs:
         parser.add_argument(
             "--flip-rtl",
             action="store_true",
-            help="Flip non-English (RTL) text",
+            help="Flip non-English (RTL) text in the terminal",
         )
 
     @classmethod

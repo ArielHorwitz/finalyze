@@ -3,7 +3,7 @@ import shutil
 
 import polars as pl
 
-from finalyze.display import print_table
+from finalyze.display import flip_rtl_columns, print_table
 from finalyze.filters import Filters
 from finalyze.source import source
 from finalyze.tags.tagger import Tagger, apply_tags, read_tags_file, write_tags_file
@@ -41,6 +41,8 @@ class Args:
 def run(command_args, global_args):
     print(f"Tags file: {global_args.tags_file}")
     source_data = source.load_source_data(global_args.source_dir)
+    if global_args.flip_rtl:
+        source_data = flip_rtl_columns(source_data)
     if command_args.delete:
         delete_tags(source_data, global_args.tags_file, command_args.filters)
         return

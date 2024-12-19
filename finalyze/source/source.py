@@ -3,7 +3,7 @@ from pathlib import Path
 
 import polars as pl
 
-from finalyze.display import flip_rtl_column, print_table
+from finalyze.display import print_table
 from finalyze.source.leumi import parse_file
 
 SOURCE_SCHEMA = {
@@ -58,20 +58,10 @@ def run(command_args, global_args):
         .sort("date", "amount")
         .select(SOURCE_SCHEMA.keys())
     )
-    print_table(parsed_data, "Parsed data")
+    print_table(parsed_data, "Parsed data", flip_rtl=global_args.flip_rtl)
     print(f"Writing output to: {output_file}")
     output_file.parent.mkdir(parents=True, exist_ok=True)
     parsed_data.write_csv(output_file)
-
-
-def get_source_data(data):
-    source_data = pl.concat(
-        pl.read_csv(file, schema=SOURCE_SCHEMA)
-        for file in data.source_dir.glob("*.csv")
-    )
-    if data.flip_rtl:
-        source_data = flip_rtl_column(source_data, "description")
-    return source_data
 
 
 def load_source_data(source_dir):

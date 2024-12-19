@@ -4,7 +4,7 @@ import tomllib
 
 from finalyze.display import print_table
 from finalyze.filters import Filters
-from finalyze.source.source import get_source_data
+from finalyze.source.source import load_source_data
 from finalyze.tags.tagger import apply_tags
 
 from . import plot
@@ -71,20 +71,24 @@ class Args:
 
 def run(command_args, global_args):
     # Source data
-    source_data = get_source_data(global_args).sort("date", "amount")
+    source_data = load_source_data(global_args.source_dir).sort("date", "amount")
     tagged_data = apply_tags(source_data, global_args.tags_file)
     filtered_data = command_args.filters.filter_data(tagged_data.lazy())
     source_data = filtered_data.select(*COLUMN_ORDER)
     if not command_args.lenient:
         validate_tags(source_data)
     if command_args.print_tables:
-        print_table(source_data.collect(), "filtered source data")
+        print_table(
+            source_data.collect(),
+            "filtered source data",
+            flip_rtl=global_args.flip_rtl,
+        )
     # Tables
     tables = get_tables(source_data)
     for table in tables:
         print(table)
         if command_args.print_tables:
-            print_table(table.with_totals(), table.title)
+            print_table(table.with_totals(), table.title, flip_rtl=global_args.flip_rtl)
     # Plots
     plots_files = global_args.plots_file
     color_map = load_colors(global_args.colors_file)
