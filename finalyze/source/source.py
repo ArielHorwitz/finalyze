@@ -49,7 +49,15 @@ def run(command_args, global_args):
         if not f.is_file():
             raise FileNotFoundError(f"File not found: {f}")
         print(f"  {f}")
-    parsed_data = parse_sources(files=command_args.files, account_name=account_name)
+    # Parse sources
+    raw_dfs = [parse_file(input_file=file) for file in command_args.files]
+    parsed_data = (
+        pl.concat(raw_dfs)
+        .with_columns(pl.lit(account_name).alias("account"))
+        .unique()
+        .sort("date", "amount")
+        .select(SOURCE_SCHEMA.keys())
+    )
     print_table(parsed_data, "Parsed data")
     print(f"Writing output to: {output_file}")
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -70,15 +78,3 @@ def load_source_data(source_dir):
     return pl.concat(
         pl.read_csv(file, schema=SOURCE_SCHEMA) for file in source_dir.glob("*.csv")
     )
-
-
-def parse_sources(*, files, account_name):
-    raw_dfs = [parse_file(input_file=file) for file in files]
-    final = (
-        pl.concat(raw_dfs)
-        .with_columns(pl.lit(account_name).alias("account"))
-        .unique()
-        .sort("date", "amount")
-        .select(SOURCE_SCHEMA.keys())
-    )
-    return final
