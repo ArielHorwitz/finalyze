@@ -33,63 +33,57 @@ class Table:
 
 def get_tables(source_data: pl.DataFrame) -> list[Table]:
     source = prepare_source(source_data)
+    incomes = source.filter(pl.col("amount") > 0)
+    expenses = source.filter(pl.col("amount") < 0).with_columns(pl.col("amount") * -1)
     tables = [
         Table(
             "Expenses breakdown detailed",
-            source.filter(pl.col("amount") < 0)
-            .with_columns(pl.col("amount") * -1)
-            .group_by("tags", "tag", "subtag")
-            .agg(pl.col("amount").sum()),
+            expenses.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum()),
             figure_constructor=px.sunburst,
             figure_arguments=dict(
                 path=["tag", "subtag"],
                 values="amount",
-                labels={
-                    "tag": "Tag",
-                    "subtag": "Subtag",
-                    "amount": "Amount",
-                    "parent": "Tag",
-                    "id": "Tags",
-                },
+                labels=dict(
+                    parent="Tag",
+                    id="Tags",
+                    labels="Tags",
+                    tag="Tag",
+                    subtag="Subtag",
+                    amount="Amount",
+                ),
                 color="tag",
             ),
         ),
         Table(
             "Incomes breakdown detailed",
-            source.filter(pl.col("amount") > 0)
-            .group_by("tags", "tag", "subtag")
-            .agg(pl.col("amount").sum()),
+            incomes.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum()),
             figure_constructor=px.sunburst,
             figure_arguments=dict(
                 path=["tag", "subtag"],
                 values="amount",
-                labels={
-                    "tag": "Tag",
-                    "subtag": "Subtag",
-                    "amount": "Amount",
-                    "parent": "Tag",
-                    "id": "Tags",
-                },
+                labels=dict(
+                    parent="Tag",
+                    id="Tags",
+                    labels="Tags",
+                    tag="Tag",
+                    subtag="Subtag",
+                    amount="Amount",
+                ),
                 color="tag",
             ),
         ),
         Table(
             "Monthly breakdown",
-            source.group_by("month", "tag", "subtag", "tags")
+            source.group_by("month", "tag", "subtag")
             .agg(pl.col("amount").sum())
-            .sort("month", "tags"),
+            .sort("month", "tag", "subtag"),
             figure_constructor=px.bar,
             figure_arguments=dict(
                 x="month",
                 y="amount",
                 color="tag",
-                hover_data=["tags", "amount"],
-                labels={
-                    "tags": "Tags",
-                    "month": "Month",
-                    "amount": "Amount",
-                    "tag": "Tag",
-                },
+                hover_data=["tag", "subtag", "amount"],
+                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
             ),
         ),
     ]
