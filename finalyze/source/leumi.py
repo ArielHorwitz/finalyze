@@ -4,26 +4,22 @@ import pandas as pd
 import polars as pl
 
 
+class UnexpectedFormat(Exception):
+    """Raised when encountering unexpected format while importing source data."""
+
+
 def parse_file(input_file):
     try:
         return BalanceFormat.parse(input_file)
-    except ImportError as exc:
-        balance_error = UnexpectedFormat(f"Unexpected file type ({exc!r})")
-    except (UnexpectedFormat, ImportError) as exc:
+    except UnexpectedFormat as exc:
         balance_error = exc
     try:
         return CreditFormat.parse(input_file)
-    except ImportError as exc:
-        credit_error = UnexpectedFormat(f"Unexpected file type ({exc!r})")
     except UnexpectedFormat as exc:
         credit_error = exc
     raise UnexpectedFormat(
         f"{input_file} not balance: {balance_error!r}, not credit: {credit_error!r}"
     )
-
-
-class UnexpectedFormat(Exception):
-    """Raised when encountering an unexpected format."""
 
 
 class BalanceFormat:
