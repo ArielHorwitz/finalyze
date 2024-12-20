@@ -25,7 +25,7 @@ class Args:
         parser.add_argument(
             "files",
             nargs="+",
-            help="Account balance and credit card .xls files exported from Bank Leumi",
+            help="Excel files exported from Bank Leumi",
         )
         Filters.configure_parser(parser, tags=False, account=False)
 

@@ -10,22 +10,22 @@ class UnexpectedFormat(Exception):
 
 def parse_file(input_file):
     try:
-        return BalanceFormat.parse(input_file)
+        return CheckingFormat.parse(input_file)
     except UnexpectedFormat as exc:
-        balance_error = exc
+        checking_error = exc
     try:
-        return CreditFormat.parse(input_file)
+        return CardFormat.parse(input_file)
     except UnexpectedFormat as exc:
-        credit_error = exc
+        card_error = exc
     raise UnexpectedFormat(
-        f"{input_file} not balance: {balance_error!r}, not credit: {credit_error!r}"
+        f"{input_file} not checking: {checking_error!r}, not card: {card_error!r}"
     )
 
 
-class BalanceFormat:
+class CheckingFormat:
     EXPECTED_HEADER = "תנועות בחשבון"
     EXPECTED_FIRST_COLUMN_NAME = "תאריך"
-    CREDIT_CARD_DESCRIPTION = "לאומי ויזה"
+    CARD_DESCRIPTION = "לאומי ויזה"
 
     @classmethod
     def check(cls, raw_df):
@@ -56,13 +56,13 @@ class BalanceFormat:
             "description": raw.select(pl.col("2").cast(pl.String)),
             # "notes": raw.select(pl.col("7").cast(pl.String)),
         }
-        parsed = pl.DataFrame(data).with_columns(pl.lit("Account txn").alias("source"))
-        # remove direct credit card transactions
-        filtered = parsed.filter(pl.col("description") != cls.CREDIT_CARD_DESCRIPTION)
+        parsed = pl.DataFrame(data).with_columns(pl.lit("checking").alias("source"))
+        # remove card transactions
+        filtered = parsed.filter(pl.col("description") != cls.CARD_DESCRIPTION)
         return filtered
 
 
-class CreditFormat:
+class CardFormat:
     EXPECTED_HEADERS = (
         'עסקאות מחויבות בש"ח (לידיעה בלבד)',
         'עסקאות בש"ח במועד החיוב',
@@ -92,17 +92,13 @@ class CreditFormat:
     @classmethod
     def parse(cls, input_file):
         raw_html = pd.read_html(input_file, encoding="utf-8")
-        raw_tables = [
-            cls._table_parse(raw_html[2]).with_columns(
-                pl.lit("Credit card").alias("source")
-            )
-        ]
+        # Credit card transactions
+        raw_tables = [cls._table_parse(raw_html[2])]
         if len(raw_html) >= 4:
-            debit_table = cls._table_parse(raw_html[3]).with_columns(
-                pl.lit("Debit").alias("source")
-            )
+            # Debit transactions on credit card
+            debit_table = cls._table_parse(raw_html[3])
             raw_tables.append(debit_table)
-        return pl.concat(raw_tables)
+        return pl.concat(raw_tables).with_columns(pl.lit("card").alias("source"))
 
     @classmethod
     def _table_parse(cls, raw_df):
