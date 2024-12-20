@@ -50,23 +50,29 @@ class CheckingFormat:
     def parse(cls, input_file, options):
         raw_html = pd.read_html(input_file, encoding="utf-8")
         raw_df = raw_html[2]
-        # Remove leading asterisks from otherwise valid data (rows from today)
-        raw_df[0] = raw_df[0].str.replace("** ", "", regex=False)
         cls.check(raw_df)
         if raw_df.iloc[-1, 0].startswith("**"):
+            # Data contains footnotes
+            # Remove leading asterisks from otherwise valid data
+            raw_df[0] = raw_df[0].str.replace("** ", "", regex=False)
+            # Remove last row containing footnote description
             raw_df = raw_df.iloc[:-1]
-        raw = pl.from_pandas(raw_df.iloc[2:])
+        # Remove headers
+        raw_df = raw_df.iloc[2:]
+        # Convert to polars
+        raw = pl.from_pandas(raw_df)
+        # Compile data
         amount_expression = pl.col("5").cast(pl.Float64) - pl.col("4").cast(pl.Float64)
         data = {
             "date": raw.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%y")),
             "amount": raw.select(amount_expression),
             "description": raw.select(pl.col("2").cast(pl.String)),
-            # "notes": raw.select(pl.col("7").cast(pl.String)),
         }
-        parsed = pl.DataFrame(data).with_columns(pl.lit("checking").alias("source"))
-        # remove card transactions
-        filtered = parsed.filter(pl.col("description") != cls.CARD_DESCRIPTION)
-        return filtered
+        checking = pl.DataFrame(data).with_columns(pl.lit("checking").alias("source"))
+        # Remove card transactions
+        is_card_transaction = pl.col("description") == cls.CARD_DESCRIPTION
+        checking = checking.filter(~is_card_transaction)
+        return checking
 
 
 class CardFormat:
@@ -102,19 +108,20 @@ class CardFormat:
         # Credit card transactions
         raw_tables = [cls._table_parse(raw_html[2])]
         if len(raw_html) >= 4:
-            # Debit transactions on credit card
+            # Debit card transactions on credit card
             debit_table = cls._table_parse(raw_html[3])
             raw_tables.append(debit_table)
-        return pl.concat(raw_tables).with_columns(pl.lit("card").alias("source"))
+        return pl.concat(raw_tables)
 
     @classmethod
     def _table_parse(cls, raw_df):
         cls.check(raw_df)
+        # Remove headers and total rows
         table = pl.from_pandas(raw_df.iloc[2:-1])
+        # Compile data
         data = {
             "date": table.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%y")),
             "amount": table.select(pl.col("5").cast(pl.Float64).mul(-1)),
             "description": table.select(pl.col("1").cast(pl.String)),
-            # "notes": table.select(pl.col("4").cast(pl.String)),
         }
-        return pl.DataFrame(data)
+        return pl.DataFrame(data).with_columns(pl.lit("card").alias("source"))
