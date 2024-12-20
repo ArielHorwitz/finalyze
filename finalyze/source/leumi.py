@@ -49,11 +49,10 @@ class BalanceFormat:
         if raw_df.iloc[-1, 0].startswith("**"):
             raw_df = raw_df.iloc[:-1]
         raw = pl.from_pandas(raw_df.iloc[2:])
+        amount_expression = pl.col("5").cast(pl.Float64) - pl.col("4").cast(pl.Float64)
         data = {
             "date": raw.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%y")),
-            "amount": raw.select(
-                pl.col("5").cast(pl.Float64) - pl.col("4").cast(pl.Float64)
-            ),
+            "amount": raw.select(amount_expression),
             "description": raw.select(pl.col("2").cast(pl.String)),
             # "notes": raw.select(pl.col("7").cast(pl.String)),
         }
@@ -109,14 +108,10 @@ class CreditFormat:
     def _table_parse(cls, raw_df):
         cls.check(raw_df)
         table = pl.from_pandas(raw_df.iloc[2:-1])
-        parsed = pl.DataFrame(
-            {
-                "date": table.select(
-                    pl.col("0").str.strptime(pl.Date, format="%d/%m/%y")
-                ),
-                "amount": table.select(pl.col("5").cast(pl.Float64).mul(-1)),
-                "description": table.select(pl.col("1").cast(pl.String)),
-                # "notes": table.select(pl.col("4").cast(pl.String)),
-            }
-        )
-        return parsed
+        data = {
+            "date": table.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%y")),
+            "amount": table.select(pl.col("5").cast(pl.Float64).mul(-1)),
+            "description": table.select(pl.col("1").cast(pl.String)),
+            # "notes": table.select(pl.col("4").cast(pl.String)),
+        }
+        return pl.DataFrame(data)
