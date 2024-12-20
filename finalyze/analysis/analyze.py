@@ -16,6 +16,7 @@ from .tables import get_tables
 class Args:
     lenient: bool
     open_graphs: bool
+    print_source: bool
     print_tables: bool
     plotly_template: str
     filters: Filters
@@ -36,6 +37,12 @@ class Args:
             help="Open graphs in browser",
         )
         parser.add_argument(
+            "-s",
+            "--print-source",
+            action="store_true",
+            help="Print source data to stdout",
+        )
+        parser.add_argument(
             "-p",
             "--print-tables",
             action="store_true",
@@ -52,6 +59,7 @@ class Args:
     def from_args(cls, args):
         return cls(
             lenient=args.lenient,
+            print_source=args.print_source,
             print_tables=args.print_tables,
             open_graphs=args.open_graphs,
             plotly_template=args.plotly_template,
@@ -67,7 +75,7 @@ def run(command_args, global_args):
     source_data = command_args.filters.filter_data(enriched_data.lazy())
     if not command_args.lenient:
         validate_tags(source_data)
-    if command_args.print_tables:
+    if command_args.print_source:
         print_table(
             source_data.collect(),
             "filtered source data",
@@ -76,8 +84,8 @@ def run(command_args, global_args):
     # Tables
     tables = get_tables(source_data)
     for table in tables:
-        print(table)
         if command_args.print_tables:
+            print(table)
             print_table(table.with_totals(), table.title, flip_rtl=global_args.flip_rtl)
     # Plots
     plots_files = global_args.plots_file
