@@ -1,6 +1,6 @@
 from pathlib import Path
 
-TEMPLATE_DIR = Path("finalyze/templates")
+TEMPLATE_DIR = Path(__file__).parent.parent.joinpath("templates").resolve()
 HTML = (TEMPLATE_DIR / "index.html").read_text()
 CSS = (TEMPLATE_DIR / "style.css").read_text()
 FIGURE_DIV = (TEMPLATE_DIR / "figure.html").read_text()
