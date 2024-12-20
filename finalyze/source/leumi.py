@@ -3,18 +3,25 @@ import math
 import pandas as pd
 import polars as pl
 
+from finalyze.display import print_table
+
 
 class UnexpectedFormat(Exception):
     """Raised when encountering unexpected format while importing source data."""
 
 
-def parse_file(input_file):
+def parse_file(input_file, options):
+    if options.verbose:
+        print_table(
+            pd.read_html(input_file, encoding="utf-8"),
+            f"Raw table for file: {input_file}",
+        )
     try:
-        return CheckingFormat.parse(input_file)
+        return CheckingFormat.parse(input_file, options)
     except UnexpectedFormat as exc:
         checking_error = exc
     try:
-        return CardFormat.parse(input_file)
+        return CardFormat.parse(input_file, options)
     except UnexpectedFormat as exc:
         card_error = exc
     raise UnexpectedFormat(
@@ -40,7 +47,7 @@ class CheckingFormat:
             )
 
     @classmethod
-    def parse(cls, input_file):
+    def parse(cls, input_file, options):
         raw_html = pd.read_html(input_file, encoding="utf-8")
         raw_df = raw_html[2]
         # Remove leading asterisks from otherwise valid data (rows from today)
@@ -90,7 +97,7 @@ class CardFormat:
             raise UnexpectedFormat(f"Expected nan, got: {expected_nan!r}")
 
     @classmethod
-    def parse(cls, input_file):
+    def parse(cls, input_file, options):
         raw_html = pd.read_html(input_file, encoding="utf-8")
         # Credit card transactions
         raw_tables = [cls._table_parse(raw_html[2])]

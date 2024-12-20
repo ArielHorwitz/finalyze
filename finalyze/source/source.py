@@ -10,10 +10,31 @@ from finalyze.source.leumi import parse_file
 
 
 @dataclasses.dataclass
+class Options:
+    verbose: bool
+
+    @classmethod
+    def configure_parser(cls, parser):
+        parser.add_argument(
+            "-v",
+            "--verbose",
+            action="store_true",
+            help="Be verbose",
+        )
+
+    @classmethod
+    def from_args(cls, args):
+        return cls(
+            verbose=args.verbose,
+        )
+
+
+@dataclasses.dataclass
 class Args:
     account_name: str
     files: list[Path]
     filters: Filters
+    options: Options
 
     @classmethod
     def configure_parser(cls, parser):
@@ -28,6 +49,7 @@ class Args:
             help="Excel files exported from Bank Leumi",
         )
         Filters.configure_parser(parser, tags=False, account=False)
+        Options.configure_parser(parser.add_argument_group("parsing"))
 
     @classmethod
     def from_args(cls, args):
@@ -35,6 +57,7 @@ class Args:
             account_name=args.account_name,
             files=tuple(Path(f).resolve() for f in args.files),
             filters=Filters.from_args(args),
+            options=Options.from_args(args),
         )
 
 
@@ -47,7 +70,10 @@ def run(command_args, global_args):
             raise FileNotFoundError(f"File not found: {f}")
         print(f"  {f}")
     # Parse sources
-    raw_dfs = [parse_file(input_file=file) for file in command_args.files]
+    raw_dfs = [
+        parse_file(input_file=file, options=command_args.options)
+        for file in command_args.files
+    ]
     parsed_data = (
         pl.concat(raw_dfs)
         .with_columns(pl.lit(account_name).alias("account"))
