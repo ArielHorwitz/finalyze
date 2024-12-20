@@ -21,6 +21,7 @@ class Filters:
     subtags: Optional[list[str]]
     description: Optional[str]
     account: Optional[str]
+    source: Optional[str]
 
     @staticmethod
     def configure_parser(
@@ -62,9 +63,12 @@ class Filters:
             )
         if account:
             parser.add_argument(
-                "-A",
                 "--account",
                 help="Filter by account name",
+            )
+            parser.add_argument(
+                "--source",
+                help="Filter by source name",
             )
 
     @classmethod
@@ -93,6 +97,8 @@ class Filters:
             predicates.append(pl.col("description").str.contains(self.description))
         if self.account is not None:
             predicates.append(pl.col("account") == self.account)
+        if self.source is not None:
+            predicates.append(pl.col("source").str.contains(self.source))
         # filter
         predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
         return df.filter(predicate)
