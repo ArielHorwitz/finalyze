@@ -1,3 +1,4 @@
+import collections
 import dataclasses
 import shutil
 
@@ -143,16 +144,16 @@ class Tagger:
         return "\n".join(lines)
 
     def guess_tags(self, index, default):
-        tag_descriptions = {}
+        tag_descriptions = collections.defaultdict(set)
         target_description = self.get_row(index)["description"]
         for row in self.source.sort("date", descending=True).iter_rows(named=True):
             if row["tag"] is None:
                 continue
             key = (row["tag"], row["subtag"])
             row_description = row["description"]
-            tag_descriptions.setdefault(key, set())
             tag_descriptions[key].add(row_description)
             if row_description == target_description:
+                print(f"Guess from {row=}")
                 return key
         if default is not None:
             return _split_tag_text(default)
@@ -179,10 +180,10 @@ class Tagger:
             index = self.get_untagged_index()
             if index is None:
                 break
-            guess1, guess2 = self.guess_tags(index, default_tags)
-            guess_repr = guess1
-            if guess2:
-                guess_repr = f"{guess_repr} [{guess2}]"
+            guess_tag, guess_subtag = self.guess_tags(index, default_tags)
+            guess_repr = guess_tag
+            if guess_subtag:
+                guess_repr = f"{guess_repr} [{guess_subtag}]"
             print()
             print(line_separator)
             print(self.describe_all_tags())
@@ -192,7 +193,7 @@ class Tagger:
             print()
             user_input = input("Tags: ")
             if user_input == "":
-                tag, subtag = guess1, guess2
+                tag, subtag = guess_tag, guess_subtag
             else:
                 tag, subtag = _split_tag_text(user_input, ",")
             self.apply_tags(index, tag, subtag)
