@@ -79,6 +79,14 @@ class GlobalArgs:
         )
 
 
+def add_developer_subcommand(subparsers):
+    try:
+        from finalyze.dev.dev import Args
+    except ModuleNotFoundError:
+        return
+    Args.configure_parser(subparsers.add_parser("dev", help="Developer experiments"))
+
+
 def parse_args():
     parser = argparse.ArgumentParser(prog=APP_NAME, description=DESCRIPTION)
     GlobalArgs.configure_parser(parser)
@@ -91,6 +99,7 @@ def parse_args():
     analyze.Args.configure_parser(
         subparsers.add_parser("analyze", help="Analyze historical data")
     )
+    add_developer_subcommand(subparsers)
     # Get configured default arguments
     args = parser.parse_args()
     if args.subcommand is None:
