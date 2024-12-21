@@ -12,6 +12,7 @@ from finalyze.source import source
 from finalyze.source.data import TAGGED_SCHEMA, validate_schema
 
 LINE_SEPARATOR = "===================="
+HASH_COLUMNS = ("account", "source", "date", "description", "amount")
 TAG_SCHEMA = {
     "tag": pl.String,
     "subtag": pl.String,
@@ -68,8 +69,6 @@ class Args:
 def run(command_args, global_args):
     print(f"Tags file: {global_args.tags_file}")
     source_data = source.load_source_data(global_args.source_dir)
-    if global_args.flip_rtl:
-        source_data = flip_rtl_columns(source_data)
     if command_args.delete:
         delete_tags(
             source_data,
@@ -88,12 +87,13 @@ def run(command_args, global_args):
     print(tagger.describe_all_tags())
 
 
-def apply_tags(data, tags_file):
-    data = data.drop("hash", "tag", "subtag", strict=False)
-    hash_column = pl.concat_str(("date", "amount")).hash()
-    data = data.with_columns(hash_column.alias("hash"))
+def apply_tags(data, tags_file, *, hash_columns: list[str] = HASH_COLUMNS):
     tags = read_tags_file(tags_file)
-    tagged = data.join(tags, on="hash", how="left")
+    tagged = (
+        data.drop(*TAG_SCHEMA, strict=False)
+        .with_columns(pl.concat_str(*hash_columns).hash().alias("hash"))
+        .join(tags, on="hash", how="left")
+    )
     validate_schema(tagged, TAGGED_SCHEMA)
     return tagged
 
@@ -105,7 +105,8 @@ def read_tags_file(tags_file):
 
 
 def write_tags_file(data, tags_file):
-    data.sort("tag", "subtag", "hash").write_csv(tags_file)
+    validate_schema(data, TAG_SCHEMA)
+    data.sort(*TAG_SCHEMA.keys()).write_csv(tags_file)
 
 
 def delete_tags(source_data, tags_file, filters, flip_rtl):
@@ -116,10 +117,7 @@ def delete_tags(source_data, tags_file, filters, flip_rtl):
     remaining_tags = tags_data.filter(~pl.col("hash").is_in(delete_data.select("hash")))
 
     delete_summary = (
-        delete_data.group_by(["tag", "subtag"])
-        .len()
-        .rename({"len": "entries"})
-        .sort(["tag", "subtag"])
+        delete_data.group_by("tag", "subtag").len("entries").sort("tag", "subtag")
     )
     print_table(delete_data, "Entries to delete", flip_rtl=flip_rtl)
     print_table(delete_summary, "Tags to delete", flip_rtl=flip_rtl)
