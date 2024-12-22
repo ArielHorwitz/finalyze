@@ -8,6 +8,10 @@ CONFIG_FILE = CONFIG_DIR / "config.toml"
 DEFAULT_CONFIG_CONTENTS = """
 [cli]
 global = []
+
+[colors]
+bills = "#cc2266"
+other = "#000000"
 """
 
 

@@ -1,10 +1,10 @@
 import dataclasses
 import subprocess
 import sys
-import tomllib
 
 import polars as pl
 
+from finalyze.config import load_config
 from finalyze.display import print_table
 from finalyze.filters import Filters
 from finalyze.source.data import ENRICHED_SCHEMA, enrich_source
@@ -92,7 +92,7 @@ def run(command_args, global_args):
             print_table(table.with_totals(), table.title, flip_rtl=global_args.flip_rtl)
     # Plots
     plots_files = global_args.plots_file
-    color_map = load_colors(global_args.colors_file)
+    color_map = load_config()["colors"]
     print(f"Exporting plots to: {plots_files}")
     plot.write_html(
         tables,
@@ -110,9 +110,3 @@ def _validate_tags(df, flip_rtl):
         print_table(null_tags, "Missing tags", flip_rtl=flip_rtl)
         print(f"Missing {null_tags.height} tags", file=sys.stderr)
         exit(1)
-
-
-def load_colors(colors_file):
-    if not colors_file.is_file():
-        colors_file.write_text('other = "#000000"')
-    return tomllib.loads(colors_file.read_text())

@@ -9,7 +9,6 @@ from finalyze.config import load_config
 from finalyze.source import source, tag
 
 TAGS_FILENAME = "tags.csv"
-COLORS_FILENAME = "colors.toml"
 PLOTS_FILENAME = "plots.html"
 DATA_DIR = Path.home() / ".local" / "share" / APP_NAME.lower() / "data"
 
@@ -34,10 +33,6 @@ class GlobalArgs:
         if self.use_dataset_tags:
             return self.dataset_dir / TAGS_FILENAME
         return self.data_dir / TAGS_FILENAME
-
-    @property
-    def colors_file(self):
-        return self.data_dir / COLORS_FILENAME
 
     @property
     def plots_file(self):
