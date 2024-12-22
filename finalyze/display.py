@@ -41,12 +41,14 @@ def print_table(
 def flip_rtl_columns(df):
     schema = df.collect_schema()
     dtypes = dict(zip(schema.names(), schema.dtypes()))
-    flipped_columns = []
-    for name, dtype in dtypes.items():
-        if dtype == pl.String:
-            flipped = pl.col(name).map_elements(
-                lambda text: text[::-1] if set(text) - ENGLISH else text,
-                return_dtype=pl.String,
-            )
-            flipped_columns.append(flipped)
-    return df.with_columns(*flipped_columns)
+    return df.with_columns(
+        pl.col(name).map_elements(flip_rtl_str, return_dtype=pl.String)
+        for name, dtype in dtypes.items()
+        if dtype == pl.String
+    )
+
+
+def flip_rtl_str(text):
+    if set(text) - ENGLISH:
+        return text[::-1]
+    return text

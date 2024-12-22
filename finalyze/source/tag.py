@@ -1,19 +1,39 @@
 import collections
 import dataclasses
 import shutil
+from typing import NamedTuple, Optional
 
 import polars as pl
+import readchar
 
-from finalyze.display import flip_rtl_columns, print_table
+from finalyze.display import flip_rtl_str, print_table
 from finalyze.filters import Filters
 from finalyze.source import source
 from finalyze.source.data import TAGGED_SCHEMA, validate_schema
 
+LINE_SEPARATOR = "===================="
 TAG_SCHEMA = {
     "tag": pl.String,
     "subtag": pl.String,
     "hash": pl.UInt64,
 }
+
+
+class Tags(NamedTuple):
+    tag: str
+    subtag: Optional[str] = None
+
+    @classmethod
+    def from_str(cls, text, separator: str = ","):
+        if separator not in text:
+            text += separator
+        tag, subtag = text.split(separator, 1)
+        return cls(tag=tag.strip(), subtag=subtag.strip())
+
+    def __str__(self):
+        if self.subtag:
+            return f"{self.tag} [{self.subtag}]"
+        return self.tag
 
 
 @dataclasses.dataclass
@@ -51,11 +71,21 @@ def run(command_args, global_args):
     if global_args.flip_rtl:
         source_data = flip_rtl_columns(source_data)
     if command_args.delete:
-        delete_tags(source_data, global_args.tags_file, command_args.filters)
+        delete_tags(
+            source_data,
+            global_args.tags_file,
+            command_args.filters,
+            global_args.flip_rtl,
+        )
         return
-    tagger = Tagger(source_data=source_data, tags_file=global_args.tags_file)
-    print(tagger.describe_all_tags())
+    tagger = Tagger(
+        source_data=source_data,
+        tags_file=global_args.tags_file,
+        flip_rtl=global_args.flip_rtl,
+    )
     tagger.tag_interactively(command_args.default_tags)
+    print(LINE_SEPARATOR)
+    print(tagger.describe_all_tags())
 
 
 def apply_tags(data, tags_file):
@@ -78,7 +108,7 @@ def write_tags_file(data, tags_file):
     data.sort("tag", "subtag", "hash").write_csv(tags_file)
 
 
-def delete_tags(source_data, tags_file, filters):
+def delete_tags(source_data, tags_file, filters, flip_rtl):
     tagged_data = apply_tags(source_data, tags_file)
     tags_data = read_tags_file(tags_file)
 
@@ -91,8 +121,8 @@ def delete_tags(source_data, tags_file, filters):
         .rename({"len": "entries"})
         .sort(["tag", "subtag"])
     )
-    print_table(delete_data, "Entries to delete")
-    print_table(delete_summary, "Tags to delete")
+    print_table(delete_data, "Entries to delete", flip_rtl=flip_rtl)
+    print_table(delete_summary, "Tags to delete", flip_rtl=flip_rtl)
     if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
         print("Aborted.")
         exit(1)
@@ -102,25 +132,32 @@ def delete_tags(source_data, tags_file, filters):
 
 
 class Tagger:
-    def __init__(self, *, source_data, tags_file):
+    def __init__(self, *, source_data, tags_file, flip_rtl):
         self.tags_file = tags_file
-        self.source = apply_tags(source_data, tags_file)
+        self.flip_rtl = flip_rtl
+        self.source = apply_tags(source_data, tags_file).sort("date")
         self.tags = read_tags_file(tags_file)
 
-    def apply_tags(self, index, tag, subtag):
+    def apply_tags(self, index, tags):
         row_hash = self.get_row(index)["hash"]
-        new_tag_data = {"hash": row_hash, "tag": tag, "subtag": subtag}
+        new_tag_data = {"tag": tags.tag, "subtag": tags.subtag, "hash": row_hash}
         new_tags_row = pl.DataFrame(new_tag_data, schema=TAG_SCHEMA)
-        all_tags = pl.concat([self.tags, new_tags_row])
-        all_tags = all_tags.unique(subset="hash", keep="last")
-        self.tags = all_tags.sort("tag", "subtag", "hash")
+        self.tags = (
+            pl.concat([self.tags, new_tags_row])
+            .unique(subset="hash", keep="last")
+            .sort(*TAG_SCHEMA)
+        )
         write_tags_file(self.tags, self.tags_file)
         self.source = apply_tags(self.source, self.tags_file)
 
     def describe_row(self, index):
         row = self.get_row(index)
+        if self.flip_rtl:
+            for key, value in row.items():
+                if isinstance(value, str):
+                    row[key] = flip_rtl_str(value)
         lines = [
-            "Applying tags for:",
+            f"    Hash: {row['hash']}",
             f" Account: {row['account']}",
             f"  Source: {row['source']}",
             f"    Date: {row['date']}",
@@ -130,35 +167,35 @@ class Tagger:
         return "\n".join(lines)
 
     def describe_all_tags(self):
-        all_tags = {}
-        for row in self.source.iter_rows(named=True):
-            key = (row["tag"], row["subtag"])
-            all_tags.setdefault(key, 0)
-            all_tags[key] += 1
-        nulls = all_tags.pop((None, None), 0)
+        tag_counts = self.source.group_by("tag", "subtag").len().sort("tag", "subtag")
+        all_tags = {
+            Tags(row["tag"], row["subtag"]): row["len"]
+            for row in tag_counts.iter_rows(named=True)
+        }
+        nulls = all_tags.pop(Tags(None, None), 0)
         lines = ["All existing tags:"] + [
-            f"  [ {count:>3} ]  {tag:>20} :: {subtag}"
-            for (tag, subtag), count in sorted(all_tags.items())
+            f"  [ {count:>5} ]  {tags.tag:>20} :: {tags.subtag}"
+            for tags, count in all_tags.items()
         ]
         lines.extend(["", f"  [[ {nulls:>3} Untagged entries   ]]"])
         return "\n".join(lines)
 
-    def guess_tags(self, index, default):
+    def guess_tags(self, index: int, default: Optional[Tags]) -> Tags:
         tag_descriptions = collections.defaultdict(set)
         target_description = self.get_row(index)["description"]
         for row in self.source.sort("date", descending=True).iter_rows(named=True):
             if row["tag"] is None:
                 continue
-            key = (row["tag"], row["subtag"])
+            tags = Tags(row["tag"], row["subtag"])
             row_description = row["description"]
-            tag_descriptions[key].add(row_description)
+            tag_descriptions[tags].add(row_description)
             if row_description == target_description:
-                print(f"Guess from {row=}")
-                return key
+                print(f"Guess from: {row}")
+                return tags
         if default is not None:
-            return _split_tag_text(default)
+            return default
         if not tag_descriptions:
-            return ("unknown", "")
+            return Tags("unknown", "")
         description_counts = {
             len(descriptions): tags for tags, descriptions in tag_descriptions.items()
         }
@@ -175,32 +212,39 @@ class Tagger:
         return None
 
     def tag_interactively(self, default_tags):
-        line_separator = "===================="
+        if default_tags:
+            default_tags = Tags.from_str(default_tags)
+        if self.get_untagged_index() is not None:
+            print(LINE_SEPARATOR)
+            print(self.describe_all_tags())
         while True:
             index = self.get_untagged_index()
             if index is None:
                 break
-            guess_tag, guess_subtag = self.guess_tags(index, default_tags)
-            guess_repr = guess_tag
-            if guess_subtag:
-                guess_repr = f"{guess_repr} [{guess_subtag}]"
-            print()
-            print(line_separator)
-            print(self.describe_all_tags())
-            print()
-            print(self.describe_row(index))
-            print(f"   Guess: {guess_repr}")
-            print()
-            user_input = input("Tags: ")
-            if user_input == "":
-                tag, subtag = guess_tag, guess_subtag
-            else:
-                tag, subtag = _split_tag_text(user_input, ",")
-            self.apply_tags(index, tag, subtag)
-
-
-def _split_tag_text(text, separator: str = ","):
-    if separator not in text:
-        text += separator
-    tag, subtag = text.split(separator, 1)
-    return tag.strip(), subtag.strip()
+            guess = self.guess_tags(index, default_tags)
+            prompt_text_lines = [
+                LINE_SEPARATOR,
+                "Currently tagging:",
+                self.describe_row(index),
+                f"   Guess: {guess}",
+                "",
+                "(i/enter/space)   Input tags manually",
+                "(g/tab)           Use guess",
+                "(t)               Show existing tags",
+                "(q)               Quit",
+            ]
+            print("\n".join(prompt_text_lines))
+            key = readchar.readkey()
+            if key in ("q"):
+                exit(0)
+            elif key in ("t"):
+                print(LINE_SEPARATOR)
+                print(self.describe_all_tags())
+            elif key in ("i", readchar.key.LF, readchar.key.SPACE):
+                if (tag := input("Tag (or 'cancel'): ")) == "cancel":
+                    break
+                if (subtag := input("Subtag (or 'cancel'): ")) == "cancel":
+                    break
+                self.apply_tags(index, Tags(tag, subtag))
+            elif key in ("g", readchar.key.TAB):
+                self.apply_tags(index, guess)
