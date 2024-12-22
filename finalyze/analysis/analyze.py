@@ -1,6 +1,9 @@
 import dataclasses
 import subprocess
+import sys
 import tomllib
+
+import polars as pl
 
 from finalyze.display import print_table
 from finalyze.filters import Filters
@@ -74,7 +77,7 @@ def run(command_args, global_args):
     enriched_data = enrich_source(tagged_data).select(*ENRICHED_SCHEMA.keys())
     source_data = command_args.filters.filter_data(enriched_data.lazy())
     if not command_args.lenient:
-        validate_tags(source_data)
+        _validate_tags(source_data, global_args.flip_rtl)
     if command_args.print_source:
         print_table(
             source_data.collect(),
@@ -101,10 +104,12 @@ def run(command_args, global_args):
         subprocess.run(["xdg-open", plots_files])
 
 
-def validate_tags(df):
-    missing_tag_indices = tuple(df.collect()["tag"].is_null().arg_true())
-    if missing_tag_indices:
-        raise ValueError(f"Missing tags at indices: {missing_tag_indices}")
+def _validate_tags(df, flip_rtl):
+    null_tags = df.filter(pl.col("tag").is_null()).collect()
+    if null_tags.height:
+        print_table(null_tags, "Missing tags", flip_rtl=flip_rtl)
+        print(f"Missing {null_tags.height} tags", file=sys.stderr)
+        exit(1)
 
 
 def load_colors(colors_file):
