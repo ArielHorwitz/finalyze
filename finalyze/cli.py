@@ -1,20 +1,17 @@
 import argparse
 import dataclasses
 import sys
-import tomllib
 from pathlib import Path
 
+from finalyze import APP_DESCRIPTION, APP_NAME
 from finalyze.analysis import analyze
+from finalyze.config import load_config
 from finalyze.source import source, tag
 
-APP_NAME = "finalyze"
-DESCRIPTION = "Personal financial analysis tool"
 TAGS_FILENAME = "tags.csv"
 COLORS_FILENAME = "colors.toml"
 PLOTS_FILENAME = "plots.html"
 DATA_DIR = Path.home() / ".local" / "share" / APP_NAME.lower() / "data"
-CONFIG_DIR = Path.home() / ".config" / APP_NAME.lower()
-CONFIG_FILE = CONFIG_DIR / "config.toml"
 
 
 @dataclasses.dataclass
@@ -88,7 +85,7 @@ def add_developer_subcommand(subparsers):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(prog=APP_NAME, description=DESCRIPTION)
+    parser = argparse.ArgumentParser(prog=APP_NAME, description=APP_DESCRIPTION)
     GlobalArgs.configure_parser(parser)
     # Subcommands
     subparsers = parser.add_subparsers(dest="subcommand")
@@ -107,10 +104,7 @@ def parse_args():
         print("\n\nNo subcommand selected.", file=sys.stderr)
         exit(1)
     # Get system arguments
-    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    if not CONFIG_FILE.is_file():
-        CONFIG_FILE.write_text("[cli]\nglobal = []")
-    config = tomllib.loads(CONFIG_FILE.read_text())
+    config = load_config()
     config_global_args = config.get("cli", {}).get("global", [])
     config_command_args = config.get("cli", {}).get(args.subcommand, [])
     # Combine configured default and system arguments
