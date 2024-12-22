@@ -41,6 +41,7 @@ class Tags(NamedTuple):
 class Args:
     default_tags: bool
     delete: bool
+    migrate: list[str]
     filters: Filters
 
     @classmethod
@@ -55,6 +56,11 @@ class Args:
             action="store_true",
             help="Delete tags and quit",
         )
+        parser.add_argument(
+            "--migrate",
+            nargs="*",
+            help="Migrate old tags using a custom set of columns for hashing",
+        )
         Filters.configure_parser(parser)
 
     @classmethod
@@ -62,6 +68,7 @@ class Args:
         return cls(
             default_tags=args.default_tags,
             delete=args.delete,
+            migrate=args.migrate,
             filters=Filters.from_args(args),
         )
 
@@ -77,6 +84,8 @@ def run(command_args, global_args):
             global_args.flip_rtl,
         )
         return
+    if command_args.migrate:
+        migrate_tags(source_data, global_args.tags_file, command_args.migrate)
     tagger = Tagger(
         source_data=source_data,
         tags_file=global_args.tags_file,
@@ -107,6 +116,12 @@ def read_tags_file(tags_file):
 def write_tags_file(data, tags_file):
     validate_schema(data, TAG_SCHEMA)
     data.sort(*TAG_SCHEMA.keys()).write_csv(tags_file)
+
+
+def migrate_tags(source_data, tags_file, hash_columns):
+    tagged = apply_tags(source_data, tags_file, hash_columns=hash_columns)
+    tagged = tagged.with_columns(pl.concat_str(*HASH_COLUMNS).hash().alias("hash"))
+    write_tags_file(tagged.select(*TAG_SCHEMA), tags_file)
 
 
 def delete_tags(source_data, tags_file, filters, flip_rtl):
