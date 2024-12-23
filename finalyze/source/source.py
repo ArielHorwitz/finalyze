@@ -13,6 +13,8 @@ from finalyze.source.leumi import parse_file
 @dataclasses.dataclass
 class Options:
     verbose: bool
+    balance_card: bool
+    remove_card: bool
 
     @classmethod
     def configure_parser(cls, parser):
@@ -22,11 +24,23 @@ class Options:
             action="store_true",
             help="Be verbose",
         )
+        parser.add_argument(
+            "--balance-card",
+            action="store_true",
+            help="Balance card transactions between checking and card sources",
+        )
+        parser.add_argument(
+            "--remove-card",
+            action="store_true",
+            help="Remove card transactions entirely from checking source",
+        )
 
     @classmethod
     def from_args(cls, args):
         return cls(
             verbose=args.verbose,
+            balance_card=args.balance_card,
+            remove_card=args.remove_card,
         )
 
 

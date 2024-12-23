@@ -69,9 +69,24 @@ class CheckingFormat:
             "description": raw.select(pl.col("2").cast(pl.String)),
         }
         checking = pl.DataFrame(data).with_columns(pl.lit("checking").alias("source"))
-        # Remove card transactions
         is_card_transaction = pl.col("description") == cls.CARD_DESCRIPTION
-        checking = checking.filter(~is_card_transaction)
+        if options.remove_card:
+            checking = checking.filter(~is_card_transaction)
+        elif options.balance_card:
+            # Extract card transfers
+            card_transfers = checking.filter(is_card_transaction)
+            checking = checking.filter(~is_card_transaction)
+            # Add two-way transfers
+            card_transfers_to = card_transfers.with_columns(
+                source=pl.lit("checking"),
+                description=pl.lit("Transfer checking-card"),
+            )
+            card_transfers_from = card_transfers.with_columns(
+                source=pl.lit("card"),
+                description=pl.lit("Transfer checking-card"),
+                amount=pl.col("amount") * -1,
+            )
+            checking = pl.concat([checking, card_transfers_to, card_transfers_from])
         return checking
 
 
