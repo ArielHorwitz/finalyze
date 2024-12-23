@@ -31,6 +31,7 @@ class Filters:
         tags: bool = True,
         account: bool = True,
     ):
+        parser.set_defaults(filters_enable_tags=tags, filters_enable_account=account)
         if group_name:
             parser = parser.add_argument_group(group_name)
         parser.add_argument(
@@ -73,12 +74,20 @@ class Filters:
 
     @classmethod
     def from_args(cls, args):
-        return cls(
-            **{
-                field.name: getattr(args, field.name, None)
-                for field in dataclasses.fields(cls)
-            }
+        data = dict(
+            start_date=args.start_date,
+            end_date=args.end_date,
+            description=args.description,
         )
+        if args.filters_enable_tags:
+            data |= dict(tags=args.tags, subtags=args.subtags)
+        else:
+            data |= dict(tags=None, subtags=None)
+        if args.filters_enable_account:
+            data |= dict(account=args.account, source=args.source)
+        else:
+            data |= dict(account=None, source=None)
+        return cls(**data)
 
     def filter_data(self, df):
         predicates = []
