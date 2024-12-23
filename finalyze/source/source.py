@@ -1,3 +1,4 @@
+import argparse
 import dataclasses
 from pathlib import Path
 
@@ -29,10 +30,20 @@ class Options:
         )
 
 
+class AccountMapAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if not getattr(namespace, self.dest, None):
+            setattr(namespace, self.dest, {})
+        if len(values) < 2:
+            parser.error(f"Need an account name and files, got: {values!r}")
+        name = values[0]
+        files = (Path(f).resolve() for f in values[1:])
+        getattr(namespace, self.dest).setdefault(name, []).extend(files)
+
+
 @dataclasses.dataclass
 class Args:
-    account_name: str
-    files: list[Path]
+    accounts: dict[str, list[Path]]
     filters: Filters
     options: Options
 
@@ -40,13 +51,12 @@ class Args:
     def configure_parser(cls, parser):
         parser.set_defaults(command_class=cls, run=run)
         parser.add_argument(
-            "account_name",
-            help="Name of account",
-        )
-        parser.add_argument(
-            "files",
-            nargs="+",
-            help="Excel files exported from Bank Leumi",
+            "-a",
+            "--account",
+            nargs="*",
+            metavar="NAME FILE",
+            action=AccountMapAction,
+            help="Account name and files",
         )
         Filters.configure_parser(parser, tags=False, account=False)
         Options.configure_parser(parser.add_argument_group("parsing"))
@@ -54,37 +64,33 @@ class Args:
     @classmethod
     def from_args(cls, args):
         return cls(
-            account_name=args.account_name,
-            files=tuple(Path(f).resolve() for f in args.files),
+            accounts=args.account,
             filters=Filters.from_args(args),
             options=Options.from_args(args),
         )
 
 
 def run(command_args, global_args):
-    account_name = command_args.account_name
-    output_file = global_args.source_dir / f"{account_name}.csv"
-    input_files = _get_files(command_args.files)
-    print("Source files:")
-    for f in input_files:
-        print(f"  {f}")
-    # Parse sources
-    raw_dfs = [
-        parse_file(input_file=file, options=command_args.options)
-        for file in input_files
-    ]
-    parsed_data = (
-        pl.concat(raw_dfs)
-        .with_columns(pl.lit(account_name).alias("account"))
-        .sort("date", "amount")
-    )
-    validate_schema(parsed_data, RAW_SCHEMA)
-    filtered_data = command_args.filters.filter_data(parsed_data)
-    source_data = filtered_data.select(*RAW_SCHEMA.keys())
-    print_table(source_data, "Parsed data", flip_rtl=global_args.flip_rtl)
-    print(f"Writing output to: {output_file}")
-    output_file.parent.mkdir(parents=True, exist_ok=True)
-    source_data.write_csv(output_file)
+    if not command_args.accounts:
+        raise ValueError("No accounts and files specified")
+    for account_name, files in command_args.accounts.items():
+        input_files = _get_files(files)
+        output_file = global_args.source_dir / f"{account_name}.csv"
+        print(f"Source files for account {account_name!r}:")
+        for f in input_files:
+            print(f"  {f}")
+        # Parse sources
+        parsed_data = pl.concat(
+            parse_file(input_file=file, options=command_args.options)
+            for file in input_files
+        ).with_columns(pl.lit(account_name).alias("account"))
+        validate_schema(parsed_data, RAW_SCHEMA)
+        filtered_data = command_args.filters.filter_data(parsed_data)
+        source_data = filtered_data.select(*RAW_SCHEMA.keys()).sort("date", "amount")
+        print_table(source_data, "Parsed data", flip_rtl=global_args.flip_rtl)
+        print(f"Writing output to: {output_file}")
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        source_data.write_csv(output_file)
 
 
 def _get_files(all_paths):
