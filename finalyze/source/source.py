@@ -64,15 +64,14 @@ class Args:
 def run(command_args, global_args):
     account_name = command_args.account_name
     output_file = global_args.source_dir / f"{account_name}.csv"
+    input_files = _get_files(command_args.files)
     print("Source files:")
-    for f in command_args.files:
-        if not f.is_file():
-            raise FileNotFoundError(f"File not found: {f}")
+    for f in input_files:
         print(f"  {f}")
     # Parse sources
     raw_dfs = [
         parse_file(input_file=file, options=command_args.options)
-        for file in command_args.files
+        for file in input_files
     ]
     parsed_data = (
         pl.concat(raw_dfs)
@@ -86,6 +85,18 @@ def run(command_args, global_args):
     print(f"Writing output to: {output_file}")
     output_file.parent.mkdir(parents=True, exist_ok=True)
     source_data.write_csv(output_file)
+
+
+def _get_files(all_paths):
+    files = set()
+    for path in all_paths:
+        if path.is_dir():
+            files.update(path.glob("*.xls"))
+        elif path.is_file():
+            files.add(path)
+        else:
+            raise FileNotFoundError(f"Path is not file or folder: {path}")
+    return tuple(sorted(files))
 
 
 def load_source_data(source_dir):
