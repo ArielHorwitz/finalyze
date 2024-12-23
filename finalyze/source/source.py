@@ -77,7 +77,6 @@ def run(command_args, global_args):
     parsed_data = (
         pl.concat(raw_dfs)
         .with_columns(pl.lit(account_name).alias("account"))
-        .unique()
         .sort("date", "amount")
     )
     validate_schema(parsed_data, RAW_SCHEMA)
