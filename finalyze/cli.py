@@ -10,36 +10,37 @@ from finalyze.source import source, tag
 
 TAGS_FILENAME = "tags.csv"
 PLOTS_FILENAME = "plots.html"
-DATA_DIR = Path.home() / ".local" / "share" / APP_NAME.lower() / "data"
+ROOT_DIR = Path.home() / ".local" / "share" / APP_NAME.lower()
 
 
 @dataclasses.dataclass
 class GlobalArgs:
-    data_dir: Path
     dataset_name: str
-    use_dataset_tags: bool
+    tags_name: str
     flip_rtl: bool
 
     @property
     def dataset_dir(self):
-        return self.data_dir / self.dataset_name
+        return ROOT_DIR / "parsed" / self.dataset_name
 
     @property
-    def source_dir(self):
-        return self.dataset_dir / "sources"
+    def tags_dir(self):
+        return ROOT_DIR / "tags"
+
+    @property
+    def output_dir(self):
+        return ROOT_DIR / "output"
 
     @property
     def tags_file(self):
-        if self.use_dataset_tags:
-            return self.dataset_dir / TAGS_FILENAME
-        return self.data_dir / TAGS_FILENAME
+        return self.tags_dir / f"{self.tags_name}.csv"
 
     @property
     def plots_file(self):
-        return self.data_dir / PLOTS_FILENAME
+        return self.output_dir / PLOTS_FILENAME
 
     def __post_init__(self):
-        for directory in (self.data_dir, self.dataset_dir, self.source_dir):
+        for directory in (self.dataset_dir, self.tags_dir, self.output_dir):
             directory.mkdir(parents=True, exist_ok=True)
 
     @staticmethod
@@ -51,9 +52,10 @@ class GlobalArgs:
             help="Dataset name",
         )
         parser.add_argument(
-            "--dataset-tags",
+            "--tags-name",
             action="store_true",
-            help="Use isolated tags file for dataset instead of global tags file",
+            default="default",
+            help="Tags file name",
         )
         parser.add_argument(
             "--flip-rtl",
@@ -64,9 +66,8 @@ class GlobalArgs:
     @classmethod
     def from_args(cls, args):
         return cls(
-            data_dir=DATA_DIR,
             dataset_name=args.dataset_name,
-            use_dataset_tags=args.dataset_tags,
+            tags_name=args.tags_name,
             flip_rtl=args.flip_rtl,
         )
 

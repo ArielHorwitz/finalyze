@@ -75,7 +75,7 @@ class Args:
 
 def run(command_args, global_args):
     print(f"Tags file: {global_args.tags_file}")
-    source_data = source.load_source_data(global_args.source_dir)
+    source_data = source.load_source_data(global_args.dataset_dir)
     if command_args.delete:
         delete_tags(
             source_data,

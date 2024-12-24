@@ -89,7 +89,7 @@ def run(command_args, global_args):
         raise ValueError("No accounts and files specified")
     for account_name, files in command_args.accounts.items():
         input_files = _get_files(files)
-        output_file = global_args.source_dir / f"{account_name}.csv"
+        output_file = global_args.dataset_dir / f"{account_name}.csv"
         print(f"Source files for account {account_name!r}:")
         for f in input_files:
             print(f"  {f}")

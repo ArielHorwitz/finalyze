@@ -72,7 +72,7 @@ class Args:
 
 def run(command_args, global_args):
     # Source data
-    source_data = load_source_data(global_args.source_dir).sort("date", "amount")
+    source_data = load_source_data(global_args.dataset_dir).sort("date", "amount")
     tagged_data = apply_tags(source_data, global_args.tags_file)
     enriched_data = enrich_source(tagged_data).select(*ENRICHED_SCHEMA.keys())
     source_data = command_args.filters.filter_data(enriched_data.lazy())
