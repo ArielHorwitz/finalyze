@@ -1,5 +1,4 @@
 import collections
-import dataclasses
 import shutil
 from typing import NamedTuple, Optional
 
@@ -7,9 +6,7 @@ import polars as pl
 import readchar
 
 from finalyze.display import flip_rtl_str, print_table
-from finalyze.filters import Filters
-from finalyze.source import source
-from finalyze.source.data import TAGGED_SCHEMA, validate_schema
+from finalyze.source.data import TAGGED_SCHEMA, load_source_data, validate_schema
 
 LINE_SEPARATOR = "===================="
 HASH_COLUMNS = ("account", "source", "date", "description", "amount")
@@ -24,79 +21,44 @@ class Tags(NamedTuple):
     tag: str
     subtag: Optional[str] = None
 
-    @classmethod
-    def from_str(cls, text, separator: str = ","):
-        if separator not in text:
-            text += separator
-        tag, subtag = text.split(separator, 1)
-        return cls(tag=tag.strip(), subtag=subtag.strip())
-
     def __str__(self):
         if self.subtag:
             return f"{self.tag} [{self.subtag}]"
         return self.tag
 
 
-@dataclasses.dataclass
-class Args:
-    default_tags: bool
-    delete: bool
-    migrate: list[str]
-    filters: Filters
-
-    @classmethod
-    def configure_parser(cls, parser):
-        parser.set_defaults(command_class=cls, run=run)
-        parser.add_argument(
-            "--default-tags",
-            help="Set default tags (instead of using best guess suggestion)",
-        )
-        parser.add_argument(
-            "--delete",
-            action="store_true",
-            help="Delete tags and quit",
-        )
-        parser.add_argument(
-            "--migrate",
-            nargs="*",
-            help="Migrate old tags using a custom set of columns for hashing",
-        )
-        Filters.configure_parser(parser)
-
-    @classmethod
-    def from_args(cls, args):
-        return cls(
-            default_tags=args.default_tags,
-            delete=args.delete,
-            migrate=args.migrate,
-            filters=Filters.from_args(args),
-        )
+def run(config):
+    print(f"Tags file: {config.general.tags_file}")
+    operation = config.tag.operation
+    if operation == "tag":
+        tag_interactively(config)
+    elif operation == "migrate":
+        migrate_tags(config)
+    elif operation == "delete":
+        delete_tags(config)
+    else:
+        raise ValueError(f"Unknown operation: {operation}")
 
 
-def run(command_args, global_args):
-    print(f"Tags file: {global_args.tags_file}")
-    source_data = source.load_source_data(global_args.dataset_dir)
-    if command_args.delete:
-        delete_tags(
-            source_data,
-            global_args.tags_file,
-            command_args.filters,
-            global_args.flip_rtl,
-        )
-        return
-    if command_args.migrate:
-        migrate_tags(source_data, global_args.tags_file, command_args.migrate)
+def tag_interactively(config):
+    source_data = load_source_data(config.general.source_dir)
     tagger = Tagger(
         source_data=source_data,
-        tags_file=global_args.tags_file,
-        flip_rtl=global_args.flip_rtl,
+        tags_file=config.general.tags_file,
+        flip_rtl=config.general.flip_rtl,
     )
-    tagger.tag_interactively(command_args.default_tags)
+    if config.tag.default_tag:
+        default_tags = Tags(config.tag.default_tag, config.tag.default_subtag)
+    else:
+        default_tags = None
+    tagger.tag_interactively(default_tags)
     print(LINE_SEPARATOR)
     print(tagger.describe_all_tags())
 
 
 def apply_tags(data, tags_file, *, hash_columns: list[str] = HASH_COLUMNS):
+    if not hash_columns:
+        raise ValueError("Need columns for hashing")
     tags = read_tags_file(tags_file)
     tagged = (
         data.drop(*TAG_SCHEMA, strict=False)
@@ -118,17 +80,26 @@ def write_tags_file(data, tags_file):
     data.sort(*TAG_SCHEMA.keys()).write_csv(tags_file)
 
 
-def migrate_tags(source_data, tags_file, hash_columns):
-    tagged = apply_tags(source_data, tags_file, hash_columns=hash_columns)
+def migrate_tags(config):
+    source_data = load_source_data(config.general.source_dir)
+    tags_file = config.general.tags_file
+    tagged = apply_tags(
+        source_data, tags_file, hash_columns=config.tag.migrate.hash_columns
+    )
     tagged = tagged.with_columns(pl.concat_str(*HASH_COLUMNS).hash().alias("hash"))
     write_tags_file(tagged.select(*TAG_SCHEMA), tags_file)
 
 
-def delete_tags(source_data, tags_file, filters, flip_rtl):
-    tagged_data = apply_tags(source_data, tags_file)
-    tags_data = read_tags_file(tags_file)
+def delete_tags(config):
+    tags_file = config.general.tags_file
+    flip_rtl = config.general.flip_rtl
+    filters = config.tag.delete.filters
 
-    delete_data = filters.filter_data(tagged_data)
+    tags_data = read_tags_file(tags_file)
+    source_data = load_source_data(config.general.source_dir)
+    tagged_data = apply_tags(source_data, tags_file)
+
+    delete_data = filters.apply(tagged_data)
     remaining_tags = tags_data.filter(~pl.col("hash").is_in(delete_data.select("hash")))
 
     delete_summary = (
@@ -225,15 +196,13 @@ class Tagger:
         return None
 
     def tag_interactively(self, default_tags):
-        if default_tags:
-            default_tags = Tags.from_str(default_tags)
         if self.get_untagged_index() is not None:
             print(LINE_SEPARATOR)
             print(self.describe_all_tags())
         while True:
             index = self.get_untagged_index()
             if index is None:
-                break
+                return
             guess = self.guess_tags(index, default_tags)
             prompt_text_lines = [
                 LINE_SEPARATOR,
@@ -249,7 +218,7 @@ class Tagger:
             print("\n".join(prompt_text_lines))
             key = readchar.readkey()
             if key in ("q"):
-                exit(0)
+                return
             elif key in ("t"):
                 print(LINE_SEPARATOR)
                 print(self.describe_all_tags())

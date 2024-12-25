@@ -1,111 +1,53 @@
-import dataclasses
 import subprocess
 import sys
 
 import polars as pl
 
-from finalyze.config import load_config
 from finalyze.display import print_table
-from finalyze.filters import Filters
-from finalyze.source.data import ENRICHED_SCHEMA, enrich_source
-from finalyze.source.source import load_source_data
+from finalyze.source.data import enrich_source, load_source_data
 from finalyze.source.tag import apply_tags
 
 from . import plot
 from .tables import get_tables
 
 
-@dataclasses.dataclass
-class Args:
-    lenient: bool
-    open_graphs: bool
-    print_source: bool
-    print_tables: bool
-    plotly_template: str
-    filters: Filters
-
-    @classmethod
-    def configure_parser(cls, parser):
-        parser.set_defaults(command_class=cls, run=run)
-        parser.add_argument(
-            "-T",
-            "--lenient",
-            action="store_true",
-            help="Do not perform strict data validation",
-        )
-        parser.add_argument(
-            "-g",
-            "--open-graphs",
-            action="store_true",
-            help="Open graphs in browser",
-        )
-        parser.add_argument(
-            "-s",
-            "--print-source",
-            action="store_true",
-            help="Print source data to stdout",
-        )
-        parser.add_argument(
-            "-p",
-            "--print-tables",
-            action="store_true",
-            help="Print tables to stdout",
-        )
-        parser.add_argument(
-            "--plotly-template",
-            default="plotly_dark",
-            help="Select template/theme for plotly",
-        )
-        Filters.configure_parser(parser)
-
-    @classmethod
-    def from_args(cls, args):
-        return cls(
-            lenient=args.lenient,
-            print_source=args.print_source,
-            print_tables=args.print_tables,
-            open_graphs=args.open_graphs,
-            plotly_template=args.plotly_template,
-            filters=Filters.from_args(args),
-        )
+def run(config):
+    source_data = load_source_data(config.general.source_dir)
+    source_data = apply_tags(source_data, config.general.tags_file)
+    source_data = enrich_source(source_data)
+    source_data = config.analysis.filters.apply(source_data)
+    if config.analysis.print_source:
+        print_table(source_data, "Source data", flip_rtl=config.general.flip_rtl)
+    if not config.analysis.allow_untagged:
+        _validate_tags(source_data, flip_rtl=config.general.flip_rtl)
+    analyze(source_data, config)
 
 
-def run(command_args, global_args):
-    # Source data
-    source_data = load_source_data(global_args.dataset_dir).sort("date", "amount")
-    tagged_data = apply_tags(source_data, global_args.tags_file)
-    enriched_data = enrich_source(tagged_data).select(*ENRICHED_SCHEMA.keys())
-    source_data = command_args.filters.filter_data(enriched_data.lazy())
-    if not command_args.lenient:
-        _validate_tags(source_data, global_args.flip_rtl)
-    if command_args.print_source:
-        print_table(
-            source_data.collect(),
-            "filtered source data",
-            flip_rtl=global_args.flip_rtl,
-        )
+def analyze(source_data, config):
     # Tables
     tables = get_tables(source_data)
     for table in tables:
-        if command_args.print_tables:
+        if config.analysis.print_tables:
             print(table)
-            print_table(table.with_totals(), table.title, flip_rtl=global_args.flip_rtl)
+            print_table(
+                table.with_totals(), table.title, flip_rtl=config.general.flip_rtl
+            )
     # Plots
-    plots_files = global_args.plots_file
-    color_map = load_config()["colors"]
+    plots_files = config.general.plots_file
+    color_map = {name: color.as_hex() for name, color in config.analysis.colors.items()}
     print(f"Exporting plots to: {plots_files}")
     plot.write_html(
         tables,
         plots_files,
-        template=command_args.plotly_template,
+        template=config.analysis.plotly_template,
         color_map=color_map,
     )
-    if command_args.open_graphs:
+    if config.analysis.open_graphs:
         subprocess.run(["xdg-open", plots_files])
 
 
 def _validate_tags(df, flip_rtl):
-    null_tags = df.filter(pl.col("tag").is_null()).collect()
+    null_tags = df.filter(pl.col("tag").is_null())
     if null_tags.height:
         print_table(null_tags, "Missing tags", flip_rtl=flip_rtl)
         print(f"Missing {null_tags.height} tags", file=sys.stderr)
