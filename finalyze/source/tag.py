@@ -188,18 +188,21 @@ class Tagger:
     def get_row(self, index):
         return self.source.row(index, named=True)
 
-    def get_untagged_index(self):
-        indices = tuple(self.source["tag"].is_null().arg_true())
+    def get_untagged_index(self, ignore_indices=None):
+        ignores = set(ignore_indices or [])
+        untagged_indices = set(self.source["tag"].is_null().arg_true())
+        indices = sorted(untagged_indices - ignores)
         if indices:
             return indices[0]
         return None
 
     def tag_interactively(self, default_tags):
+        skipped_indices = set()
         if self.get_untagged_index() is not None:
             print(LINE_SEPARATOR)
             print(self.describe_all_tags())
         while True:
-            index = self.get_untagged_index()
+            index = self.get_untagged_index(skipped_indices)
             if index is None:
                 return
             guess = self.guess_tags(index, default_tags)
@@ -211,6 +214,7 @@ class Tagger:
                 "",
                 "(i/enter/space)   Input tags manually",
                 "(g/tab)           Use guess",
+                "(s)               Skip entry",
                 "(t)               Show existing tags",
                 "(q)               Quit",
             ]
@@ -221,11 +225,13 @@ class Tagger:
             elif key in ("t"):
                 print(LINE_SEPARATOR)
                 print(self.describe_all_tags())
+            elif key in ("s"):
+                skipped_indices.add(index)
             elif key in ("i", readchar.key.LF, readchar.key.SPACE):
                 if (tag := input("Tag (or 'cancel'): ")) == "cancel":
-                    break
+                    continue
                 if (subtag := input("Subtag (or 'cancel'): ")) == "cancel":
-                    break
+                    continue
                 self.apply_tags(index, Tags(tag, subtag))
             elif key in ("g", readchar.key.TAB):
                 self.apply_tags(index, guess)
