@@ -90,47 +90,67 @@ class CheckingFormat:
 
 
 class CardFormat:
-    EXPECTED_HEADERS = (
-        'עסקאות מחויבות בש"ח (לידיעה בלבד)',
+    UNCONFIRMED_TITLE = "עסקאות אחרונות שטרם נקלטו"
+    TITLES = {
         'עסקאות בש"ח במועד החיוב',
+        'עסקאות מחויבות בש"ח (לידיעה בלבד)',
+    }
+    HEADERS = (
+        "תאריך העסקה",
+        "שם בית העסק",
+        "סכום העסקה",
+        "סוג העסקה",
+        "פרטים",
+        "סכום חיוב",
     )
-    EXPECTED_FIRST_COLUMN_NAME = "תאריך העסקה"
-    EXPECTED_LAST_ROW_VALUE = 'סה"כ:'
-
-    @classmethod
-    def check(cls, raw_df):
-        if (header := raw_df.iloc[0, 0]) not in cls.EXPECTED_HEADERS:
-            raise UnexpectedFormat(
-                f"Expected header {cls.EXPECTED_HEADERS!r}" f", got: {header!r}"
-            )
-        if (first_column := raw_df.iloc[1, 0]) != cls.EXPECTED_FIRST_COLUMN_NAME:
-            raise UnexpectedFormat(
-                f"Expected column name {cls.EXPECTED_FIRST_COLUMN_NAME!r}"
-                f", got: {first_column!r}"
-            )
-        if (last_row_value := raw_df.iloc[-1, 4]) != cls.EXPECTED_LAST_ROW_VALUE:
-            raise UnexpectedFormat(
-                f"Expected {cls.EXPECTED_LAST_ROW_VALUE!r} in last row"
-                f", got: {last_row_value!r}"
-            )
-        if not math.isnan(expected_nan := raw_df.iloc[-1, 0]):
-            raise UnexpectedFormat(f"Expected nan, got: {expected_nan!r}")
+    TOTALS_NAME = 'סה"כ:'
 
     @classmethod
     def parse(cls, input_file, config):
-        raw_html = pd.read_html(input_file, encoding="utf-8")
-        # Credit card transactions
-        raw_tables = [cls._table_parse(raw_html[2])]
-        if len(raw_html) >= 4:
-            # Debit card transactions on credit card
-            debit_table = cls._table_parse(raw_html[3])
-            raw_tables.append(debit_table)
-        return pl.concat(raw_tables)
+        raw_tables = pd.read_html(input_file, encoding="utf-8")
+        parsed_tables = []
+        for raw_table in raw_tables:
+            title = raw_table.iloc[0, 0]
+            if title not in cls.TITLES:
+                continue
+            cls.check(raw_table, title)
+            parsed_table = cls._table_parse(raw_table)
+            parsed_tables.append(parsed_table)
+        if not parsed_tables:
+            raise UnexpectedFormat("No valid tables found")
+        return pl.concat(parsed_tables)
+
+    @classmethod
+    def check(cls, raw_df, title):
+        # Check title row
+        for column_index in range(raw_df.shape[1]):
+            actual_title = raw_df.iloc[0, column_index]
+            if actual_title != title:
+                raise UnexpectedFormat(
+                    f"Expected title {title!r}" f", got: {actual_title!r}"
+                )
+        # Check headers row
+        for column_index, expected_header in enumerate(cls.HEADERS):
+            actual_header = raw_df.iloc[1, column_index]
+            if actual_header != expected_header:
+                raise UnexpectedFormat(
+                    f"Expected header {expected_header!r}, got: {actual_header!r}"
+                )
+        # Check totals row
+        actual_totals_name = raw_df.iloc[-1, 4]
+        if actual_totals_name != cls.TOTALS_NAME:
+            raise UnexpectedFormat(
+                f"Expected {cls.TOTALS_NAME!r} in last row"
+                f", got: {actual_totals_name!r}"
+            )
+        for column_index in range(4):
+            expected_nan = raw_df.iloc[-1, column_index]
+            if not math.isnan(expected_nan):
+                raise UnexpectedFormat(f"Expected nan, got: {expected_nan!r}")
 
     @classmethod
     def _table_parse(cls, raw_df):
-        cls.check(raw_df)
-        # Remove headers and total rows
+        # Remove titles, headers, and totals rows
         table = pl.from_pandas(raw_df.iloc[2:-1])
         # Compile data
         data = {
