@@ -105,11 +105,18 @@ class Analysis(BaseModel):
     colors: dict[str, Color] = Field(default=DEFAULT_COLORS, validate_default=True)
 
 
+class Display(BaseModel):
+    flip_rtl: bool = False
+    max_rows: int = 1_000_000
+    max_cols: int = 1_000
+    max_width: int = 1_000
+    show_shape: bool = False
+
+
 class General(BaseModel):
     data_dir: Path = Field(default=DEFAULT_DATA_DIR, validate_default=True)
     dataset: str = "default"
     tags: str = "default"
-    flip_rtl: bool = False
 
     @property
     def source_dir(self):
@@ -143,11 +150,13 @@ class General(BaseModel):
 
 class Config(BaseModel):
     general: General = General()
+    display: Display = Display()
     source: Source = Source()
     tag: Tag = Tag()
     analysis: Analysis = Analysis()
 
 
+@functools.cache
 def load_config(config_file: Path = CONFIG_FILE):
     config_file = Path(config_file)
     config_file.parent.mkdir(parents=True, exist_ok=True)

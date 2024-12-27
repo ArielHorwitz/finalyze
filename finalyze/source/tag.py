@@ -45,7 +45,7 @@ def tag_interactively(config):
     tagger = Tagger(
         source_data=source_data,
         tags_file=config.general.tags_file,
-        flip_rtl=config.general.flip_rtl,
+        flip_rtl=config.display.flip_rtl,
     )
     if config.tag.default_tag:
         default_tags = Tags(config.tag.default_tag, config.tag.default_subtag)
@@ -92,7 +92,6 @@ def migrate_tags(config):
 
 def delete_tags(config):
     tags_file = config.general.tags_file
-    flip_rtl = config.general.flip_rtl
     filters = config.tag.delete.filters
 
     tags_data = read_tags_file(tags_file)
@@ -105,8 +104,8 @@ def delete_tags(config):
     delete_summary = (
         delete_data.group_by("tag", "subtag").len("entries").sort("tag", "subtag")
     )
-    print_table(delete_data, "Entries to delete", flip_rtl=flip_rtl)
-    print_table(delete_summary, "Tags to delete", flip_rtl=flip_rtl)
+    print_table(delete_data, "Entries to delete")
+    print_table(delete_summary, "Tags to delete")
     if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
         print("Aborted.")
         exit(1)

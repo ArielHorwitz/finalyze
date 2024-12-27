@@ -3,38 +3,43 @@ import string
 import pandas as pd
 import polars as pl
 
+from finalyze.config import load_config
+
 ENGLISH = frozenset(string.printable)
-PD_OPTIONS = (
-    "display.max_rows",
-    1_000_000,
-    "display.max_columns",
-    1_000,
-    "display.width",
-    1_000,
-)
-PL_OPTIONS = {
-    "tbl_rows": 1_000_000,
-    "tbl_cols": 1_000,
-    "tbl_width_chars": 1_000,
-    "tbl_hide_dataframe_shape": True,
-}
 
 
-def print_table(
-    table,
-    description: str = "Unnamed table",
-    enable: bool = True,
-    flip_rtl: bool = False,
-):
-    if not enable:
-        return
-    if flip_rtl:
-        table = flip_rtl_columns(table)
+def print_table(table, description: str = "Unnamed table"):
+    config = load_config()
     print()
     print(description)
-    with pl.Config(**PL_OPTIONS):
-        with pd.option_context(*PD_OPTIONS):
+
+    if isinstance(table, pl.DataFrame):
+        if config.display.flip_rtl:
+            table = flip_rtl_columns(table)
+        pl_options = {
+            "tbl_rows": config.display.max_rows,
+            "tbl_cols": config.display.max_cols,
+            "tbl_width_chars": config.display.max_width,
+            "tbl_hide_dataframe_shape": not config.display.show_shape,
+        }
+        with pl.Config(**pl_options):
             print(table)
+
+    elif isinstance(table, pd.DataFrame):
+        pd_options = (
+            "display.max_rows",
+            config.display.max_rows,
+            "display.max_columns",
+            config.display.max_cols,
+            "display.width",
+            config.display.max_width,
+        )
+        with pd.option_context(*pd_options):
+            print(table)
+
+    else:
+        raise TypeError(f"Unknown table type: {type(table)}")
+
     print()
 
 

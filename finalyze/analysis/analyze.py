@@ -17,21 +17,19 @@ def run(config):
     source_data = enrich_source(source_data)
     source_data = config.analysis.filters.apply(source_data)
     if config.analysis.print_source:
-        print_table(source_data, "Source data", flip_rtl=config.general.flip_rtl)
+        print_table(source_data, "Source data")
     if not config.analysis.allow_untagged:
-        _validate_tags(source_data, flip_rtl=config.general.flip_rtl)
+        _validate_tags(source_data, flip_rtl=config.display.flip_rtl)
     analyze(source_data, config)
 
 
 def analyze(source_data, config):
     # Tables
     tables = get_tables(source_data)
-    for table in tables:
-        if config.analysis.print_tables:
+    if config.analysis.print_tables:
+        for table in tables:
             print(table)
-            print_table(
-                table.with_totals(), table.title, flip_rtl=config.general.flip_rtl
-            )
+            print_table(table.with_totals(), table.title)
     # Plots
     plots_files = config.general.plots_file
     color_map = {name: color.as_hex() for name, color in config.analysis.colors.items()}
@@ -49,6 +47,6 @@ def analyze(source_data, config):
 def _validate_tags(df, flip_rtl):
     null_tags = df.filter(pl.col("tag").is_null())
     if null_tags.height:
-        print_table(null_tags, "Missing tags", flip_rtl=flip_rtl)
+        print_table(null_tags, "Missing tags")
         print(f"Missing {null_tags.height} tags", file=sys.stderr)
         exit(1)
