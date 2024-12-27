@@ -91,8 +91,8 @@ class Tag(BaseModel):
     default_tag: Optional[str] = None
     default_subtag: Optional[str] = None
     operation: TagOperation = Field(default="tag", validate_default=True)
-    delete: TagDeletion = TagDeletion()
-    migrate: TagMigration = TagMigration()
+    deletion: TagDeletion = TagDeletion()
+    migration: TagMigration = TagMigration()
 
 
 class Analysis(BaseModel):
