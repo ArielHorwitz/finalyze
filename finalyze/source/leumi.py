@@ -12,10 +12,9 @@ class UnexpectedFormat(Exception):
 
 def parse_file(input_file, config):
     if config.ingestion.verbose_parsing:
-        print_table(
-            pd.read_html(input_file, encoding="utf-8"),
-            f"Raw table for file: {input_file}",
-        )
+        raw_tables = pd.read_html(input_file, encoding="utf-8")
+        for i, table in enumerate(raw_tables):
+            print_table(table, f"Raw table {i} for file: {input_file}")
     try:
         return CheckingFormat.parse(input_file, config)
     except UnexpectedFormat as exc:
