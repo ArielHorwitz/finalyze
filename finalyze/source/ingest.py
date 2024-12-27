@@ -6,9 +6,9 @@ from finalyze.source.leumi import parse_file
 
 
 def run(config):
-    if not config.source.directories:
+    if not config.ingestion.directories:
         raise ValueError("No accounts directories specified")
-    for account_name, files in config.source.directories.items():
+    for account_name, files in config.ingestion.directories.items():
         input_files = _get_files(files)
         output_file = config.general.source_dir / f"{account_name}.csv"
         print(f"Source files for account {account_name!r}:")
@@ -19,7 +19,7 @@ def run(config):
             parse_file(input_file=file, config=config) for file in input_files
         ).with_columns(pl.lit(account_name).alias("account"))
         validate_schema(parsed_data, RAW_SCHEMA)
-        filtered_data = config.source.filters.apply(parsed_data)
+        filtered_data = config.ingestion.filters.apply(parsed_data)
         source_data = filtered_data.select(*RAW_SCHEMA.keys()).sort("date", "amount")
         print_table(source_data, f"Parsed data for account: {account_name}")
         print(f"Writing output to: {output_file}")

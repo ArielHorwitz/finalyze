@@ -11,7 +11,7 @@ class UnexpectedFormat(Exception):
 
 
 def parse_file(input_file, config):
-    if config.source.verbose_parsing:
+    if config.ingestion.verbose_parsing:
         print_table(
             pd.read_html(input_file, encoding="utf-8"),
             f"Raw table for file: {input_file}",
@@ -70,9 +70,9 @@ class CheckingFormat:
         }
         checking = pl.DataFrame(data).with_columns(pl.lit("checking").alias("source"))
         is_card_transaction = pl.col("description") == cls.CARD_DESCRIPTION
-        if config.source.card_transactions == "remove":
+        if config.ingestion.card_transactions == "remove":
             checking = checking.filter(~is_card_transaction)
-        elif config.source.card_transactions == "balance":
+        elif config.ingestion.card_transactions == "balance":
             # Extract card transfers
             card_transfers = checking.filter(is_card_transaction)
             checking = checking.filter(~is_card_transaction)

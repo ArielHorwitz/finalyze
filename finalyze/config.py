@@ -57,7 +57,7 @@ class Filters(BaseModel):
         return df.filter(predicate)
 
 
-class Source(BaseModel):
+class Ingestion(BaseModel):
     directories: dict[str, list[Path]] = Field(
         default=DEFAULT_SOURCE_DIRECTORIES,
         validate_default=True,
@@ -151,7 +151,7 @@ class General(BaseModel):
 class Config(BaseModel):
     general: General = General()
     display: Display = Display()
-    source: Source = Source()
+    ingestion: Ingestion = Ingestion()
     tag: Tag = Tag()
     analysis: Analysis = Analysis()
 
