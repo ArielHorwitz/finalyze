@@ -28,7 +28,7 @@ ENRICHED_SCHEMA = {
 def load_source_data(source_dir):
     return pl.concat(
         pl.read_csv(file, schema=RAW_SCHEMA) for file in source_dir.glob("*.csv")
-    )
+    ).sort("date", "amount")
 
 
 def enrich_source(source):
