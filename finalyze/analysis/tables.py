@@ -37,6 +37,22 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
     validate_schema(source, ENRICHED_SCHEMA)
     incomes = source.filter(pl.col("amount") > 0)
     expenses = source.filter(pl.col("amount") < 0).with_columns(pl.col("amount") * -1)
+    cumsum_balances = (
+        source.group_by("account", "month")
+        .agg(pl.col("amount").sum())
+        .sort("month", "account")
+        .with_columns(pl.col("amount").cum_sum().over("account").alias("amount"))
+    )
+    cumsum_balances_total = (
+        cumsum_balances.group_by("month")
+        .agg(pl.col("amount").sum())
+        .sort("month")
+        .with_columns(pl.lit("total").alias("account"))
+        .select(cumsum_balances.columns)
+    )
+    cumsum_balances = pl.concat((cumsum_balances, cumsum_balances_total)).sort(
+        "month", "account"
+    )
     tables = [
         Table(
             "Expenses breakdown detailed",
@@ -117,11 +133,8 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
             ),
         ),
         Table(
-            "Total balance",
-            source.group_by("account", "month")
-            .agg(pl.col("amount").sum())
-            .sort("month", "account")
-            .with_columns(pl.col("amount").cum_sum().over("account").alias("amount")),
+            "Total account balances",
+            cumsum_balances,
             figure_constructor=px.line,
             figure_arguments=dict(
                 x="month",
