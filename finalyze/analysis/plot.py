@@ -24,5 +24,19 @@ def write_html(tables, config):
         div = FIGURE_DIV.format(figure=fig_html, plot_title=table.title)
         divs.append(div)
     content = "\n".join(divs)
-    html = HTML.format(css=CSS, title=title, main_content=content)
+    formatted_filters_lines = []
+    field_names = config.analysis.filters.__class__.model_fields
+    for field_name in field_names:
+        field_value = getattr(config.analysis.filters, field_name)
+        if field_value is None:
+            continue
+        formatted_filters_lines.append(f"<b>{field_name}:</b> {field_value}")
+    formatted_filters_lines = formatted_filters_lines or ["No filters."]
+    formatted_filters = "<br>".join(formatted_filters_lines)
+    html = HTML.format(
+        css=CSS,
+        title=title,
+        main_content=content,
+        filters=formatted_filters,
+    )
     Path(config.general.plots_file).write_text(html)
