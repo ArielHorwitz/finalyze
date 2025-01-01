@@ -55,6 +55,60 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
     )
     tables = [
         Table(
+            "Total account balances",
+            cumsum_balances,
+            figure_constructor=px.line,
+            figure_arguments=dict(
+                x="month",
+                y="amount",
+                color="account",
+                hover_data=["amount"],
+                labels=dict(month="Month", amount="Amount"),
+            ),
+        ),
+        Table(
+            "Monthly net breakdown",
+            source.group_by("month", "tag", "subtag")
+            .agg(pl.col("amount").sum())
+            .sort("month", "tag", "subtag"),
+            figure_constructor=px.bar,
+            figure_arguments=dict(
+                x="month",
+                y="amount",
+                color="tag",
+                hover_data=["tag", "subtag", "amount"],
+                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
+            ),
+        ),
+        Table(
+            "Monthly expenses breakdown",
+            expenses.group_by("month", "tag", "subtag")
+            .agg(pl.col("amount").sum())
+            .sort("month", "tag", "subtag"),
+            figure_constructor=px.bar,
+            figure_arguments=dict(
+                x="month",
+                y="amount",
+                color="tag",
+                hover_data=["tag", "subtag", "amount"],
+                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
+            ),
+        ),
+        Table(
+            "Monthly incomes breakdown",
+            incomes.group_by("month", "tag", "subtag")
+            .agg(pl.col("amount").sum())
+            .sort("month", "tag", "subtag"),
+            figure_constructor=px.bar,
+            figure_arguments=dict(
+                x="month",
+                y="amount",
+                color="tag",
+                hover_data=["tag", "subtag", "amount"],
+                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
+            ),
+        ),
+        Table(
             "Expenses breakdown detailed",
             expenses.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum()),
             figure_constructor=px.sunburst,
@@ -88,60 +142,6 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
                     amount="Amount",
                 ),
                 color="tag",
-            ),
-        ),
-        Table(
-            "Monthly expenses breakdown",
-            expenses.group_by("month", "tag", "subtag")
-            .agg(pl.col("amount").sum())
-            .sort("month", "tag", "subtag"),
-            figure_constructor=px.bar,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="tag",
-                hover_data=["tag", "subtag", "amount"],
-                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
-            ),
-        ),
-        Table(
-            "Monthly incomes breakdown",
-            incomes.group_by("month", "tag", "subtag")
-            .agg(pl.col("amount").sum())
-            .sort("month", "tag", "subtag"),
-            figure_constructor=px.bar,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="tag",
-                hover_data=["tag", "subtag", "amount"],
-                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
-            ),
-        ),
-        Table(
-            "Monthly net breakdown",
-            source.group_by("month", "tag", "subtag")
-            .agg(pl.col("amount").sum())
-            .sort("month", "tag", "subtag"),
-            figure_constructor=px.bar,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="tag",
-                hover_data=["tag", "subtag", "amount"],
-                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
-            ),
-        ),
-        Table(
-            "Total account balances",
-            cumsum_balances,
-            figure_constructor=px.line,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="account",
-                hover_data=["amount"],
-                labels=dict(month="Month", amount="Amount"),
             ),
         ),
     ]
