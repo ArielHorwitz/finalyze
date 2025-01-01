@@ -20,10 +20,6 @@ def run(config):
         print_table(source_data, "Source data")
     if not config.analysis.allow_untagged:
         _validate_tags(source_data, flip_rtl=config.display.flip_rtl)
-    analyze(source_data, config)
-
-
-def analyze(source_data, config):
     # Tables
     tables = get_tables(source_data)
     if config.analysis.print_tables:
@@ -31,17 +27,11 @@ def analyze(source_data, config):
             print(table)
             print_table(table.with_totals(), table.title)
     # Plots
-    plots_files = config.general.plots_file
-    color_map = {name: color.as_hex() for name, color in config.analysis.colors.items()}
-    print(f"Exporting plots to: {plots_files}")
-    plot.write_html(
-        tables,
-        plots_files,
-        template=config.analysis.plotly_template,
-        color_map=color_map,
-    )
-    if config.analysis.open_graphs:
-        subprocess.run(["xdg-open", plots_files])
+    plots_file = config.general.plots_file
+    print(f"Exporting plots to: {plots_file}")
+    plot.write_html(tables, config)
+    if config.analysis.graphs.open:
+        subprocess.run(["xdg-open", plots_file])
 
 
 def _validate_tags(df, flip_rtl):

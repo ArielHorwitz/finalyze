@@ -95,14 +95,19 @@ class Tag(BaseModel):
     migration: TagMigration = TagMigration()
 
 
+class AnalysisGraphs(BaseModel):
+    open: bool = False
+    plotly_template: str = "plotly_dark"
+    colors: dict[str, Color] = Field(default=DEFAULT_COLORS, validate_default=True)
+    lightweight_html: bool = False
+
+
 class Analysis(BaseModel):
     filters: Filters = Filters()
+    graphs: AnalysisGraphs = AnalysisGraphs()
     allow_untagged: bool = False
     print_source: bool = False
     print_tables: bool = False
-    open_graphs: bool = False
-    plotly_template: str = "plotly_dark"
-    colors: dict[str, Color] = Field(default=DEFAULT_COLORS, validate_default=True)
 
 
 class Display(BaseModel):
