@@ -42,6 +42,22 @@ h3 {
   box-shadow: 2px 2px 15px -5px;
 }
 
+.table-box {
+  width:98%;
+  padding:1%;
+  float:left;
+  margin-left:auto;
+  margin-right:1%;
+  margin-bottom:1%;
+  background-color:#22aaff;
+  border-radius:10px;
+  box-shadow: 2px 2px 15px -5px;
+}
+
+tr:nth-child(even) {
+  background-color: #1888ee;
+}
+
 /* @media screen and (min-width: 1501px) { */
 /*   .figure-box { */
 /*     width:47%; */

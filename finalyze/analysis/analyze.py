@@ -28,8 +28,11 @@ def run(config):
             print_table(table.with_totals(), table.title)
     # Plots
     plots_file = config.general.plots_file
+    source_data_display = source_data.select(
+        "account", "source", "date", "amount", "tag", "subtag", "description", "hash"
+    )
     print(f"Exporting plots to: {plots_file}")
-    plot.write_html(tables, config)
+    plot.write_html(source_data_display, tables, config)
     if config.analysis.graphs.open:
         subprocess.run(["xdg-open", plots_file])
 
