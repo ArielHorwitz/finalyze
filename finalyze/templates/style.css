@@ -66,8 +66,8 @@ tr:nth-child(even) {
   background-color: #1888ee;
 }
 
-/* @media screen and (min-width: 1501px) { */
-/*   .figure-box { */
-/*     width:47%; */
-/*   } */
-/* } */
+@media screen and (min-width: 1501px) {
+  .figure-box {
+    width:47%;
+  }
+}
