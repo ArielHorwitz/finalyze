@@ -40,6 +40,36 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
     expenses = breakdowns.filter(pl.col("amount") < 0).with_columns(
         pl.col("amount") * -1
     )
+    last_months = (
+        source.group_by("month")
+        .agg(pl.col("amount").count())
+        .select(pl.col("month"))
+        .sort("month", descending=True)["month"][: config.analysis.breakdown_months]
+    )
+    last_month_breakdowns = [
+        Table(
+            f"{name} breakdown - {month}",
+            df.filter(pl.col("month") == month)
+            .group_by("tags", "tag", "subtag")
+            .agg(pl.col("amount").sum()),
+            figure_constructor=px.sunburst,
+            figure_arguments=dict(
+                path=["tag", "subtag"],
+                values="amount",
+                labels=dict(
+                    parent="Tag",
+                    id="Tags",
+                    labels="Tags",
+                    tag="Tag",
+                    subtag="Subtag",
+                    amount="Amount",
+                ),
+                color="tag",
+            ),
+        )
+        for df, name in ((expenses, "Expenses"), (incomes, "Incomes"))
+        for month in last_months
+    ]
     tables = [
         Table(
             "Total balance",
@@ -115,7 +145,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
             ),
         ),
         Table(
-            "Expenses breakdown detailed",
+            "Total expenses breakdown",
             expenses.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum()),
             figure_constructor=px.sunburst,
             figure_arguments=dict(
@@ -133,7 +163,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
             ),
         ),
         Table(
-            "Incomes breakdown detailed",
+            "Total incomes breakdown",
             incomes.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum()),
             figure_constructor=px.sunburst,
             figure_arguments=dict(
@@ -150,6 +180,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
                 color="tag",
             ),
         ),
+        *last_month_breakdowns,
     ]
     return tables
 
