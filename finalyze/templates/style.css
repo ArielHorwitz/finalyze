@@ -3,7 +3,7 @@ body {
 }
 
 h2 {
-  color: #22aaff;
+  color: #205050;
   text-align: center;
 }
 
@@ -52,6 +52,14 @@ h3 {
   background-color:#22aaff;
   border-radius:10px;
   box-shadow: 2px 2px 15px -5px;
+}
+
+
+.collapsible, .collapse-all {
+  cursor: pointer;
+}
+.collapsible-content {
+  display: block;
 }
 
 tr:nth-child(even) {

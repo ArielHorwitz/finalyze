@@ -3,6 +3,7 @@ from pathlib import Path
 TEMPLATE_DIR = Path(__file__).parent.parent.joinpath("templates").resolve()
 HTML = (TEMPLATE_DIR / "index.html").read_text()
 CSS = (TEMPLATE_DIR / "style.css").read_text()
+SCRIPT = (TEMPLATE_DIR / "script.js").read_text()
 FIGURE_DIV = (TEMPLATE_DIR / "figure.html").read_text()
 
 
@@ -44,6 +45,7 @@ def write_html(source_table, tables, config):
     # Generate and export html
     html = HTML.format(
         css=CSS,
+        script=SCRIPT,
         title=title,
         main_content=content,
         filters=formatted_filters,
