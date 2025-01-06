@@ -14,6 +14,7 @@ class Table:
     source: pl.DataFrame = dataclasses.field(repr=False)
     figure_constructor: Optional[Callable[[Any], Figure]] = None
     figure_arguments: dict[str, Any] = dataclasses.field(default_factory=dict)
+    extra_traces: Optional["Table"] = None
 
     def __post_init__(self):
         if isinstance(self.source, pl.LazyFrame):
@@ -26,8 +27,12 @@ class Table:
     def get_figure(self, **kwargs):
         if self.figure_constructor is None:
             return None
-        kwargs = self.figure_arguments | kwargs
-        return self.figure_constructor(self.source.to_pandas(), **kwargs)
+        self_kwargs = self.figure_arguments | kwargs
+        figure = self.figure_constructor(self.source.to_pandas(), **self_kwargs)
+        if self.extra_traces:
+            for trace in self.extra_traces.get_figure(**kwargs).data:
+                figure.add_trace(trace)
+        return figure
 
     def with_totals(self):
         return add_totals(self.source)
@@ -70,6 +75,25 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
         for df, name in ((expenses, "Expenses"), (incomes, "Incomes"))
         for month in last_months
     ]
+    account_balances = Table(
+        "Account balances",
+        source,
+        figure_constructor=px.line,
+        figure_arguments=dict(
+            x="date",
+            y="balance_source",
+            color="account_source",
+            hover_data=[
+                "balance_source",
+                "amount",
+                "description",
+                "tags",
+                "account",
+                "source",
+            ],
+            labels=dict(balance_source="Balance", account_source="Source"),
+        ),
+    )
     tables = [
         Table(
             "Total balance",
@@ -89,18 +113,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
                 ],
                 labels=dict(balance_total="Balance"),
             ),
-        ),
-        Table(
-            "Account balances",
-            source,
-            figure_constructor=px.line,
-            figure_arguments=dict(
-                x="date",
-                y="balance_source",
-                color="account_source",
-                hover_data=["balance_source", "amount", "description"],
-                labels=dict(balance_source="Balance", account_source="Source"),
-            ),
+            extra_traces=account_balances,
         ),
         Table(
             "Monthly net breakdown",
