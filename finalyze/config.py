@@ -108,6 +108,7 @@ class AnalysisGraphs(BaseModel):
 class Analysis(BaseModel):
     filters: Filters = Filters()
     graphs: AnalysisGraphs = AnalysisGraphs()
+    breakdown_filters: Filters = Filters()
     allow_untagged: bool = False
     print_source: bool = False
     print_tables: bool = False

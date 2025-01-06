@@ -33,10 +33,13 @@ class Table:
         return add_totals(self.source)
 
 
-def get_tables(source: pl.DataFrame) -> list[Table]:
+def get_tables(source: pl.DataFrame, config) -> list[Table]:
     validate_schema(source, ENRICHED_SCHEMA)
-    incomes = source.filter(pl.col("amount") > 0)
-    expenses = source.filter(pl.col("amount") < 0).with_columns(pl.col("amount") * -1)
+    breakdowns = config.analysis.breakdown_filters.apply(source)
+    incomes = breakdowns.filter(pl.col("amount") > 0)
+    expenses = breakdowns.filter(pl.col("amount") < 0).with_columns(
+        pl.col("amount") * -1
+    )
     tables = [
         Table(
             "Total balance",
@@ -71,7 +74,7 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
         ),
         Table(
             "Monthly net breakdown",
-            source.group_by("month", "tag", "subtag")
+            breakdowns.group_by("month", "tag", "subtag")
             .agg(pl.col("amount").sum())
             .sort("month", "tag", "subtag"),
             figure_constructor=px.bar,

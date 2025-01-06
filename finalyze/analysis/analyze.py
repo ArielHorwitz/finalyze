@@ -21,7 +21,7 @@ def run(config):
     if not config.analysis.allow_untagged:
         _validate_tags(source_data, flip_rtl=config.display.flip_rtl)
     # Tables
-    tables = get_tables(source_data)
+    tables = get_tables(source_data, config)
     if config.analysis.print_tables:
         for table in tables:
             print(table)
