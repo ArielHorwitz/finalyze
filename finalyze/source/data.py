@@ -22,6 +22,10 @@ ENRICHED_SCHEMA = {
     **TAGGED_SCHEMA,
     "month": pl.String,
     "tags": pl.String,
+    "account_source": pl.String,
+    "balance_total": pl.Float64,
+    "balance_account": pl.Float64,
+    "balance_source": pl.Float64,
 }
 
 
@@ -33,13 +37,21 @@ def load_source_data(source_dir):
 
 def enrich_source(source):
     validate_schema(source, TAGGED_SCHEMA)
-    # Month column
-    year = pl.col("date").dt.year().cast(str)
-    month = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
-    source = source.with_columns((year + "-" + month).alias("month"))
-    # Combined tags column
+    year_str = pl.col("date").dt.year().cast(str)
+    month_str = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
+    month = year_str + "-" + month_str
     combined_tags = pl.col("tag") + " - " + pl.col("subtag")
-    source = source.with_columns(combined_tags.alias("tags"))
+    account_source = pl.col("account") + " - " + pl.col("source")
+    source = source.with_columns(
+        month.alias("month"),
+        combined_tags.alias("tags"),
+        account_source.alias("account_source"),
+    )
+    source = source.sort("date", "tags", "amount", "description", "hash").with_columns(
+        pl.col("amount").cum_sum().alias("balance_total"),
+        pl.col("amount").cum_sum().over("account").alias("balance_account"),
+        pl.col("amount").cum_sum().over("account", "source").alias("balance_source"),
+    )
     validate_schema(source, ENRICHED_SCHEMA)
     return source
 

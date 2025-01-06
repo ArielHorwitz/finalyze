@@ -37,33 +37,36 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
     validate_schema(source, ENRICHED_SCHEMA)
     incomes = source.filter(pl.col("amount") > 0)
     expenses = source.filter(pl.col("amount") < 0).with_columns(pl.col("amount") * -1)
-    cumsum_balances = (
-        source.group_by("account", "month")
-        .agg(pl.col("amount").sum())
-        .sort("month", "account")
-        .with_columns(pl.col("amount").cum_sum().over("account").alias("amount"))
-    )
-    cumsum_balances_total = (
-        cumsum_balances.group_by("month")
-        .agg(pl.col("amount").sum())
-        .sort("month")
-        .with_columns(pl.lit("total").alias("account"))
-        .select(cumsum_balances.columns)
-    )
-    cumsum_balances = pl.concat((cumsum_balances, cumsum_balances_total)).sort(
-        "month", "account"
-    )
     tables = [
         Table(
-            "Total account balances",
-            cumsum_balances,
+            "Total balance",
+            source.with_columns(pl.lit("total").alias("Balance")),
             figure_constructor=px.line,
             figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="account",
-                hover_data=["amount"],
-                labels=dict(month="Month", amount="Amount"),
+                x="date",
+                y="balance_total",
+                color="Balance",
+                hover_data=[
+                    "balance_total",
+                    "amount",
+                    "description",
+                    "tags",
+                    "account",
+                    "source",
+                ],
+                labels=dict(balance_total="Balance"),
+            ),
+        ),
+        Table(
+            "Account balances",
+            source,
+            figure_constructor=px.line,
+            figure_arguments=dict(
+                x="date",
+                y="balance_source",
+                color="account_source",
+                hover_data=["balance_source", "amount", "description"],
+                labels=dict(balance_source="Balance", account_source="Source"),
             ),
         ),
         Table(
