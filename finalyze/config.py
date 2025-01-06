@@ -32,6 +32,7 @@ class Filters(BaseModel):
     description: Optional[str] = None
     account: Optional[str] = None
     source: Optional[str] = None
+    invert: bool = False
 
     def apply(self, df):
         predicates = []
@@ -54,6 +55,8 @@ class Filters(BaseModel):
             predicates.append(pl.col("source").str.contains(self.source))
         # filter
         predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
+        if self.invert:
+            predicate = ~predicate
         return df.filter(predicate)
 
 
