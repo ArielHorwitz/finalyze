@@ -14,7 +14,7 @@ class Table:
     source: pl.DataFrame = dataclasses.field(repr=False)
     figure_constructor: Optional[Callable[[Any], Figure]] = None
     figure_arguments: dict[str, Any] = dataclasses.field(default_factory=dict)
-    extra_traces: Optional["Table"] = None
+    extra_traces: list["Table"] = dataclasses.field(default_factory=list)
 
     def __post_init__(self):
         if isinstance(self.source, pl.LazyFrame):
@@ -29,8 +29,8 @@ class Table:
             return None
         self_kwargs = self.figure_arguments | kwargs
         figure = self.figure_constructor(self.source.to_pandas(), **self_kwargs)
-        if self.extra_traces:
-            for trace in self.extra_traces.get_figure(**kwargs).data:
+        for extra_table in self.extra_traces:
+            for trace in extra_table.get_figure(**kwargs).data:
                 figure.add_trace(trace)
         return figure
 
@@ -45,6 +45,58 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
     expenses = breakdowns.filter(pl.col("amount") < 0).with_columns(
         pl.col("amount") * -1
     )
+
+    # Cash flow
+    total_cash_flows = [
+        Table(
+            name.capitalize(),
+            df.group_by("month")
+            .agg(pl.col("amount").sum())
+            .sort("month")
+            .with_columns(pl.lit(name).alias("Flow")),
+            figure_constructor=px.line,
+            figure_arguments=dict(
+                x="month",
+                y="amount",
+                color="Flow",
+                hover_data=["month", "amount"],
+                markers=True,
+            ),
+        )
+        for df, name in [
+            (breakdowns, "total"),
+            (incomes, "income"),
+            (expenses, "expense"),
+        ]
+    ]
+    rolling_cash_flows = Table(
+        "Total cash flow (rolling mean)",
+        pl.concat(
+            breakdowns.group_by("month")
+            .agg(pl.col("amount").sum())
+            .sort("month")
+            .with_columns(
+                pl.lit(f"rolling ({len(weights)} months) [#{i}]").alias("Flow"),
+                pl.col("amount")
+                .rolling_mean(window_size=len(weights), weights=weights)
+                .alias("amount"),
+            )
+            for i, weights in enumerate(config.analysis.rolling_average_weights)
+        ),
+        figure_constructor=px.line,
+        figure_arguments=dict(
+            x="month",
+            y="amount",
+            line_dash="Flow",
+            hover_data=["month", "amount"],
+            markers=True,
+            line_shape="spline",
+        ),
+    )
+    cash_flow = total_cash_flows[0]
+    cash_flow.extra_traces = [rolling_cash_flows, *total_cash_flows[1:]]
+
+    # Breakdown of past individual months
     last_months = (
         source.group_by("month")
         .agg(pl.col("amount").count())
@@ -75,6 +127,8 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
         for df, name in ((expenses, "Expenses"), (incomes, "Incomes"))
         for month in last_months
     ]
+
+    # Balances
     account_balances = Table(
         "Account balances",
         source,
@@ -113,22 +167,9 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
                 ],
                 labels=dict(balance_total="Balance"),
             ),
-            extra_traces=account_balances,
+            extra_traces=[account_balances],
         ),
-        Table(
-            "Monthly net breakdown",
-            breakdowns.group_by("month", "tag", "subtag")
-            .agg(pl.col("amount").sum())
-            .sort("month", "tag", "subtag"),
-            figure_constructor=px.bar,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="tag",
-                hover_data=["tag", "subtag", "amount"],
-                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
-            ),
-        ),
+        cash_flow,
         Table(
             "Monthly expenses breakdown",
             expenses.group_by("month", "tag", "subtag")

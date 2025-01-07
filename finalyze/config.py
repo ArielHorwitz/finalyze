@@ -16,7 +16,13 @@ CONFIG_DIR = Path.home() / ".config" / APP_NAME.lower()
 CONFIG_FILE = CONFIG_DIR / "config.toml"
 
 DEFAULT_DATA_DIR = Path.home() / ".local" / "share" / APP_NAME
-DEFAULT_COLORS = {"bills": "#cc2266", "other": "#000000"}
+DEFAULT_COLORS = {
+    "total": "#fff",
+    "expense": "#f00",
+    "income": "#0f0",
+    "bills": "#c26",
+    "other": "#000",
+}
 DEFAULT_SOURCE_DIRECTORIES = {
     "default": [Path.home() / "Downloads" / "finalyze" / "sources"],
 }
@@ -110,6 +116,13 @@ class Analysis(BaseModel):
     graphs: AnalysisGraphs = AnalysisGraphs()
     breakdown_filters: Filters = Filters()
     breakdown_months: int = 3
+    rolling_average_weights: list[list[float]] = Field(
+        default_factory=lambda: [
+            [3, 4],
+            [3, 4, 5, 6],
+            [3, 4, 5, 6, 7, 8],
+        ],
+    )
     allow_untagged: bool = False
     print_source: bool = False
     print_tables: bool = False
