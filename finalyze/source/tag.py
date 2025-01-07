@@ -28,7 +28,6 @@ class Tags(NamedTuple):
 
 
 def run(config):
-    print(f"Tags file: {config.general.tags_file}")
     operation = config.tag.operation
     if operation == "tag":
         tag_interactively(config)
@@ -51,9 +50,12 @@ def tag_interactively(config):
         default_tags = Tags(config.tag.default_tag, config.tag.default_subtag)
     else:
         default_tags = None
-    tagger.tag_interactively(default_tags)
-    print(LINE_SEPARATOR)
-    print(tagger.describe_all_tags())
+    performed_tagging = tagger.tag_interactively(default_tags)
+    if not performed_tagging:
+        print("No tags missing.")
+    if config.tag.print_result:
+        print(LINE_SEPARATOR)
+        print(tagger.describe_all_tags())
 
 
 def apply_tags(data, tags_file, *, hash_columns: list[str] = HASH_COLUMNS):
@@ -198,9 +200,8 @@ class Tagger:
 
     def tag_interactively(self, default_tags):
         skipped_indices = set()
-        if self.get_untagged_index() is not None:
-            print(LINE_SEPARATOR)
-            print(self.describe_all_tags())
+        if self.get_untagged_index(skipped_indices) is None:
+            return False
         while True:
             index = self.get_untagged_index(skipped_indices)
             if index is None:
@@ -221,7 +222,7 @@ class Tagger:
             print("\n".join(prompt_text_lines))
             key = readchar.readkey()
             if key in ("q"):
-                return
+                break
             elif key in ("t"):
                 print(LINE_SEPARATOR)
                 print(self.describe_all_tags())
@@ -235,3 +236,4 @@ class Tagger:
                 self.apply_tags(index, Tags(tag, subtag))
             elif key in ("g", readchar.key.TAB):
                 self.apply_tags(index, guess)
+        return True

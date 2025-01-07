@@ -76,6 +76,7 @@ class Ingestion(BaseModel):
         validate_default=True,
     )
     verbose_parsing: bool = False
+    print_directories: bool = False
     print_result: bool = False
     filters: Filters = Filters()
 
@@ -102,6 +103,7 @@ class Tag(BaseModel):
     operation: TagOperation = Field(default="tag", validate_default=True)
     deletion: TagDeletion = TagDeletion()
     migration: TagMigration = TagMigration()
+    print_result: bool = False
 
 
 class AnalysisGraphs(BaseModel):
@@ -140,6 +142,7 @@ class General(BaseModel):
     data_dir: Path = Field(default=DEFAULT_DATA_DIR, validate_default=True)
     dataset: str = "default"
     tags: str = "default"
+    print_config: bool = False
 
     @property
     def source_dir(self):

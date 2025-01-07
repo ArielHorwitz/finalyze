@@ -11,9 +11,10 @@ def run(config):
     for account_name, files in config.ingestion.directories.items():
         input_files = _get_files(files)
         output_file = config.general.source_dir / f"{account_name}.csv"
-        print(f"Source files for account {account_name!r}:")
-        for f in input_files:
-            print(f"  {f}")
+        if config.ingestion.print_directories:
+            print(f"Source files for account {account_name!r}:")
+            for f in input_files:
+                print(f"  {f}")
         # Parse sources
         parsed_data = pl.concat(
             parse_file(input_file=file, config=config) for file in input_files
@@ -21,8 +22,9 @@ def run(config):
         validate_schema(parsed_data, RAW_SCHEMA)
         filtered_data = config.ingestion.filters.apply(parsed_data)
         source_data = filtered_data.select(*RAW_SCHEMA.keys()).sort("date", "amount")
-        print_table(source_data, f"Parsed data for account: {account_name}")
-        print(f"Writing output to: {output_file}")
+        if config.ingestion.print_result:
+            print_table(source_data, f"Parsed data for account: {account_name}")
+        print(f"Parsed account {account_name!r} to: {output_file}")
         output_file.parent.mkdir(parents=True, exist_ok=True)
         source_data.write_csv(output_file)
 

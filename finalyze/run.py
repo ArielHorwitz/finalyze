@@ -48,7 +48,6 @@ def parse_args():
 
 
 def run_pipeline(config):
-    pprint.pprint(config.model_dump())
     ingest.run(config)
     tag.run(config)
     analyze.run(config)
@@ -57,5 +56,7 @@ def run_pipeline(config):
 def main():
     args = parse_args()
     config = load_config(args.config_file)
+    if config.general.print_config:
+        pprint.pprint(config.model_dump())
     config.general.create_directories()
     args.run(config)
