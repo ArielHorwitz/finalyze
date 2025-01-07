@@ -167,7 +167,13 @@ class Tagger:
 
     def guess_tags(self, index: int, default: Optional[Tags]) -> Tags:
         tag_descriptions = collections.defaultdict(set)
-        target_description = self.get_row(index)["description"]
+        row = self.get_row(index)
+        target_description = row["description"]
+        if any(row[k] is None for k in HASH_COLUMNS):
+            raise ValueError(
+                "Row missing required fields;"
+                " possibly an empty line in source csv file?"
+            )
         for row in self.source.sort("date", descending=True).iter_rows(named=True):
             if row["tag"] is None:
                 continue
