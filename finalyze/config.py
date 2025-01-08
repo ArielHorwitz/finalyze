@@ -2,7 +2,7 @@ import functools
 import json
 import operator
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Any, Literal, Optional
 
 import polars as pl
 import toml
@@ -111,6 +111,7 @@ class AnalysisGraphs(BaseModel):
     plotly_template: str = "plotly_dark"
     colors: dict[str, Color] = Field(default=DEFAULT_COLORS, validate_default=True)
     lightweight_html: bool = False
+    plotly_arguments: dict[str, Any] = Field(default_factory=dict)
 
 
 class Analysis(BaseModel):

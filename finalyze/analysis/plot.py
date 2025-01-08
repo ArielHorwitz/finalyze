@@ -17,7 +17,11 @@ def write_html(source_table, tables, config):
     # Plots
     divs = []
     for i, table in enumerate(tables):
-        fig = table.get_figure(template=template, color_discrete_map=color_map)
+        fig = table.get_figure(
+            template=template,
+            color_discrete_map=color_map,
+            **config.analysis.graphs.plotly_arguments,
+        )
         if not fig:
             continue
         is_first = i == 0
