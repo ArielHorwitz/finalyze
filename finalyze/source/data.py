@@ -35,13 +35,13 @@ def load_source_data(source_dir):
     ).sort("date", "amount")
 
 
-def enrich_source(source):
+def enrich_source(source, delimiter):
     validate_schema(source, TAGGED_SCHEMA)
     year_str = pl.col("date").dt.year().cast(str)
     month_str = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
     month = year_str + "-" + month_str
-    combined_tags = pl.col("tag") + " - " + pl.col("subtag")
-    account_source = pl.col("account") + " - " + pl.col("source")
+    combined_tags = pl.col("tag") + delimiter + pl.col("subtag")
+    account_source = pl.col("account") + delimiter + pl.col("source")
     source = source.with_columns(
         month.alias("month"),
         combined_tags.alias("tags"),

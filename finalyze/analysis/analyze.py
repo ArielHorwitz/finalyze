@@ -14,7 +14,10 @@ from .tables import get_tables
 def run(config):
     source_data = load_source_data(config.general.source_dir)
     source_data = apply_tags(source_data, config.general.tags_file)
-    source_data = enrich_source(source_data)
+    source_data = enrich_source(
+        source_data,
+        delimiter=config.general.multi_column_delimiter,
+    )
     source_data = config.analysis.filters.apply(source_data)
     if config.analysis.print_source:
         print_table(source_data, "Source data")

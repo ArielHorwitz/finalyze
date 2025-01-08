@@ -144,6 +144,7 @@ class General(BaseModel):
     dataset: str = "default"
     tags: str = "default"
     print_config: bool = False
+    multi_column_delimiter: str = " - "
 
     @property
     def source_dir(self):
