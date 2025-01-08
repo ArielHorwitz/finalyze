@@ -76,12 +76,12 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
             .agg(pl.col("amount").sum())
             .sort("month")
             .with_columns(
-                pl.lit(f"rolling ({len(weights)} months) [#{i}]").alias("Flow"),
+                pl.lit(f"rolling ({len(weights)})").alias("Flow"),
                 pl.col("amount")
                 .rolling_mean(window_size=len(weights), weights=weights)
                 .alias("amount"),
             )
-            for i, weights in enumerate(config.analysis.rolling_average_weights)
+            for weights in config.analysis.rolling_average_weights
         ),
         figure_constructor=px.line,
         figure_arguments=dict(
