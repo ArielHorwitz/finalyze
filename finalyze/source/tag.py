@@ -29,7 +29,9 @@ class Tags(NamedTuple):
 
 def run(config):
     if config.tag.delete_filters.has_effect:
-        delete_tags(config)
+        delete_filtered_tags(config)
+    if config.tag.delete_unused:
+        delete_unused_tags(config)
     tag_interactively(config)
 
 
@@ -76,21 +78,48 @@ def write_tags_file(data, tags_file):
     data.sort(*TAG_SCHEMA.keys()).write_csv(tags_file)
 
 
-def delete_tags(config):
+def delete_unused_tags(config):
     tags_file = config.general.tags_file
-
     tags_data = read_tags_file(tags_file)
     source_data = load_source_data(config.general.source_dir)
     tagged_data = apply_tags(source_data, tags_file)
 
-    delete_data = config.tag.delete_filters.apply(tagged_data)
-    remaining_tags = tags_data.filter(~pl.col("hash").is_in(delete_data.select("hash")))
-
+    delete_data = tags_data.filter(~pl.col("hash").is_in(tagged_data.select("hash")))
     delete_summary = (
         delete_data.group_by("tag", "subtag").len("entries").sort("tag", "subtag")
     )
-    print_table(delete_data, "Entries to delete")
+    tag_hashes = delete_data["hash"]
+    if len(tag_hashes) == 0:
+        return
+    print_table(delete_data, "Unused tags to delete")
+    print_table(delete_summary, "Unused tags to delete")
+    _delete_tags(config, tag_hashes)
+
+
+def delete_filtered_tags(config):
+    source_data = load_source_data(config.general.source_dir)
+    tagged_data = apply_tags(source_data, config.general.tags_file)
+
+    delete_data = config.tag.delete_filters.apply(tagged_data)
+    delete_summary = (
+        delete_data.group_by("tag", "subtag").len("entries").sort("tag", "subtag")
+    )
+    tag_hashes = delete_data["hash"]
+    if len(tag_hashes) == 0:
+        return
+    print_table(delete_data, "Entries of tags to delete")
     print_table(delete_summary, "Tags to delete")
+    _delete_tags(config, tag_hashes)
+
+
+def _delete_tags(config, tag_hashes):
+    if len(tag_hashes) == 0:
+        return
+
+    tags_file = config.general.tags_file
+    tags_data = read_tags_file(tags_file)
+    remaining_tags = tags_data.filter(~pl.col("hash").is_in(tag_hashes))
+
     if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
         print("Aborted deleting tags.")
         return

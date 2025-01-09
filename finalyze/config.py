@@ -101,6 +101,7 @@ class Tag(BaseModel):
     default_tag: Optional[str] = None
     default_subtag: Optional[str] = None
     delete_filters: Filters = Filters()
+    delete_unused: bool = False
 
 
 class AnalysisGraphs(BaseModel):
