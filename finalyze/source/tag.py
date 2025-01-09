@@ -31,8 +31,6 @@ def run(config):
     operation = config.tag.operation
     if operation == "tag":
         tag_interactively(config)
-    elif operation == "migrate":
-        migrate_tags(config)
     elif operation == "delete":
         delete_tags(config)
     else:
@@ -80,16 +78,6 @@ def read_tags_file(tags_file):
 def write_tags_file(data, tags_file):
     validate_schema(data, TAG_SCHEMA)
     data.sort(*TAG_SCHEMA.keys()).write_csv(tags_file)
-
-
-def migrate_tags(config):
-    source_data = load_source_data(config.general.source_dir)
-    tags_file = config.general.tags_file
-    tagged = apply_tags(
-        source_data, tags_file, hash_columns=config.tag.migrate.hash_columns
-    )
-    tagged = tagged.with_columns(pl.concat_str(*HASH_COLUMNS).hash().alias("hash"))
-    write_tags_file(tagged.select(*TAG_SCHEMA), tags_file)
 
 
 def delete_tags(config):
