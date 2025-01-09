@@ -13,6 +13,8 @@ Then run the entire pipeline:
 finalyze
 ```
 
+At the very least, the `ingestion.directories` table in the config must be populated with the path where the raw source files are located.
+
 A minimal config file will be produced automatically if missing. Options are customizable only via the config file. For all possible options, see [config.py](finalyze/config.py).
 
 See also: `finalyze --help`
