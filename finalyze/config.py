@@ -27,7 +27,6 @@ DEFAULT_SOURCE_DIRECTORIES = {
     "default": [Path.home() / "Downloads" / "finalyze" / "sources"],
 }
 LiteralCardTransactions = Literal["remove", "balance", "untouched"]
-TagOperation = Literal["tag", "delete"]
 
 
 class Filters(BaseModel):
@@ -97,16 +96,11 @@ class Ingestion(BaseModel):
         }
 
 
-class TagDeletion(BaseModel):
-    filters: Filters = Filters()
-
-
 class Tag(BaseModel):
+    print_result: bool = False
     default_tag: Optional[str] = None
     default_subtag: Optional[str] = None
-    operation: TagOperation = Field(default="tag", validate_default=True)
-    deletion: TagDeletion = TagDeletion()
-    print_result: bool = False
+    delete_filters: Filters = Filters()
 
 
 class AnalysisGraphs(BaseModel):

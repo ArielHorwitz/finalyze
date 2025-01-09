@@ -28,13 +28,9 @@ class Tags(NamedTuple):
 
 
 def run(config):
-    operation = config.tag.operation
-    if operation == "tag":
-        tag_interactively(config)
-    elif operation == "delete":
+    if config.tag.delete_filters.has_effect:
         delete_tags(config)
-    else:
-        raise ValueError(f"Unknown operation: {operation}")
+    tag_interactively(config)
 
 
 def tag_interactively(config):
@@ -82,13 +78,12 @@ def write_tags_file(data, tags_file):
 
 def delete_tags(config):
     tags_file = config.general.tags_file
-    filters = config.tag.delete.filters
 
     tags_data = read_tags_file(tags_file)
     source_data = load_source_data(config.general.source_dir)
     tagged_data = apply_tags(source_data, tags_file)
 
-    delete_data = filters.apply(tagged_data)
+    delete_data = config.tag.delete_filters.apply(tagged_data)
     remaining_tags = tags_data.filter(~pl.col("hash").is_in(delete_data.select("hash")))
 
     delete_summary = (
@@ -97,11 +92,12 @@ def delete_tags(config):
     print_table(delete_data, "Entries to delete")
     print_table(delete_summary, "Tags to delete")
     if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
-        print("Aborted.")
-        exit(1)
+        print("Aborted deleting tags.")
+        return
     if tags_file.is_file():
         shutil.copy2(tags_file, f"{tags_file}.bak")
     write_tags_file(remaining_tags, tags_file)
+    print("Deleted tags.")
 
 
 class Tagger:
