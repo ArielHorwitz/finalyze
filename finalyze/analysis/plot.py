@@ -31,15 +31,19 @@ def write_html(source_table, tables, config):
         divs.append(div)
     content = "\n".join(divs)
     # Filters
-    formatted_filters_lines = []
-    field_names = config.analysis.filters.__class__.model_fields
-    for field_name in field_names:
-        field_value = getattr(config.analysis.filters, field_name)
-        if field_value is None:
-            continue
-        formatted_filters_lines.append(f"<b>{field_name}:</b> {field_value}")
-    formatted_filters_lines = formatted_filters_lines or ["No filters."]
-    formatted_filters = "<br>".join(formatted_filters_lines)
+    filters = config.analysis.filters
+    if filters.has_effect:
+        field_values = {
+            field_name: getattr(filters, field_name)
+            for field_name in filters.model_fields_set
+        }
+        formatted_filters = "<br>".join(
+            f"<b>{name}:</b> {value}"
+            for name, value in field_values.items()
+            if value is not None
+        )
+    else:
+        formatted_filters = "No filters."
     # Source data table
     formatted_source_rows = ["".join(f"<th>{v}</th>" for v in source_table.columns)]
     for row in source_table.iter_rows():

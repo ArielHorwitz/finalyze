@@ -40,7 +40,7 @@ class Filters(BaseModel):
     source: Optional[str] = None
     invert: bool = False
 
-    def apply(self, df):
+    def _get_predicates(self):
         predicates = []
         # dates
         if self.start_date is not None:
@@ -59,11 +59,19 @@ class Filters(BaseModel):
             predicates.append(pl.col("account") == self.account)
         if self.source is not None:
             predicates.append(pl.col("source").str.contains(self.source))
+        return predicates
+
+    def apply(self, df):
+        predicates = self._get_predicates()
         # filter
         predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
         if self.invert:
             predicate = ~predicate
         return df.filter(predicate)
+
+    @property
+    def has_effect(self):
+        return len(self._get_predicates()) > 0
 
 
 class Ingestion(BaseModel):
