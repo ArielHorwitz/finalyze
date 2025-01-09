@@ -62,7 +62,7 @@ class Filters(BaseModel):
 
     @property
     def has_effect(self):
-        return len(self._get_predicates()) > 0
+        return len(self._get_predicates()) > 0 or self.invert
 
     @property
     def predicate(self):
