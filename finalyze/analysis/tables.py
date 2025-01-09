@@ -47,30 +47,26 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
     )
 
     # Cash flow
-    total_cash_flows = [
+    split_cash_flows = [
         Table(
-            name.capitalize(),
+            f"Cash flow - {name.capitalize()}",
             df.group_by("month")
             .agg(pl.col("amount").sum())
             .sort("month")
             .with_columns(pl.lit(name).alias("Flow")),
-            figure_constructor=px.line,
+            figure_constructor=px.bar,
             figure_arguments=dict(
                 x="month",
                 y="amount",
                 color="Flow",
                 hover_data=["month", "amount"],
-                markers=True,
+                barmode="group",
             ),
         )
-        for df, name in [
-            (breakdowns, "total"),
-            (incomes, "income"),
-            (expenses, "expense"),
-        ]
+        for df, name in [(incomes, "income"), (expenses, "expense")]
     ]
     rolling_cash_flows = Table(
-        "Total cash flow (rolling mean)",
+        "Cash flow (rolling mean)",
         pl.concat(
             breakdowns.group_by("month")
             .agg(pl.col("amount").sum())
@@ -93,8 +89,22 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
             line_shape="spline",
         ),
     )
-    cash_flow = total_cash_flows[0]
-    cash_flow.extra_traces = [rolling_cash_flows, *total_cash_flows[1:]]
+    cash_flow = Table(
+        "Cash flow - Total",
+        breakdowns.group_by("month")
+        .agg(pl.col("amount").sum())
+        .sort("month")
+        .with_columns(pl.lit("total").alias("Flow")),
+        figure_constructor=px.bar,
+        figure_arguments=dict(
+            x="month",
+            y="amount",
+            color="Flow",
+            hover_data=["month", "amount"],
+            barmode="group",
+        ),
+        extra_traces=[rolling_cash_flows, *split_cash_flows],
+    )
 
     # Breakdown of past individual months
     last_months = (
@@ -145,6 +155,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
                 "account",
                 "source",
             ],
+            line_shape="hv",
             labels=dict(balance_source="Balance", account_source="Source"),
         ),
     )
@@ -165,6 +176,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
                     "account",
                     "source",
                 ],
+                line_shape="hv",
                 labels=dict(balance_total="Balance"),
             ),
             extra_traces=[account_balances],
