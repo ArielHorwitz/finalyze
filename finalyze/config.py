@@ -153,6 +153,14 @@ class AnalysisAnonymization(BaseModel):
     """Source names to use for anonymous data."""
     tags: list[str] = ANON_TAGS
     """Tags to use for anonymous data."""
+    anonymize_accounts: bool = True
+    """Include accounts in anonymization."""
+    anonymize_sources: bool = True
+    """Include sources in anonymization."""
+    anonymize_descriptions: bool = True
+    """Include descriptions in anonymization."""
+    anonymize_tags: bool = True
+    """Include tags in anonymization."""
 
 
 class Analysis(BaseModel):

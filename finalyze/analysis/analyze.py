@@ -73,16 +73,25 @@ def _anonymize_data(df, config):
     min_scale, max_scale = conf.scale
     scale = random.random() * (max_scale - min_scale) + min_scale
     amount_col = pl.col("amount") * scale
-    desc_col = pl.col("description").map_elements(_generate_hex, return_dtype=pl.String)
-    df = df.with_columns(
-        amount_col.alias("amount"),
-        _remap_column(df, "account", conf.names),
-        _remap_column(df, "source", conf.sources),
-        _remap_column(df, "tag", conf.tags),
-        _remap_column(df, "subtag", conf.tags),
-        desc_col.alias("description"),
-    )
-    return df
+    new_columns = [amount_col.alias("amount")]
+    if conf.anonymize_accounts:
+        new_columns.append(_remap_column(df, "account", conf.names))
+    if conf.anonymize_sources:
+        new_columns.append(_remap_column(df, "source", conf.sources))
+    if conf.anonymize_descriptions:
+        new_columns.append(
+            pl.col("description")
+            .map_elements(_generate_hex, return_dtype=pl.String)
+            .alias("description")
+        )
+    if conf.anonymize_tags:
+        new_columns.extend(
+            (
+                _remap_column(df, "tag", conf.tags),
+                _remap_column(df, "subtag", conf.tags),
+            )
+        )
+    return df.with_columns(new_columns)
 
 
 def _remap_column(df, column_name, new_values):
