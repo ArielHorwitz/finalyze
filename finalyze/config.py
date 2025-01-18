@@ -145,13 +145,13 @@ class AnalysisAnonymization(BaseModel):
     scale: tuple[float, float] = (1, 1_000_000)
     """Minimum and maximum amount to scale amounts."""
     anonymize_accounts: bool = True
-    """Include accounts in anonymization."""
+    """Also anonymize accounts."""
     anonymize_sources: bool = True
-    """Include sources in anonymization."""
+    """Also anonymize sources."""
     anonymize_descriptions: bool = True
-    """Include descriptions in anonymization."""
+    """Also anonymize descriptions."""
     anonymize_tags: bool = True
-    """Include tags in anonymization."""
+    """Also anonymize tags."""
 
 
 class Analysis(BaseModel):
