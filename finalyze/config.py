@@ -203,7 +203,7 @@ def load_config(config_file: Path = CONFIG_FILE):
     config_file = Path(config_file)
     config_file.parent.mkdir(parents=True, exist_ok=True)
     if not config_file.is_file():
-        print("Creating default config...")
+        print(f"Creating default config at: {config_file}")
         config_dump = json.loads(Config().model_dump_json())
         config_file.write_text(toml.dumps(config_dump))
     config_data = toml.loads(config_file.read_text())
