@@ -1,3 +1,5 @@
+import random
+import string
 import subprocess
 import sys
 
@@ -16,6 +18,8 @@ def run(config):
     source_data = apply_tags(source_data, config.general.tags_file)
     if config.analysis.add_edge_ticks:
         source_data = _add_edge_ticks(source_data)
+    if config.analysis.anonymization.enable:
+        source_data = _anonymize_data(source_data, config)
     source_data = enrich_source(
         source_data,
         delimiter=config.general.multi_column_delimiter,
@@ -62,6 +66,35 @@ def _add_edge_ticks(df):
         for date in (min_date, max_date)
     )
     return pl.concat((df, tick_df))
+
+
+def _anonymize_data(df, config):
+    conf = config.analysis.anonymization
+    min_scale, max_scale = conf.scale
+    scale = random.random() * (max_scale - min_scale) + min_scale
+    amount_col = pl.col("amount") * scale
+    desc_col = pl.col("description").map_elements(_generate_hex, return_dtype=pl.String)
+    df = df.with_columns(
+        amount_col.alias("amount"),
+        _remap_column(df, "account", conf.names),
+        _remap_column(df, "source", conf.sources),
+        _remap_column(df, "tag", conf.tags),
+        _remap_column(df, "subtag", conf.tags),
+        desc_col.alias("description"),
+    )
+    return df
+
+
+def _remap_column(df, column_name, new_values):
+    original = list(df.group_by(column_name).agg(pl.len())[column_name])
+    anon = list(new_values)
+    random.shuffle(original)
+    random.shuffle(anon)
+    return pl.col(column_name).replace(dict(zip(original, anon))).alias(column_name)
+
+
+def _generate_hex(*args):
+    return "".join(random.choice(string.hexdigits) for _i in range(10))
 
 
 def _validate_tags(df, flip_rtl):

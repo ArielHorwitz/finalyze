@@ -44,6 +44,8 @@ def write_html(source_table, tables, config):
         )
     else:
         formatted_filters = "No filters."
+    if config.analysis.anonymization.enable:
+        formatted_filters = f"{formatted_filters}<br><br><i><b>Anonymized.</b></i>"
     # Source data table
     formatted_source_rows = ["".join(f"<th>{v}</th>" for v in source_table.columns)]
     for row in source_table.iter_rows():
