@@ -34,13 +34,21 @@ ANON_TAGS = ["Aardvark", "Albatross", "Alligator", "Ant", "Armadillo", "Avocet",
 
 class Filters(BaseModel):
     start_date: Optional[Date] = None
+    """Minimum date (inclusive)."""
     end_date: Optional[Date] = None
+    """Maximum date (non-inclusive)."""
     tags: Optional[list[str]] = None
+    """Tags."""
     subtags: Optional[list[str]] = None
+    """Subtags."""
     description: Optional[str] = None
+    """Description."""
     account: Optional[str] = None
+    """Account."""
     source: Optional[str] = None
+    """Source."""
     invert: bool = False
+    """Invert results."""
 
     def _get_predicates(self):
         predicates = []
@@ -84,14 +92,20 @@ class Ingestion(BaseModel):
         default=DEFAULT_SOURCE_DIRECTORIES,
         validate_default=True,
     )
+    """A list of directories to ingest for each account."""
     card_transactions: LiteralCardTransactions = Field(
         default="untouched",
         validate_default=True,
     )
+    """How to handle credit card data in the checking account."""
     verbose_parsing: bool = False
+    """Print more data while parsing sources."""
     print_directories: bool = False
+    """Print the directories used for ingestion."""
     print_result: bool = False
+    """Print the resulting data from ingestion."""
     filters: Filters = Filters()
+    """Filter data for ingestion."""
 
     @field_validator("directories", mode="after")
     @classmethod
@@ -104,34 +118,54 @@ class Ingestion(BaseModel):
 
 class Tag(BaseModel):
     print_result: bool = False
+    """Print a summary of the tags."""
     default_tag: Optional[str] = None
+    """Set a default tag for untagged rows."""
     default_subtag: Optional[str] = None
+    """Set a default subtag for untagged rows."""
     delete_filters: Filters = Filters()
+    """Prompt to delete tags based on filters."""
     delete_unused: bool = False
+    """Prompt to delete tags that aren't found in the dataset."""
 
 
 class AnalysisGraphs(BaseModel):
     open: bool = False
+    """Open the output file."""
     plotly_template: str = "plotly_dark"
+    """Plotly template for the graphs."""
     colors: dict[str, Color] = Field(default=DEFAULT_COLORS, validate_default=True)
+    """Colors for labels in the graphs."""
     lightweight_html: bool = False
+    """Do not include scripts in the output HTML file to keep it small in size."""
     plotly_arguments: dict[str, Any] = Field(default_factory=dict)
+    """Arbitrary extra arguments for plotly graphs."""
 
 
 class AnalysisAnonymization(BaseModel):
     enable: bool = False
+    """Enable (weak) anonymization."""
     scale: tuple[float, float] = (1, 1_000_000)
+    """Minimum and maximum amount to scale amounts."""
     names: list[str] = ANON_NAMES
+    """Account names to use for anonymous data."""
     sources: list[str] = ANON_SOURCES
+    """Source names to use for anonymous data."""
     tags: list[str] = ANON_TAGS
+    """Tags to use for anonymous data."""
 
 
 class Analysis(BaseModel):
     filters: Filters = Filters()
+    """Filters for analysis data."""
     graphs: AnalysisGraphs = AnalysisGraphs()
+    """Configuration for graphs."""
     anonymization: AnalysisAnonymization = AnalysisAnonymization()
+    """Configuration for (weak) anonymization of output data."""
     breakdown_filters: Filters = Filters()
+    """Filters for breakdown graphs."""
     breakdown_months: int = 3
+    """Number of months back to breakdown in detail."""
     rolling_average_weights: list[list[float]] = Field(
         default_factory=lambda: [
             [3, 4],
@@ -139,26 +173,41 @@ class Analysis(BaseModel):
             [3, 4, 5, 6, 7, 8],
         ],
     )
+    """List of weights for each of the rolling averages."""
     add_edge_ticks: bool = True
+    """Add empty transactions at the min and max dates to make some graphs more readable."""  # fmt: skip  # noqa: disable=E501
     allow_untagged: bool = False
+    """Bypass restriction requiring every entry to be tagged."""
     print_source: bool = False
+    """Print all the source data for making the analysis."""
     print_tables: bool = False
+    """Print the tables used for each graph."""
 
 
 class Display(BaseModel):
     flip_rtl: bool = False
+    """Flip text of non-English letters when printing tables."""
     max_rows: int = 1_000_000
+    """Maximum rows to print when printing tables."""
     max_cols: int = 1_000
+    """Maximum columns to print when printing tables."""
     max_width: int = 1_000
+    """Maximum width in characters when printing tables."""
     show_shape: bool = False
+    """Show the shape (dimension sizes) of tables when printing them."""
 
 
 class General(BaseModel):
     data_dir: Path = Field(default=DEFAULT_DATA_DIR, validate_default=True)
+    """Default directory for storing app data."""
     dataset: str = "default"
-    tags: str = "default"
+    """Dataset name to use"""
+    tag_set: str = "default"
+    """Name of tags file."""
     print_config: bool = False
+    """Print the loaded configuration."""
     multi_column_delimiter: str = " - "
+    """Delimiter for combined column names."""
 
     @property
     def source_dir(self):
@@ -174,7 +223,7 @@ class General(BaseModel):
 
     @property
     def tags_file(self):
-        return self.tags_dir / f"{self.tags}.csv"
+        return self.tags_dir / f"{self.tag_set}.csv"
 
     @property
     def plots_file(self):
@@ -192,10 +241,15 @@ class General(BaseModel):
 
 class Config(BaseModel):
     general: General = General()
+    """General configuration."""
     display: Display = Display()
+    """Configuration for display."""
     ingestion: Ingestion = Ingestion()
+    """Configuration for ingestion."""
     tag: Tag = Tag()
+    """Configuration for tagging."""
     analysis: Analysis = Analysis()
+    """Configuration for analysis."""
 
 
 @functools.cache
@@ -214,9 +268,9 @@ def load_config(config_file: Path = CONFIG_FILE):
 if __name__ == "__main__":
     # Try default and user configs
     print("DEFAULT")
-    config = Config()
-    print(config)
+    default_config = Config()
+    print(default_config)
     print()
     print("USER")
-    config = load_config()
-    print(config)
+    user_config = load_config()
+    print(user_config)
