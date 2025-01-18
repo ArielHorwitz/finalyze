@@ -4,28 +4,19 @@ import pandas as pd
 import polars as pl
 
 from finalyze.display import print_table
+from finalyze.source.parsing import ParsingError, register_parser
+
+RAW_PRINT_FLAGS = {}
 
 
-class UnexpectedFormat(Exception):
-    """Raised when encountering unexpected format while importing source data."""
-
-
-def parse_file(input_file, config):
+def _print_raw(input_file, config):
+    if RAW_PRINT_FLAGS.get(input_file):
+        return
     if config.ingestion.verbose_parsing:
         raw_tables = pd.read_html(input_file, encoding="utf-8")
         for i, table in enumerate(raw_tables):
             print_table(table, f"Raw table {i} for file: {input_file}")
-    try:
-        return CheckingFormat.parse(input_file, config)
-    except UnexpectedFormat as exc:
-        checking_error = exc
-    try:
-        return CardFormat.parse(input_file, config)
-    except UnexpectedFormat as exc:
-        card_error = exc
-    raise UnexpectedFormat(
-        f"{input_file} not checking: {checking_error!r}, not card: {card_error!r}"
-    )
+    RAW_PRINT_FLAGS[input_file] = True
 
 
 class CheckingFormat:
@@ -36,17 +27,20 @@ class CheckingFormat:
     @classmethod
     def check(cls, raw_df):
         if (header := raw_df.iloc[0, 0]) != cls.EXPECTED_HEADER:
-            raise UnexpectedFormat(
+            raise ParsingError(
                 f"Expected header {cls.EXPECTED_HEADER!r}, got: {header!r}"
             )
         if (first_column := raw_df.iloc[1, 0]) != cls.EXPECTED_FIRST_COLUMN_NAME:
-            raise UnexpectedFormat(
+            raise ParsingError(
                 f"Expected column name {cls.EXPECTED_FIRST_COLUMN_NAME!r}"
                 f", got: {first_column!r}"
             )
 
     @classmethod
     def parse(cls, input_file, config):
+        if input_file.suffix != ".xls":
+            raise ParsingError("Not a .xls file")
+        _print_raw(input_file, config)
         raw_html = pd.read_html(input_file, encoding="utf-8")
         raw_df = raw_html[2]
         cls.check(raw_df)
@@ -107,6 +101,9 @@ class CardFormat:
 
     @classmethod
     def parse(cls, input_file, config):
+        if input_file.suffix != ".xls":
+            raise ParsingError("Not a .xls file")
+        _print_raw(input_file, config)
         raw_tables = pd.read_html(input_file, encoding="utf-8")
         parsed_tables = []
         for raw_table in raw_tables:
@@ -117,7 +114,7 @@ class CardFormat:
             parsed_table = cls._table_parse(raw_table)
             parsed_tables.append(parsed_table)
         if not parsed_tables:
-            raise UnexpectedFormat("No valid tables found")
+            raise ParsingError("No valid tables found")
         return pl.concat(parsed_tables)
 
     @classmethod
@@ -126,27 +123,27 @@ class CardFormat:
         for column_index in range(raw_df.shape[1]):
             actual_title = raw_df.iloc[0, column_index]
             if actual_title != title:
-                raise UnexpectedFormat(
+                raise ParsingError(
                     f"Expected title {title!r}" f", got: {actual_title!r}"
                 )
         # Check headers row
         for column_index, expected_header in enumerate(cls.HEADERS):
             actual_header = raw_df.iloc[1, column_index]
             if actual_header != expected_header:
-                raise UnexpectedFormat(
+                raise ParsingError(
                     f"Expected header {expected_header!r}, got: {actual_header!r}"
                 )
         # Check totals row
         actual_totals_name = raw_df.iloc[-1, 4]
         if actual_totals_name != cls.TOTALS_NAME:
-            raise UnexpectedFormat(
+            raise ParsingError(
                 f"Expected {cls.TOTALS_NAME!r} in last row"
                 f", got: {actual_totals_name!r}"
             )
         for column_index in range(4):
             expected_nan = raw_df.iloc[-1, column_index]
             if not math.isnan(expected_nan):
-                raise UnexpectedFormat(f"Expected nan, got: {expected_nan!r}")
+                raise ParsingError(f"Expected nan, got: {expected_nan!r}")
 
     @classmethod
     def _table_parse(cls, raw_df):
@@ -159,3 +156,7 @@ class CardFormat:
             "description": table.select(pl.col("1").cast(pl.String)),
         }
         return pl.DataFrame(data).with_columns(pl.lit("card").alias("source"))
+
+
+register_parser("leumi checking", CheckingFormat.parse)
+register_parser("leumi card", CardFormat.parse)

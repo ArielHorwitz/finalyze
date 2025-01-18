@@ -1,8 +1,11 @@
+import importlib
+from pathlib import Path
+
 import polars as pl
 
 from finalyze.display import print_table
 from finalyze.source.data import RAW_SCHEMA, validate_schema
-from finalyze.source.leumi import parse_file
+from finalyze.source.parsing import PARSED_SCHEMA, parse_file
 
 
 def run(config):
@@ -17,7 +20,8 @@ def run(config):
                 print(f"  {f}")
         # Parse sources
         parsed_data = pl.concat(
-            parse_file(input_file=file, config=config) for file in input_files
+            parse_file(input_file=file, config=config).select(*PARSED_SCHEMA.keys())
+            for file in input_files
         ).with_columns(pl.lit(account_name).alias("account"))
         validate_schema(parsed_data, RAW_SCHEMA)
         filtered_data = config.ingestion.filters.apply(parsed_data)
@@ -33,9 +37,21 @@ def _get_files(all_paths):
     files = set()
     for path in all_paths:
         if path.is_dir():
-            files.update(path.glob("*.xls"))
+            files.update((p for p in path.iterdir() if p.is_file()))
         elif path.is_file():
             files.add(path)
         else:
             raise FileNotFoundError(f"Path is not file or folder: {path}")
     return tuple(sorted(files))
+
+
+def _import_parser_modules():
+    parsers_dir = Path(__file__).parent / "parsers"
+    for parser_file in parsers_dir.iterdir():
+        if not parser_file.is_file() or parser_file.suffix != ".py":
+            continue
+        module_path = f"finalyze.source.parsers.{parser_file.stem}"
+        importlib.import_module(module_path)
+
+
+_import_parser_modules()
