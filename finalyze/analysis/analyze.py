@@ -12,6 +12,10 @@ from finalyze.source.tag import apply_tags
 from . import plot
 from .tables import get_tables
 
+ANON_NAMES = ["Einstein", "Newton", "Curie", "Galileo", "Darwin", "Turing", "Planck", "Hawking", "Pasteur", "Lovelace", "Bohr", "Maxwell"]  # fmt: skip  # noqa: disable=E501
+ANON_SOURCES = ["Chemistry", "Biology", "Psychology", "Geology", "Sociology", "Philosophy", "Physics", "Mathematics", "Economics", "Astronomy"]  # fmt: skip  # noqa: disable=E501
+ANON_TAGS = ["Aardvark", "Albatross", "Alligator", "Ant", "Armadillo", "Avocet", "Bat", "Bear", "Bee", "Beetle", "Bison", "Bumblebee", "Butterfly", "Capybara", "Caracal", "Caribou", "Cat", "Caterpillar", "Centipede", "Chicken", "Chimpanzee", "Chinchilla", "Clam", "Cow", "Crab", "Crocodile", "Crow", "Deer", "Dingo", "Dog", "Dolphin", "Donkey", "Dove", "Duck", "Dugong", "Eagle", "Eel", "Elephant", "Emu", "Falcon", "Ferret", "Finch", "Flamingo", "Fox", "Frog", "Geese", "Giraffe", "Goat", "Goose", "Gorilla", "Guinea Pig", "Gull", "Hare", "Hawk", "Hedgehog", "Hippopotamus", "Hornet", "Horse", "Hyena", "Ibex", "Iguana", "Jaguar", "Javelina", "Jellyfish", "Kangaroo", "Kiwi", "Koala", "Ladybug", "Lemur", "Lion", "Lizard", "Llama", "Lobster", "Loon", "Lynx", "Macaw", "Mallard", "Meerkat", "Millipede", "Monkey", "Moose", "Moth", "Mule", "Mussel", "Narwhal", "Newt", "Ocelot", "Octopus", "Orangutan", "Orca", "Ostrich", "Owl", "Ox", "Oyster", "Pangolin", "Parrot", "Peacock", "Penguin", "Pig", "Pigeon", "Platypus", "Polar Bear", "Puffin", "Quail", "Quokka", "Rabbit", "Raccoon", "Rattlesnake", "Rhinoceros", "Salamander", "Scorpion", "Seal", "Shark", "Sheep", "Shrimp", "Skunk", "Slug", "Snail", "Snake", "Sparrow", "Spider", "Squid", "Squirrel", "Starfish", "Swan", "Tapir", "Tarantula", "Tiger", "Toad", "Turkey", "Turtle", "Umbrellabird", "Vole", "Vulture", "Wallaby", "Walrus", "Wasp", "Weasel", "Whale", "Wolf", "Worm", "Xerus", "Yak", "Zebra", "Zebu"]  # fmt: skip  # noqa: disable=E501
+
 
 def run(config):
     source_data = load_source_data(config.general.source_dir)
@@ -75,9 +79,9 @@ def _anonymize_data(df, config):
     amount_col = pl.col("amount") * scale
     new_columns = [amount_col.alias("amount")]
     if conf.anonymize_accounts:
-        new_columns.append(_remap_column(df, "account", conf.names))
+        new_columns.append(_remap_column(df, "account", ANON_NAMES))
     if conf.anonymize_sources:
-        new_columns.append(_remap_column(df, "source", conf.sources))
+        new_columns.append(_remap_column(df, "source", ANON_SOURCES))
     if conf.anonymize_descriptions:
         new_columns.append(
             pl.col("description")
@@ -87,8 +91,8 @@ def _anonymize_data(df, config):
     if conf.anonymize_tags:
         new_columns.extend(
             (
-                _remap_column(df, "tag", conf.tags),
-                _remap_column(df, "subtag", conf.tags),
+                _remap_column(df, "tag", ANON_TAGS),
+                _remap_column(df, "subtag", ANON_TAGS),
             )
         )
     return df.with_columns(new_columns)
