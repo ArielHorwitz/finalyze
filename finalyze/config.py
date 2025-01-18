@@ -127,6 +127,7 @@ class Analysis(BaseModel):
             [3, 4, 5, 6, 7, 8],
         ],
     )
+    add_edge_ticks: bool = True
     allow_untagged: bool = False
     print_source: bool = False
     print_tables: bool = False

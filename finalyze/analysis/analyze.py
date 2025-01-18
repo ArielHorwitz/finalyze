@@ -14,6 +14,8 @@ from .tables import get_tables
 def run(config):
     source_data = load_source_data(config.general.source_dir)
     source_data = apply_tags(source_data, config.general.tags_file)
+    if config.analysis.add_edge_ticks:
+        source_data = _add_edge_ticks(source_data)
     source_data = enrich_source(
         source_data,
         delimiter=config.general.multi_column_delimiter,
@@ -38,6 +40,28 @@ def run(config):
     plot.write_html(source_data_display, tables, config)
     if config.analysis.graphs.open:
         subprocess.run(["xdg-open", plots_file])
+
+
+def _add_edge_ticks(df):
+    min_date = df["date"].min()
+    max_date = df["date"].max()
+    account_sources = df.group_by("account", "source").agg(pl.len())
+    tick_df = pl.concat(
+        pl.DataFrame()
+        .with_columns(
+            account=account_sources["account"],
+            source=account_sources["source"],
+            date=pl.lit(date),
+            amount=pl.lit(0.0),
+            description=pl.lit("auto-generated tick"),
+            tag=pl.lit("other"),
+            subtag=pl.lit("auto-tick"),
+            hash=pl.lit(0).cast(pl.UInt64),
+        )
+        .select(df.columns)
+        for date in (min_date, max_date)
+    )
+    return pl.concat((df, tick_df))
 
 
 def _validate_tags(df, flip_rtl):
