@@ -65,6 +65,9 @@ def validate_schema(df, expected_schema):
     if extra_columns := set(actual_schema.keys()) - set(expected_schema.keys()):
         errors.append(f"Extra columns: {extra_columns}")
     for column, expected_dtype in expected_schema.items():
+        if column not in actual_schema:
+            errors.append(f"Missing column: {column}")
+            continue
         actual_dtype = actual_schema[column]
         if actual_dtype != expected_dtype:
             errors.append(
