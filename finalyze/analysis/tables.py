@@ -94,7 +94,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
         breakdowns.group_by("month")
         .agg(pl.col("amount").sum())
         .sort("month")
-        .with_columns(pl.lit("total").alias("Flow")),
+        .with_columns(pl.lit("total flow").alias("Flow")),
         figure_constructor=px.bar,
         figure_arguments=dict(
             x="month",
@@ -162,7 +162,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
     tables = [
         Table(
             "Total balance",
-            source.with_columns(pl.lit("total").alias("Balance")),
+            source.with_columns(pl.lit("total balance").alias("Balance")),
             figure_constructor=px.line,
             figure_arguments=dict(
                 x="date",

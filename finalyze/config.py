@@ -17,7 +17,7 @@ CONFIG_FILE = CONFIG_DIR / "config.toml"
 
 DEFAULT_DATA_DIR = Path.home() / ".local" / "share" / APP_NAME
 DEFAULT_COLORS = {
-    "total": "#fff",
+    "total balance": "#fff",
     "expense": "#f00",
     "income": "#0f0",
     "bills": "#c26",
