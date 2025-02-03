@@ -127,6 +127,8 @@ class Tag(BaseModel):
 
 
 class AnalysisGraphs(BaseModel):
+    title: str = "plots"
+    """Title and name of the output file."""
     open: bool = False
     """Open the output file."""
     plotly_template: str = "plotly_dark"
@@ -223,10 +225,6 @@ class General(BaseModel):
     @property
     def tags_file(self):
         return self.tags_dir / f"{self.tag_set}.csv"
-
-    @property
-    def plots_file(self):
-        return self.output_dir / "plots.html"
 
     def create_directories(self):
         for directory in (self.source_dir, self.tags_dir, self.output_dir):

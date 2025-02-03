@@ -2,6 +2,7 @@ import random
 import string
 import subprocess
 import sys
+from pathlib import Path
 
 import polars as pl
 
@@ -40,14 +41,16 @@ def run(config):
             print(table)
             print_table(table.with_totals(), table.title)
     # Plots
-    plots_file = config.general.plots_file
     source_data_display = source_data.select(
         "account", "source", "date", "amount", "tag", "subtag", "description", "hash"
     )
-    print(f"Exporting plots to: {plots_file}")
-    plot.write_html(source_data_display, tables, config)
+    output_file_stem = config.analysis.graphs.title.lower()
+    output_file = config.general.output_dir / f"{output_file_stem}.html"
+    print(f"Exporting plots to: {output_file}")
+    html_text = plot.get_html(source_data_display, tables, config)
+    Path(output_file).write_text(html_text)
     if config.analysis.graphs.open:
-        subprocess.run(["xdg-open", plots_file])
+        subprocess.run(["xdg-open", output_file])
 
 
 def _add_edge_ticks(df):
