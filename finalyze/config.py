@@ -26,7 +26,26 @@ DEFAULT_COLORS = {
 DEFAULT_SOURCE_DIRECTORIES = {
     "default": [Path.home() / "Downloads" / "finalyze" / "sources"],
 }
-LiteralCardTransactions = Literal["remove", "balance", "untouched"]
+CardTransactionStrategies = Literal["remove", "balance", "untouched"]
+"""Strategies for handling credit card transactions that show up in the checking account.
+
+*untouched*:
+Leave them as is.
+
+*remove*:
+Remove them entirely.
+
+*balance*:
+Replace them with equal and opposite "Transfer" transactions. This is used to
+maintain the balances of all accounts correctly when using data from both
+checking account and credit cards.
+
+E.g. if there is a transaction found in the checking account that is identified
+as a charge of 100 USD from the credit card: replace it with a transaction for
+-100 described as a transfer under the "checking" account, and add a
+transaction for +100 described as a transfer under the "card" account. This
+assumes the same -100 USD is found in the "card" account.
+"""
 
 
 class Filters(BaseModel):
@@ -90,11 +109,13 @@ class Ingestion(BaseModel):
         validate_default=True,
     )
     """A list of directories to ingest for each account."""
-    card_transactions: LiteralCardTransactions = Field(
+    card_transactions: CardTransactionStrategies = Field(
         default="untouched",
         validate_default=True,
     )
-    """How to handle credit card data in the checking account."""
+    """How to handle credit card transaction in the checking account.
+
+    See: `CardTransactionStrategies`."""
     verbose_parsing: bool = False
     """Print more data while parsing sources."""
     print_directories: bool = False
