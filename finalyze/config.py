@@ -165,7 +165,7 @@ class AnalysisGraphs(BaseModel):
 class AnalysisAnonymization(BaseModel):
     enable: bool = False
     """Enable (weak) anonymization."""
-    scale: tuple[float, float] = (1, 1_000_000)
+    scale: tuple[float, float] = (1_000_000, 1_000_000_000_000)
     """Minimum and maximum amount to scale amounts."""
     anonymize_accounts: bool = True
     """Also anonymize accounts."""
