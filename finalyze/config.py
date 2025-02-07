@@ -116,6 +116,8 @@ class Ingestion(BaseModel):
     """How to handle credit card transaction in the checking account.
 
     See: `CardTransactionStrategies`."""
+    clear_previous: bool = True
+    """Clear previously ingested data in the dataset."""
     verbose_parsing: bool = False
     """Print more data while parsing sources."""
     print_directories: bool = False

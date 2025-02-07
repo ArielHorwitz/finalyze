@@ -11,6 +11,10 @@ from finalyze.source.parsing import PARSED_SCHEMA, parse_file
 def run(config):
     if not config.ingestion.directories:
         raise ValueError("No accounts directories specified")
+    if config.ingestion.clear_previous:
+        for file in config.general.source_dir.glob("*.csv"):
+            print(f"Removing file: {file}")
+            file.unlink()
     for account_name, files in config.ingestion.directories.items():
         input_files = _get_files(files)
         output_file = config.general.source_dir / f"{account_name}.csv"
