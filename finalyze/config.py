@@ -27,7 +27,7 @@ DEFAULT_SOURCE_DIRECTORIES = {
     "default": [Path.home() / "Downloads" / "finalyze" / "sources"],
 }
 CardTransactionStrategies = Literal["remove", "balance", "untouched"]
-"""Strategies for handling credit card transactions that show up in the checking account.
+"""Strategies for handling credit card transactions in the checking account.
 
 *untouched*:
 Leave them as is.
