@@ -20,7 +20,11 @@ ANON_TAGS = ["Aardvark", "Albatross", "Alligator", "Ant", "Armadillo", "Avocet",
 
 def run(config):
     source_data = load_source_data(config.general.source_dir)
-    source_data = apply_tags(source_data, config.general.tags_file)
+    source_data = apply_tags(
+        source_data,
+        config.general.tags_file,
+        preset_rules=config.tag.preset_rules,
+    )
     source_data = config.analysis.filters.apply(source_data)
     if config.analysis.add_edge_ticks:
         source_data = _add_edge_ticks(source_data)

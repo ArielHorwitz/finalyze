@@ -6,6 +6,7 @@ import arrow
 import polars as pl
 import readchar
 
+from finalyze.config import TagPresetRule
 from finalyze.display import flip_rtl_str, print_table
 from finalyze.source.data import TAGGED_SCHEMA, load_source_data, validate_schema
 
@@ -37,7 +38,11 @@ def run(config):
 
 
 def tag_interactively(config):
-    source_data = load_source_data(config.general.source_dir)
+    source_data = load_source_data(config.general.source_dir).with_columns(
+        pl.concat_str(*HASH_COLUMNS).hash().alias("hash")
+    )
+    preset_hashes = get_tag_preset_hashes(source_data, config)
+    source_data = source_data.filter(~pl.col("hash").is_in(preset_hashes)).drop("hash")
     if config.tag.default_tag:
         default_tags = Tags(config.tag.default_tag, config.tag.default_subtag)
     else:
@@ -56,7 +61,13 @@ def tag_interactively(config):
         print(tagger.describe_all_tags())
 
 
-def apply_tags(data, tags_file, *, hash_columns: list[str] = HASH_COLUMNS):
+def apply_tags(
+    data,
+    tags_file,
+    *,
+    hash_columns: list[str] = HASH_COLUMNS,
+    preset_rules: Optional[list[TagPresetRule]] = None,
+):
     if not hash_columns:
         raise ValueError("Need columns for hashing")
     tags = read_tags_file(tags_file)
@@ -65,8 +76,38 @@ def apply_tags(data, tags_file, *, hash_columns: list[str] = HASH_COLUMNS):
         .with_columns(pl.concat_str(*hash_columns).hash().alias("hash"))
         .join(tags, on="hash", how="left")
     )
+    if preset_rules is not None:
+        tagged = apply_tag_presets(tagged, preset_rules)
     validate_schema(tagged, TAGGED_SCHEMA)
     return tagged
+
+
+def get_tag_preset_hashes(source_data, config):
+    all_hashes = set()
+    for preset in config.tag.preset_rules:
+        filters = preset.filters
+        filters.tags = None
+        filters.subtags = None
+        if not filters.has_effect:
+            continue
+        all_hashes.update(filters.apply(source_data)["hash"])
+    return pl.Series(list(all_hashes), dtype=pl.UInt64)
+
+
+def apply_tag_presets(data, preset_rules):
+    for preset in reversed(preset_rules):
+        filters = preset.filters
+        filters.tags = None
+        filters.subtags = None
+        if not filters.has_effect:
+            continue
+        filtered = filters.apply(data).with_columns(
+            pl.lit(preset.tag).alias("tag"),
+            pl.lit(preset.subtag).alias("subtag"),
+        )
+        data = data.filter(~pl.col("hash").is_in(filtered.select("hash")))
+        data = pl.concat((data, filtered))
+    return data
 
 
 def read_tags_file(tags_file):

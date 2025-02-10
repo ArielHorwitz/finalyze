@@ -136,6 +136,15 @@ class Ingestion(BaseModel):
         }
 
 
+class TagPresetRule(BaseModel):
+    tag: str = "Untagged"
+    """Tag preset to assign."""
+    subtag: str = "Untagged"
+    """Subtag preset to assign."""
+    filters: Filters = Filters()
+    """Filters for entries to assign preset."""
+
+
 class Tag(BaseModel):
     print_result: bool = False
     """Print a summary of the tags."""
@@ -147,6 +156,11 @@ class Tag(BaseModel):
     """Prompt to delete tags based on filters."""
     delete_unused: bool = False
     """Prompt to delete tags that aren't found in the dataset."""
+    preset_rules: list[TagPresetRule] = Field(
+        default_factory=list,
+        validate_default=True,
+    )
+    """List of preset rules for tagging."""
 
 
 class AnalysisGraphs(BaseModel):
