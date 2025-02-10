@@ -68,25 +68,30 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
     rolling_cash_flows = Table(
         "Cash flow (rolling mean)",
         pl.concat(
-            breakdowns.group_by("month")
+            source.group_by("month")
             .agg(pl.col("amount").sum())
             .sort("month")
             .with_columns(
-                pl.lit(f"rolling ({len(weights)})").alias("Flow"),
+                pl.lit(f"rolling {title} ({len(weights)})").alias("Flow"),
                 pl.col("amount")
                 .rolling_mean(window_size=len(weights), weights=weights)
                 .alias("amount"),
             )
             for weights in config.analysis.rolling_average_weights
+            for title, source in [
+                ("total", breakdowns),
+                ("incomes", incomes),
+                ("expenses", expenses),
+            ]
         ),
         figure_constructor=px.line,
         figure_arguments=dict(
             x="month",
             y="amount",
-            line_dash="Flow",
             hover_data=["month", "amount"],
             markers=True,
             line_shape="spline",
+            line_dash="Flow",
             color="Flow",
         ),
     )
@@ -104,7 +109,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
             hover_data=["month", "amount"],
             barmode="group",
         ),
-        extra_traces=[rolling_cash_flows, *split_cash_flows],
+        extra_traces=[*split_cash_flows, rolling_cash_flows],
     )
 
     # Breakdown of past individual months
