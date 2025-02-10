@@ -87,6 +87,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
             hover_data=["month", "amount"],
             markers=True,
             line_shape="spline",
+            color="Flow",
         ),
     )
     cash_flow = Table(
