@@ -38,16 +38,17 @@ def run(config):
 
 def tag_interactively(config):
     source_data = load_source_data(config.general.source_dir)
-    tagger = Tagger(
-        source_data=source_data,
-        tags_file=config.general.tags_file,
-        flip_rtl=config.display.flip_rtl,
-    )
     if config.tag.default_tag:
         default_tags = Tags(config.tag.default_tag, config.tag.default_subtag)
     else:
         default_tags = None
-    performed_tagging = tagger.tag_interactively(default_tags)
+    tagger = Tagger(
+        source_data=source_data,
+        tags_file=config.general.tags_file,
+        flip_rtl=config.display.flip_rtl,
+        default_tags=default_tags,
+    )
+    performed_tagging = tagger.tag_interactively()
     if not performed_tagging:
         print("No tags missing.")
     if config.tag.print_result:
@@ -136,9 +137,10 @@ def _delete_tags(config, tag_hashes):
 
 
 class Tagger:
-    def __init__(self, *, source_data, tags_file, flip_rtl):
+    def __init__(self, *, source_data, tags_file, flip_rtl, default_tags):
         self.tags_file = tags_file
         self.flip_rtl = flip_rtl
+        self.default_tags = default_tags
         self.source = apply_tags(source_data, tags_file).sort("date")
         self.tags = read_tags_file(tags_file)
 
@@ -184,7 +186,7 @@ class Tagger:
         lines.extend(["", f"  [[ {nulls:>3} Untagged entries   ]]"])
         return "\n".join(lines)
 
-    def guess_tags(self, index: int, default: Optional[Tags]) -> Tags:
+    def guess_tags(self, index: int) -> Tags:
         tag_descriptions = collections.defaultdict(set)
         row = self.get_row(index)
         target_description = row["description"]
@@ -202,8 +204,8 @@ class Tagger:
             if row_description == target_description:
                 print(f"Guess from: {row}")
                 return tags
-        if default is not None:
-            return default
+        if self.default_tags is not None:
+            return self.default_tags
         if not tag_descriptions:
             return Tags("unknown", "")
         description_counts = {
@@ -223,7 +225,7 @@ class Tagger:
             return indices[0]
         return None
 
-    def tag_interactively(self, default_tags):
+    def tag_interactively(self):
         skipped_indices = set()
         if self.get_untagged_index(skipped_indices) is None:
             return False
@@ -231,7 +233,7 @@ class Tagger:
             index = self.get_untagged_index(skipped_indices)
             if index is None:
                 return
-            guess = self.guess_tags(index, default_tags)
+            guess = self.guess_tags(index)
             prompt_text_lines = [
                 LINE_SEPARATOR,
                 "Currently tagging:",
