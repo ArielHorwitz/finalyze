@@ -98,7 +98,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
         ]
     ]
     cash_flow = Table(
-        "Cash flow - Total",
+        "Cash flow",
         breakdowns.group_by("month")
         .agg(pl.col("amount").sum())
         .sort("month")
@@ -175,7 +175,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
     )
     tables = [
         Table(
-            "Total balance",
+            "Balance",
             source.with_columns(pl.lit("total balance").alias("Balance")),
             figure_constructor=px.line,
             figure_arguments=dict(
