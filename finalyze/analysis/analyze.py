@@ -21,20 +21,7 @@ ANON_TAGS = ["Aardvark", "Albatross", "Alligator", "Ant", "Armadillo", "Avocet",
 
 
 def run(config):
-    source_data = load_source_data(config.general.source_dir)
-    source_data = apply_tags(
-        source_data,
-        config.general.tags_file,
-        preset_rules=config.tag.preset_rules,
-    )
-    source_data = config.analysis.filters.apply(source_data)
-    source_data = _add_edge_ticks(source_data, config)
-    if config.analysis.anonymization.enable:
-        source_data = _anonymize_data(source_data, config)
-    source_data = enrich_source(
-        source_data,
-        delimiter=config.general.multi_column_delimiter,
-    )
+    source_data = get_post_processed_source_data(config)
     if config.analysis.print_source:
         print_table(source_data, "Source data")
     if not config.analysis.allow_untagged:
@@ -56,6 +43,24 @@ def run(config):
     Path(output_file).write_text(html_text)
     if config.analysis.graphs.open:
         subprocess.run(["xdg-open", output_file])
+
+
+def get_post_processed_source_data(config):
+    source_data = load_source_data(config.general.source_dir)
+    source_data = apply_tags(
+        source_data,
+        config.general.tags_file,
+        preset_rules=config.tag.preset_rules,
+    )
+    source_data = config.analysis.filters.apply(source_data)
+    source_data = _add_edge_ticks(source_data, config)
+    if config.analysis.anonymization.enable:
+        source_data = _anonymize_data(source_data, config)
+    source_data = enrich_source(
+        source_data,
+        delimiter=config.general.multi_column_delimiter,
+    )
+    return source_data
 
 
 def _add_edge_ticks(df, config):
