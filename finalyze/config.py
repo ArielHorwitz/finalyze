@@ -1,3 +1,4 @@
+import copy
 import functools
 import json
 import operator
@@ -297,25 +298,59 @@ class Config(BaseModel):
     """Configuration for analysis."""
 
 
-@functools.cache
-def load_config(config_file: Path = CONFIG_FILE):
-    config_file = Path(config_file)
-    config_file.parent.mkdir(parents=True, exist_ok=True)
+LOADED_CONFIG = None
+
+
+def load_config(
+    *,
+    config_dir: Path = CONFIG_DIR,
+    additional_configs: tuple[str, ...] = tuple(),
+    override: str = "",
+    use_preloaded: bool = True,
+):
+    global LOADED_CONFIG
+    if LOADED_CONFIG is not None and use_preloaded:
+        return LOADED_CONFIG
+
+    default_config_file = config_dir / "config.toml"
+    config_data = toml.loads(default_config_file.read_text())
+    for config_name in additional_configs:
+        config_file_path = Path(config_dir) / f"{config_name}.toml"
+        new_config_data = toml.loads(config_file_path.read_text())
+        config_data = _depth_first_merge(config_data, new_config_data)
+    config_data = _depth_first_merge(config_data, toml.loads(override))
+    LOADED_CONFIG = Config(**config_data)
+    return LOADED_CONFIG
+
+
+def get_config_file_names(*, config_dir: Path = CONFIG_DIR) -> tuple[str]:
+    return tuple(file.stem for file in config_dir.glob("*.toml"))
+
+
+def write_default_config(*, config_dir: Path = CONFIG_FILE):
+    config_dir.mkdir(parents=True, exist_ok=True)
+    config_file = config_dir / "config.toml"
     if not config_file.is_file():
         print(f"Creating default config at: {config_file}")
         config_dump = json.loads(Config().model_dump_json())
         config_file.write_text(toml.dumps(config_dump))
-    config_data = toml.loads(config_file.read_text())
-    config = Config(**config_data)
-    return config
+
+
+def _depth_first_merge(base: dict, other: dict):
+    assert isinstance(base, dict)
+    assert isinstance(other, dict)
+    base = copy.deepcopy(base)
+    for key, other_value in other.items():
+        base_value = base.get(key)
+        if isinstance(base_value, dict) and isinstance(other_value, dict):
+            base[key] = _depth_first_merge(base_value, other_value)
+        else:
+            base[key] = other_value
+    return base
 
 
 if __name__ == "__main__":
-    # Try default and user configs
+    # Try default config
     print("DEFAULT")
     default_config = Config()
     print(default_config)
-    print()
-    print("USER")
-    user_config = load_config()
-    print(user_config)

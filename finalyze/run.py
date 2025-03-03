@@ -1,10 +1,10 @@
 import argparse
 import pprint
-from pathlib import Path
+import sys
 
 from finalyze import APP_DESCRIPTION, APP_NAME
 from finalyze.analysis import analyze
-from finalyze.config import CONFIG_FILE, load_config
+from finalyze.config import CONFIG_DIR, load_config, write_default_config, get_config_file_names
 from finalyze.source import ingest, tag
 
 
@@ -20,9 +20,30 @@ def parse_args():
     parser = argparse.ArgumentParser(prog=APP_NAME, description=APP_DESCRIPTION)
     parser.set_defaults(run=run_pipeline)
     parser.add_argument(
-        "--config-file",
-        help=f"Location of config file [default: {CONFIG_FILE}]",
-        default=str(CONFIG_FILE),
+        "-C",
+        "--config-dir",
+        help=f"Directory of config files [default: {CONFIG_DIR}]",
+        default=CONFIG_DIR,
+    )
+    parser.add_argument(
+        "-c",
+        "--additional-configs",
+        help="Additional config file names (see --list-configs)",
+        action="append",
+        default=[],
+    )
+    parser.add_argument(
+        "-o",
+        "--config-override",
+        help="Override config using 'CATEGORY.OPTION=\"new_value\"'",
+        action="append",
+        default=[],
+    )
+    parser.add_argument(
+        "-l",
+        "--list-configs",
+        help="List additional config file names and exit",
+        action="store_true",
     )
     # Subcommands
     subparsers = parser.add_subparsers(
@@ -43,7 +64,6 @@ def parse_args():
     )
     add_developer_subcommand(subparsers)
     args = parser.parse_args()
-    args.config_file = Path(args.config_file).expanduser().resolve()
     return args
 
 
@@ -55,7 +75,16 @@ def run_pipeline(config):
 
 def main():
     args = parse_args()
-    config = load_config(args.config_file)
+    write_default_config(config_dir=args.config_dir)
+    if args.list_configs:
+        print("\n".join(get_config_file_names(config_dir=args.config_dir)))
+        exit()
+    override = "\n".join(args.config_override)
+    config = load_config(
+        config_dir=args.config_dir,
+        additional_configs=args.additional_configs,
+        override=override,
+    )
     if config.general.print_config:
         pprint.pprint(config.model_dump())
     config.general.create_directories()
