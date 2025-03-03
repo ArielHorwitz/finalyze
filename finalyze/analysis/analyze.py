@@ -1,3 +1,5 @@
+import calendar
+import datetime
 import random
 import string
 import subprocess
@@ -26,8 +28,7 @@ def run(config):
         preset_rules=config.tag.preset_rules,
     )
     source_data = config.analysis.filters.apply(source_data)
-    if config.analysis.add_edge_ticks:
-        source_data = _add_edge_ticks(source_data)
+    source_data = _add_edge_ticks(source_data, config)
     if config.analysis.anonymization.enable:
         source_data = _anonymize_data(source_data, config)
     source_data = enrich_source(
@@ -57,11 +58,29 @@ def run(config):
         subprocess.run(["xdg-open", output_file])
 
 
-def _add_edge_ticks(df):
-    min_date = df["date"].min()
-    max_date = df["date"].max()
+def _add_edge_ticks(df, config):
+    dfs = [df]
+    if config.analysis.edge_tick_min.enable:
+        min_date = df["date"].min()
+        min_delta = datetime.timedelta(days=config.analysis.edge_tick_min.pad_days)
+        edge_date = min_date - min_delta
+        if config.analysis.edge_tick_min.cap_same_month:
+            edge_date = max(min_date.replace(day=1), edge_date)
+        dfs.append(_generate_edge_ticks(df, edge_date))
+    if config.analysis.edge_tick_max.enable:
+        max_date = df["date"].max()
+        max_delta = datetime.timedelta(days=config.analysis.edge_tick_max.pad_days)
+        edge_date = max_date + max_delta
+        if config.analysis.edge_tick_max.cap_same_month:
+            last_day = calendar.monthrange(max_date.year, max_date.month)[1]
+            edge_date = min(max_date.replace(day=last_day), edge_date)
+        dfs.append(_generate_edge_ticks(df, edge_date))
+    return pl.concat(dfs)
+
+
+def _generate_edge_ticks(df, date):
     account_sources = df.group_by("account", "source").agg(pl.len())
-    tick_df = pl.concat(
+    return (
         pl.DataFrame()
         .with_columns(
             account=account_sources["account"],
@@ -74,9 +93,7 @@ def _add_edge_ticks(df):
             hash=pl.lit(0).cast(pl.UInt64),
         )
         .select(df.columns)
-        for date in (min_date, max_date)
     )
-    return pl.concat((df, tick_df))
 
 
 def _anonymize_data(df, config):

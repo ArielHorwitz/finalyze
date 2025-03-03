@@ -193,6 +193,15 @@ class AnalysisAnonymization(BaseModel):
     """Also anonymize tags."""
 
 
+class AnalysisEdgeTick(BaseModel):
+    enable: bool = False
+    """Enable edge ticks."""
+    pad_days: int = 31
+    """Add edge ticks a number of days past the data."""
+    cap_same_month: bool = False
+    """Don't allow edge tick to overflow past the edge of the month."""
+
+
 class Analysis(BaseModel):
     filters: Filters = Filters()
     """Filters for analysis data."""
@@ -212,8 +221,10 @@ class Analysis(BaseModel):
         ],
     )
     """List of weights for each of the rolling averages."""
-    add_edge_ticks: bool = True
-    """Add empty transactions at the min and max dates to make some graphs more readable."""  # fmt: skip  # noqa: disable=E501
+    edge_tick_min: AnalysisEdgeTick = AnalysisEdgeTick()
+    """Add empty transactions for every account and source before the minimum date to make some graphs more readable."""  # fmt: skip  # noqa: disable=E501
+    edge_tick_max: AnalysisEdgeTick = AnalysisEdgeTick()
+    """Add empty transactions for every account and source after the maximum date to make some graphs more readable."""  # fmt: skip  # noqa: disable=E501
     allow_untagged: bool = False
     """Bypass restriction requiring every entry to be tagged."""
     print_source: bool = False
