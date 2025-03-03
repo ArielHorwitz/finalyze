@@ -49,7 +49,7 @@ def run(config):
     source_data_display = source_data.select(
         "account", "source", "date", "amount", "tag", "subtag", "description", "hash"
     )
-    output_file_stem = config.analysis.graphs.title.lower()
+    output_file_stem = config.analysis.graphs.title.lower().replace(" ", "_")
     output_file = config.general.output_dir / f"{output_file_stem}.html"
     print(f"Exporting plots to: {output_file}")
     html_text = plot.get_html(source_data_display, tables, config)
