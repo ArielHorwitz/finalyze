@@ -173,6 +173,24 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
             labels=dict(balance_source="Balance", account_source="Source"),
         ),
     )
+    monthly_breakdowns = [
+        Table(
+            f"Monthly {name} breakdown",
+            df.group_by("month", "tag")
+            .agg(pl.col("amount").sum())
+            .sort("month", "tag"),
+            figure_constructor=px.area,
+            figure_arguments=dict(
+                x="month",
+                y="amount",
+                color="tag",
+                line_shape="linear",
+                hover_data=["tag", "amount"],
+                labels=dict(tag="Tag", amount="Amount", month="Month"),
+            ),
+        )
+        for df, name in [(incomes, "incomes"), (expenses, "expenses")]
+    ]
     tables = [
         Table(
             "Balance",
@@ -196,34 +214,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
             extra_traces=[account_balances],
         ),
         cash_flow,
-        Table(
-            "Monthly expenses breakdown",
-            expenses.group_by("month", "tag", "subtag")
-            .agg(pl.col("amount").sum())
-            .sort("month", "tag", "subtag"),
-            figure_constructor=px.bar,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="tag",
-                hover_data=["tag", "subtag", "amount"],
-                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
-            ),
-        ),
-        Table(
-            "Monthly incomes breakdown",
-            incomes.group_by("month", "tag", "subtag")
-            .agg(pl.col("amount").sum())
-            .sort("month", "tag", "subtag"),
-            figure_constructor=px.bar,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="tag",
-                hover_data=["tag", "subtag", "amount"],
-                labels=dict(tag="Tag", subtag="Subtag", amount="Amount", month="Month"),
-            ),
-        ),
+        *monthly_breakdowns,
         Table(
             "Total expenses breakdown",
             expenses.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum()),
