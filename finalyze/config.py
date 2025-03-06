@@ -66,6 +66,10 @@ class Filters(BaseModel):
     """Source."""
     invert: bool = False
     """Invert results."""
+    and_filters: Optional[list["Filters"]] = None
+    """Logically AND filters (does not work with other predicates)."""
+    or_filters: Optional[list["Filters"]] = None
+    """Logically OR filters (does not work with other predicates)."""
 
     def _get_predicates(self):
         predicates = []
@@ -90,18 +94,43 @@ class Filters(BaseModel):
 
     @property
     def has_effect(self):
-        return len(self._get_predicates()) > 0 or self.invert
+        return (
+            len(self._get_predicates()) > 0
+            or self.invert
+            or self.and_filters
+            or self.or_filters
+        )
 
     @property
     def predicate(self):
-        predicates = self._get_predicates()
-        predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
-        if self.invert:
-            predicate = ~predicate
+        exclusive_predicates = (
+            bool(self._get_predicates()) or self.invert,
+            bool(self.and_filters),
+            bool(self.or_filters),
+        )
+        if sum(exclusive_predicates) > 1:
+            raise ValueError(
+                "and_filters, or_filters, and other predicates "
+                f"are mutually exclusive, found: {self}"
+            )
+        if self.or_filters:
+            predicates = [f.predicate for f in self.or_filters]
+            predicate = functools.reduce(operator.or_, predicates, pl.lit(False))
+        elif self.and_filters:
+            predicates = [f.predicate for f in self.and_filters]
+            predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
+        else:
+            predicates = self._get_predicates()
+            predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
+            if self.invert:
+                predicate = ~predicate
         return predicate
 
-    def apply(self, df):
-        return df.filter(self.predicate)
+    def apply(self, df, /, *, invert: bool = False):
+        predicate = self.predicate
+        if invert:
+            predicate = ~predicate
+        return df.filter(predicate)
 
 
 class Ingestion(BaseModel):
