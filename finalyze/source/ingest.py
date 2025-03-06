@@ -3,34 +3,35 @@ from pathlib import Path
 
 import polars as pl
 
+from finalyze.config import config
 from finalyze.display import print_table
 from finalyze.source.data import RAW_SCHEMA, validate_schema
 from finalyze.source.parsing import PARSED_SCHEMA, parse_file
 
 
-def run(config):
-    if not config.ingestion.directories:
+def run():
+    if not config().ingestion.directories:
         raise ValueError("No accounts directories specified")
-    if config.ingestion.clear_previous:
-        for file in config.general.source_dir.glob("*.csv"):
+    if config().ingestion.clear_previous:
+        for file in config().general.source_dir.glob("*.csv"):
             print(f"Removing file: {file}")
             file.unlink()
-    for account_name, files in config.ingestion.directories.items():
+    for account_name, files in config().ingestion.directories.items():
         input_files = _get_files(files)
-        output_file = config.general.source_dir / f"{account_name}.csv"
-        if config.ingestion.print_directories:
+        output_file = config().general.source_dir / f"{account_name}.csv"
+        if config().ingestion.print_directories:
             print(f"Source files for account {account_name!r}:")
             for f in input_files:
                 print(f"  {f}")
         # Parse sources
         parsed_data = pl.concat(
-            parse_file(input_file=file, config=config).select(*PARSED_SCHEMA.keys())
+            parse_file(input_file=file).select(*PARSED_SCHEMA.keys())
             for file in input_files
         ).with_columns(pl.lit(account_name).alias("account"))
         validate_schema(parsed_data, RAW_SCHEMA)
-        filtered_data = config.ingestion.filters.apply(parsed_data)
+        filtered_data = config().ingestion.filters.apply(parsed_data)
         source_data = filtered_data.select(*RAW_SCHEMA.keys()).sort("date", "amount")
-        if config.ingestion.print_result:
+        if config().ingestion.print_result:
             print_table(source_data, f"Parsed data for account: {account_name}")
         print(f"Parsed account {account_name!r} to: {output_file}")
         output_file.parent.mkdir(parents=True, exist_ok=True)

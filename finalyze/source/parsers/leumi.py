@@ -3,16 +3,17 @@ import math
 import pandas as pd
 import polars as pl
 
+from finalyze.config import config
 from finalyze.display import print_table
 from finalyze.source.parsing import ParsingError, register_parser
 
 RAW_PRINT_FLAGS = {}
 
 
-def _print_raw(input_file, config):
+def _print_raw(input_file):
     if RAW_PRINT_FLAGS.get(input_file):
         return
-    if config.ingestion.verbose_parsing:
+    if config().ingestion.verbose_parsing:
         raw_tables = pd.read_html(input_file, encoding="utf-8")
         for i, table in enumerate(raw_tables):
             print_table(table, f"Raw table {i} for file: {input_file}")
@@ -37,10 +38,10 @@ class CheckingFormat:
             )
 
     @classmethod
-    def parse(cls, input_file, config):
+    def parse(cls, input_file):
         if input_file.suffix != ".xls":
             raise ParsingError("Not a .xls file")
-        _print_raw(input_file, config)
+        _print_raw(input_file)
         raw_html = pd.read_html(input_file, encoding="utf-8")
         raw_df = raw_html[2]
         cls.check(raw_df)
@@ -63,9 +64,9 @@ class CheckingFormat:
         }
         checking = pl.DataFrame(data).with_columns(pl.lit("checking").alias("source"))
         is_card_transaction = pl.col("description") == cls.CARD_DESCRIPTION
-        if config.ingestion.card_transactions == "remove":
+        if config().ingestion.card_transactions == "remove":
             checking = checking.filter(~is_card_transaction)
-        elif config.ingestion.card_transactions == "balance":
+        elif config().ingestion.card_transactions == "balance":
             # Extract card transfers
             card_transfers = checking.filter(is_card_transaction)
             checking = checking.filter(~is_card_transaction)
@@ -100,10 +101,10 @@ class CardFormat:
     TOTALS_NAME = 'סה"כ:'
 
     @classmethod
-    def parse(cls, input_file, config):
+    def parse(cls, input_file):
         if input_file.suffix != ".xls":
             raise ParsingError("Not a .xls file")
-        _print_raw(input_file, config)
+        _print_raw(input_file)
         raw_tables = pd.read_html(input_file, encoding="utf-8")
         parsed_tables = []
         for raw_table in raw_tables:

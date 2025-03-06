@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from finalyze.config import config
+
 TEMPLATE_DIR = Path(__file__).parent.parent.joinpath("templates").resolve()
 HTML = (TEMPLATE_DIR / "index.html").read_text()
 CSS = (TEMPLATE_DIR / "style.css").read_text()
@@ -7,20 +9,20 @@ SCRIPT = (TEMPLATE_DIR / "script.js").read_text()
 FIGURE_DIV = (TEMPLATE_DIR / "figure.html").read_text()
 
 
-def get_html(source_table, tables, config):
+def get_html(source_table, tables):
     color_map = {
-        name: color.as_hex() for name, color in config.analysis.graphs.colors.items()
+        name: color.as_hex() for name, color in config().analysis.graphs.colors.items()
     }
-    lightweight = config.analysis.graphs.lightweight_html
-    template = config.analysis.graphs.plotly_template
-    title = config.analysis.graphs.title
+    lightweight = config().analysis.graphs.lightweight_html
+    template = config().analysis.graphs.plotly_template
+    title = config().analysis.graphs.title
     # Plots
     divs = []
     for i, table in enumerate(tables):
         fig = table.get_figure(
             template=template,
             color_discrete_map=color_map,
-            **config.analysis.graphs.plotly_arguments,
+            **config().analysis.graphs.plotly_arguments,
         )
         if not fig:
             continue
@@ -31,7 +33,7 @@ def get_html(source_table, tables, config):
         divs.append(div)
     content = "\n".join(divs)
     # Filters
-    filters = config.analysis.filters
+    filters = config().analysis.filters
     if filters.has_effect:
         field_values = {
             field_name: getattr(filters, field_name)
@@ -44,7 +46,7 @@ def get_html(source_table, tables, config):
         )
     else:
         formatted_filters = "No filters."
-    if config.analysis.anonymization.enable:
+    if config().analysis.anonymization.enable:
         formatted_filters = f"{formatted_filters}<br><br><i><b>Anonymized.</b></i>"
     # Source data table
     formatted_source_rows = ["".join(f"<th>{v}</th>" for v in source_table.columns)]

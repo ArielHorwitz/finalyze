@@ -1,5 +1,7 @@
 import polars as pl
 
+from finalyze.config import config
+
 
 class InvalidSchema(Exception):
     """Raised when a schema is invalid."""
@@ -29,13 +31,15 @@ ENRICHED_SCHEMA = {
 }
 
 
-def load_source_data(source_dir):
+def load_source_data():
     return pl.concat(
-        pl.read_csv(file, schema=RAW_SCHEMA) for file in source_dir.glob("*.csv")
+        pl.read_csv(file, schema=RAW_SCHEMA)
+        for file in config().general.source_dir.glob("*.csv")
     ).sort("date", "amount")
 
 
-def enrich_source(source, delimiter):
+def enrich_source(source):
+    delimiter = config().general.multi_column_delimiter
     validate_schema(source, TAGGED_SCHEMA)
     year_str = pl.col("date").dt.year().cast(str)
     month_str = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")

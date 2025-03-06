@@ -3,24 +3,23 @@ import string
 import pandas as pd
 import polars as pl
 
-from finalyze.config import load_config
+from finalyze.config import config
 
 ENGLISH = frozenset(string.printable)
 
 
 def print_table(table, description: str = "Unnamed table"):
-    config = load_config()
     print()
     print(description)
 
     if isinstance(table, pl.DataFrame):
-        if config.display.flip_rtl:
+        if config().display.flip_rtl:
             table = flip_rtl_columns(table)
         pl_options = {
-            "tbl_rows": config.display.max_rows,
-            "tbl_cols": config.display.max_cols,
-            "tbl_width_chars": config.display.max_width,
-            "tbl_hide_dataframe_shape": not config.display.show_shape,
+            "tbl_rows": config().display.max_rows,
+            "tbl_cols": config().display.max_cols,
+            "tbl_width_chars": config().display.max_width,
+            "tbl_hide_dataframe_shape": not config().display.show_shape,
         }
         with pl.Config(**pl_options):
             print(table)
@@ -28,11 +27,11 @@ def print_table(table, description: str = "Unnamed table"):
     elif isinstance(table, pd.DataFrame):
         pd_options = (
             "display.max_rows",
-            config.display.max_rows,
+            config().display.max_rows,
             "display.max_columns",
-            config.display.max_cols,
+            config().display.max_cols,
             "display.width",
-            config.display.max_width,
+            config().display.max_width,
         )
         with pd.option_context(*pd_options):
             print(table)

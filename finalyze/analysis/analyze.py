@@ -8,6 +8,7 @@ from pathlib import Path
 
 import polars as pl
 
+from finalyze.config import config
 from finalyze.display import print_table
 from finalyze.source.data import enrich_source, load_source_data
 from finalyze.source.tag import apply_tags
@@ -20,15 +21,15 @@ ANON_SOURCES = ["Chemistry", "Biology", "Psychology", "Geology", "Sociology", "P
 ANON_TAGS = ["Aardvark", "Albatross", "Alligator", "Ant", "Armadillo", "Avocet", "Bat", "Bear", "Bee", "Beetle", "Bison", "Bumblebee", "Butterfly", "Capybara", "Caracal", "Caribou", "Cat", "Caterpillar", "Centipede", "Chicken", "Chimpanzee", "Chinchilla", "Clam", "Cow", "Crab", "Crocodile", "Crow", "Deer", "Dingo", "Dog", "Dolphin", "Donkey", "Dove", "Duck", "Dugong", "Eagle", "Eel", "Elephant", "Emu", "Falcon", "Ferret", "Finch", "Flamingo", "Fox", "Frog", "Geese", "Giraffe", "Goat", "Goose", "Gorilla", "Guinea Pig", "Gull", "Hare", "Hawk", "Hedgehog", "Hippopotamus", "Hornet", "Horse", "Hyena", "Ibex", "Iguana", "Jaguar", "Javelina", "Jellyfish", "Kangaroo", "Kiwi", "Koala", "Ladybug", "Lemur", "Lion", "Lizard", "Llama", "Lobster", "Loon", "Lynx", "Macaw", "Mallard", "Meerkat", "Millipede", "Monkey", "Moose", "Moth", "Mule", "Mussel", "Narwhal", "Newt", "Ocelot", "Octopus", "Orangutan", "Orca", "Ostrich", "Owl", "Ox", "Oyster", "Pangolin", "Parrot", "Peacock", "Penguin", "Pig", "Pigeon", "Platypus", "Polar Bear", "Puffin", "Quail", "Quokka", "Rabbit", "Raccoon", "Rattlesnake", "Rhinoceros", "Salamander", "Scorpion", "Seal", "Shark", "Sheep", "Shrimp", "Skunk", "Slug", "Snail", "Snake", "Sparrow", "Spider", "Squid", "Squirrel", "Starfish", "Swan", "Tapir", "Tarantula", "Tiger", "Toad", "Turkey", "Turtle", "Umbrellabird", "Vole", "Vulture", "Wallaby", "Walrus", "Wasp", "Weasel", "Whale", "Wolf", "Worm", "Xerus", "Yak", "Zebra", "Zebu"]  # fmt: skip  # noqa: disable=E501
 
 
-def run(config):
-    source_data = get_post_processed_source_data(config)
-    if config.analysis.print_source:
+def run():
+    source_data = get_post_processed_source_data()
+    if config().analysis.print_source:
         print_table(source_data, "Source data")
-    if not config.analysis.allow_untagged:
-        _validate_tags(source_data, flip_rtl=config.display.flip_rtl)
+    if not config().analysis.allow_untagged:
+        _validate_tags(source_data)
     # Tables
-    tables = get_tables(source_data, config)
-    if config.analysis.print_tables:
+    tables = get_tables(source_data)
+    if config().analysis.print_tables:
         for table in tables:
             print(table)
             print_table(table.with_totals(), table.title)
@@ -36,47 +37,43 @@ def run(config):
     source_data_display = source_data.select(
         "account", "source", "date", "amount", "tag", "subtag", "description", "hash"
     )
-    output_file_stem = config.analysis.graphs.title.lower().replace(" ", "_")
-    output_file = config.general.output_dir / f"{output_file_stem}.html"
+    output_file_stem = config().analysis.graphs.title.lower().replace(" ", "_")
+    output_file = config().general.output_dir / f"{output_file_stem}.html"
     print(f"Exporting plots to: {output_file}")
-    html_text = plot.get_html(source_data_display, tables, config)
+    html_text = plot.get_html(source_data_display, tables)
     Path(output_file).write_text(html_text)
-    if config.analysis.graphs.open:
+    if config().analysis.graphs.open:
         subprocess.run(["xdg-open", output_file])
 
 
-def get_post_processed_source_data(config):
-    source_data = load_source_data(config.general.source_dir)
+def get_post_processed_source_data():
+    source_data = load_source_data()
     source_data = apply_tags(
         source_data,
-        config.general.tags_file,
-        preset_rules=config.tag.preset_rules,
+        preset_rules=config().tag.preset_rules,
     )
-    source_data = config.analysis.filters.apply(source_data)
-    source_data = _add_edge_ticks(source_data, config)
-    if config.analysis.anonymization.enable:
-        source_data = _anonymize_data(source_data, config)
-    source_data = enrich_source(
-        source_data,
-        delimiter=config.general.multi_column_delimiter,
-    )
+    source_data = config().analysis.filters.apply(source_data)
+    source_data = _add_edge_ticks(source_data)
+    if config().analysis.anonymization.enable:
+        source_data = _anonymize_data(source_data)
+    source_data = enrich_source(source_data)
     return source_data
 
 
-def _add_edge_ticks(df, config):
+def _add_edge_ticks(df):
     dfs = [df]
-    if config.analysis.edge_tick_min.enable:
+    if config().analysis.edge_tick_min.enable:
         min_date = df["date"].min()
-        min_delta = datetime.timedelta(days=config.analysis.edge_tick_min.pad_days)
+        min_delta = datetime.timedelta(days=config().analysis.edge_tick_min.pad_days)
         edge_date = min_date - min_delta
-        if config.analysis.edge_tick_min.cap_same_month:
+        if config().analysis.edge_tick_min.cap_same_month:
             edge_date = max(min_date.replace(day=1), edge_date)
         dfs.append(_generate_edge_ticks(df, edge_date))
-    if config.analysis.edge_tick_max.enable:
+    if config().analysis.edge_tick_max.enable:
         max_date = df["date"].max()
-        max_delta = datetime.timedelta(days=config.analysis.edge_tick_max.pad_days)
+        max_delta = datetime.timedelta(days=config().analysis.edge_tick_max.pad_days)
         edge_date = max_date + max_delta
-        if config.analysis.edge_tick_max.cap_same_month:
+        if config().analysis.edge_tick_max.cap_same_month:
             last_day = calendar.monthrange(max_date.year, max_date.month)[1]
             edge_date = min(max_date.replace(day=last_day), edge_date)
         dfs.append(_generate_edge_ticks(df, edge_date))
@@ -101,8 +98,8 @@ def _generate_edge_ticks(df, date):
     )
 
 
-def _anonymize_data(df, config):
-    conf = config.analysis.anonymization
+def _anonymize_data(df):
+    conf = config().analysis.anonymization
     min_scale, max_scale = conf.scale
     scale = random.random() * (max_scale - min_scale) + min_scale
     amount_col = pl.col("amount") * scale
@@ -139,7 +136,7 @@ def _generate_hex(*args):
     return "".join(random.choice(string.hexdigits) for _i in range(10))
 
 
-def _validate_tags(df, flip_rtl):
+def _validate_tags(df):
     null_tags = df.filter(pl.col("tag").is_null())
     if null_tags.height:
         print_table(null_tags, "Missing tags")

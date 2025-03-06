@@ -323,6 +323,9 @@ def load_config(
     return LOADED_CONFIG
 
 
+config = load_config
+
+
 def get_config_file_names(*, config_dir: Path = CONFIG_DIR) -> tuple[str]:
     return tuple(file.stem for file in config_dir.glob("*.toml"))
 

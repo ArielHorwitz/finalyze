@@ -1,10 +1,14 @@
 import argparse
 import pprint
-import sys
 
 from finalyze import APP_DESCRIPTION, APP_NAME
 from finalyze.analysis import analyze
-from finalyze.config import CONFIG_DIR, load_config, write_default_config, get_config_file_names
+from finalyze.config import (
+    CONFIG_DIR,
+    get_config_file_names,
+    load_config,
+    write_default_config,
+)
 from finalyze.source import ingest, tag
 
 
@@ -67,10 +71,10 @@ def parse_args():
     return args
 
 
-def run_pipeline(config):
-    ingest.run(config)
-    tag.run(config)
-    analyze.run(config)
+def run_pipeline():
+    ingest.run()
+    tag.run()
+    analyze.run()
 
 
 def main():
@@ -88,4 +92,4 @@ def main():
     if config.general.print_config:
         pprint.pprint(config.model_dump())
     config.general.create_directories()
-    args.run(config)
+    args.run()

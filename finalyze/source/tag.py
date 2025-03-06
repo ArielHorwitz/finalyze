@@ -6,7 +6,7 @@ import arrow
 import polars as pl
 import readchar
 
-from finalyze.config import TagPresetRule
+from finalyze.config import TagPresetRule, config
 from finalyze.display import flip_rtl_str, print_table
 from finalyze.source.data import TAGGED_SCHEMA, load_source_data, validate_schema
 
@@ -29,48 +29,42 @@ class Tags(NamedTuple):
         return self.tag
 
 
-def run(config):
-    if config.tag.delete_filters.has_effect:
-        delete_filtered_tags(config)
-    if config.tag.delete_unused:
-        delete_unused_tags(config)
-    tag_interactively(config)
+def run():
+    if config().tag.delete_filters.has_effect:
+        delete_filtered_tags()
+    if config().tag.delete_unused:
+        delete_unused_tags()
+    tag_interactively()
 
 
-def tag_interactively(config):
-    source_data = load_source_data(config.general.source_dir).with_columns(
+def tag_interactively():
+    source_data = load_source_data().with_columns(
         pl.concat_str(*HASH_COLUMNS).hash().alias("hash")
     )
-    preset_hashes = get_tag_preset_hashes(source_data, config)
+    preset_hashes = get_tag_preset_hashes(source_data)
     source_data = source_data.filter(~pl.col("hash").is_in(preset_hashes)).drop("hash")
-    if config.tag.default_tag:
-        default_tags = Tags(config.tag.default_tag, config.tag.default_subtag)
+    if config().tag.default_tag:
+        default_tags = Tags(config().tag.default_tag, config().tag.default_subtag)
     else:
         default_tags = None
-    tagger = Tagger(
-        source_data=source_data,
-        tags_file=config.general.tags_file,
-        flip_rtl=config.display.flip_rtl,
-        default_tags=default_tags,
-    )
+    tagger = Tagger(source_data=source_data, default_tags=default_tags)
     performed_tagging = tagger.tag_interactively()
     if not performed_tagging:
         print("No tags missing.")
-    if config.tag.print_result:
+    if config().tag.print_result:
         print(LINE_SEPARATOR)
         print(tagger.describe_all_tags())
 
 
 def apply_tags(
     data,
-    tags_file,
     *,
     hash_columns: list[str] = HASH_COLUMNS,
     preset_rules: Optional[list[TagPresetRule]] = None,
 ):
     if not hash_columns:
         raise ValueError("Need columns for hashing")
-    tags = read_tags_file(tags_file)
+    tags = read_tags_file()
     tagged = (
         data.drop(*TAG_SCHEMA, strict=False)
         .with_columns(pl.concat_str(*hash_columns).hash().alias("hash"))
@@ -82,9 +76,9 @@ def apply_tags(
     return tagged
 
 
-def get_tag_preset_hashes(source_data, config):
+def get_tag_preset_hashes(source_data):
     all_hashes = set()
-    for preset in config.tag.preset_rules:
+    for preset in config().tag.preset_rules:
         filters = preset.filters
         filters.tags = None
         filters.subtags = None
@@ -110,22 +104,23 @@ def apply_tag_presets(data, preset_rules):
     return data
 
 
-def read_tags_file(tags_file):
+def read_tags_file():
+    tags_file = config().general.tags_file
     if not tags_file.is_file():
         tags_file.write_text(",".join(TAG_SCHEMA.keys()))
     return pl.read_csv(tags_file, schema=TAG_SCHEMA)
 
 
-def write_tags_file(data, tags_file):
+def write_tags_file(data):
     validate_schema(data, TAG_SCHEMA)
+    tags_file = config().general.tags_file
     data.sort(*TAG_SCHEMA.keys()).write_csv(tags_file)
 
 
-def delete_unused_tags(config):
-    tags_file = config.general.tags_file
-    tags_data = read_tags_file(tags_file)
-    source_data = load_source_data(config.general.source_dir)
-    tagged_data = apply_tags(source_data, tags_file)
+def delete_unused_tags():
+    tags_data = read_tags_file()
+    source_data = load_source_data()
+    tagged_data = apply_tags(source_data)
 
     delete_data = tags_data.filter(~pl.col("hash").is_in(tagged_data.select("hash")))
     delete_summary = (
@@ -136,14 +131,14 @@ def delete_unused_tags(config):
         return
     print_table(delete_data, "Unused tags to delete")
     print_table(delete_summary, "Unused tags to delete")
-    _delete_tags(config, tag_hashes)
+    _delete_tags(tag_hashes)
 
 
-def delete_filtered_tags(config):
-    source_data = load_source_data(config.general.source_dir)
-    tagged_data = apply_tags(source_data, config.general.tags_file)
+def delete_filtered_tags():
+    source_data = load_source_data()
+    tagged_data = apply_tags(source_data)
 
-    delete_data = config.tag.delete_filters.apply(tagged_data)
+    delete_data = config().tag.delete_filters.apply(tagged_data)
     delete_summary = (
         delete_data.group_by("tag", "subtag").len("entries").sort("tag", "subtag")
     )
@@ -152,20 +147,20 @@ def delete_filtered_tags(config):
         return
     print_table(delete_data, "Entries of tags to delete")
     print_table(delete_summary, "Tags to delete")
-    _delete_tags(config, tag_hashes)
+    _delete_tags(tag_hashes)
 
 
-def _delete_tags(config, tag_hashes):
+def _delete_tags(tag_hashes):
     if len(tag_hashes) == 0:
         return
 
-    tags_file = config.general.tags_file
-    tags_data = read_tags_file(tags_file)
+    tags_data = read_tags_file()
     remaining_tags = tags_data.filter(~pl.col("hash").is_in(tag_hashes))
 
     if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
         print("Aborted deleting tags.")
         return
+    tags_file = config().general.tags_file
     if tags_file.is_file():
         timestamp = arrow.now().format("YYYY-MM-DD_HH-mm-ssSS")
         bak_filename = f"{tags_file.stem}__{timestamp}.csv"
@@ -173,17 +168,15 @@ def _delete_tags(config, tag_hashes):
         shutil.copy2(tags_file, backup_file_path)
         backup_file_path.parent.mkdir(parents=True, exist_ok=True)
         print(f"Backed up tags at {backup_file_path}")
-    write_tags_file(remaining_tags, tags_file)
+    write_tags_file(remaining_tags)
     print("Deleted tags.")
 
 
 class Tagger:
-    def __init__(self, *, source_data, tags_file, flip_rtl, default_tags):
-        self.tags_file = tags_file
-        self.flip_rtl = flip_rtl
+    def __init__(self, *, source_data, default_tags):
         self.default_tags = default_tags
-        self.source = apply_tags(source_data, tags_file).sort("date")
-        self.tags = read_tags_file(tags_file)
+        self.source = apply_tags(source_data).sort("date")
+        self.tags = read_tags_file()
 
     def apply_tags(self, index, tags):
         row_hash = self.get_row(index)["hash"]
@@ -194,12 +187,12 @@ class Tagger:
             .unique(subset="hash", keep="last")
             .sort(*TAG_SCHEMA)
         )
-        write_tags_file(self.tags, self.tags_file)
-        self.source = apply_tags(self.source, self.tags_file)
+        write_tags_file(self.tags)
+        self.source = apply_tags(self.source)
 
     def describe_row(self, index):
         row = self.get_row(index)
-        if self.flip_rtl:
+        if config().display.flip_rtl:
             for key, value in row.items():
                 if isinstance(value, str):
                     row[key] = flip_rtl_str(value)

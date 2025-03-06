@@ -16,10 +16,9 @@ from typing import Callable
 
 import polars as pl
 
-from finalyze.config import Config
 from finalyze.source.data import InvalidSchema, validate_schema
 
-PARSING_FUNC = Callable[[Path, Config], pl.DataFrame]
+PARSING_FUNC = Callable[[Path], pl.DataFrame]
 REGISTERED_PARSERS = {}
 PARSED_SCHEMA = {
     "source": pl.String,
@@ -41,11 +40,11 @@ def register_parser(name: str, parser: PARSING_FUNC):
     REGISTERED_PARSERS[name] = parser
 
 
-def parse_file(input_file: Path, config: Config):
+def parse_file(input_file: Path):
     parsing_errors = {}
     for name, parser in REGISTERED_PARSERS.items():
         try:
-            df = parser(input_file, config)
+            df = parser(input_file)
         except ParsingError as exc:
             parsing_errors[name] = exc
             continue

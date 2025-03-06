@@ -5,6 +5,7 @@ import plotly.express as px
 import polars as pl
 from plotly.graph_objects import Figure
 
+from finalyze.config import config
 from finalyze.source.data import ENRICHED_SCHEMA, validate_schema
 
 
@@ -38,9 +39,9 @@ class Table:
         return add_totals(self.source)
 
 
-def get_tables(source: pl.DataFrame, config) -> list[Table]:
+def get_tables(source: pl.DataFrame) -> list[Table]:
     validate_schema(source, ENRICHED_SCHEMA)
-    breakdowns = config.analysis.breakdown_filters.apply(source)
+    breakdowns = config().analysis.breakdown_filters.apply(source)
     incomes = breakdowns.filter(pl.col("amount") > 0)
     expenses = breakdowns.filter(pl.col("amount") < 0).with_columns(
         pl.col("amount") * -1
@@ -78,7 +79,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
                     .rolling_mean(window_size=len(weights), weights=weights)
                     .alias("amount"),
                 )
-                for weights in config.analysis.rolling_average_weights
+                for weights in config().analysis.rolling_average_weights
             ),
             figure_constructor=px.line,
             figure_arguments=dict(
@@ -125,7 +126,7 @@ def get_tables(source: pl.DataFrame, config) -> list[Table]:
         source.group_by("month")
         .agg(pl.col("amount").count())
         .select(pl.col("month"))
-        .sort("month", descending=True)["month"][: config.analysis.breakdown_months]
+        .sort("month", descending=True)["month"][: config().analysis.breakdown_months]
     )
     last_month_breakdowns = [
         Table(
