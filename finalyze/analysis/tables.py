@@ -174,6 +174,30 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
             labels=dict(balance_source="Balance", account_source="Source"),
         ),
     )
+    other_balances = Table(
+        "Other balances",
+        (
+            config()
+            .analysis.external_filters.apply(source, invert=True)
+            .with_columns(pl.lit("internal balance").alias("Balance"))
+        ),
+        figure_constructor=px.line,
+        figure_arguments=dict(
+            x="date",
+            y="balance_inexternal",
+            color="Balance",
+            hover_data=[
+                "amount",
+                "description",
+                "tags",
+                "account",
+                "source",
+                "external",
+            ],
+            line_shape="hv",
+            # labels=dict(balance_other="Balance (other)"),
+        ),
+    )
     monthly_breakdowns = [
         Table(
             f"Monthly {name} breakdown",
@@ -212,7 +236,7 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
                 line_shape="hv",
                 labels=dict(balance_total="Balance"),
             ),
-            extra_traces=[account_balances],
+            extra_traces=[other_balances, account_balances],
         ),
         cash_flow,
         *monthly_breakdowns,

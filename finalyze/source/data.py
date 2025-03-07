@@ -24,8 +24,10 @@ ENRICHED_SCHEMA = {
     **TAGGED_SCHEMA,
     "month": pl.String,
     "tags": pl.String,
+    "external": pl.Boolean,
     "account_source": pl.String,
     "balance_total": pl.Float64,
+    "balance_inexternal": pl.Float64,
     "balance_account": pl.Float64,
     "balance_source": pl.Float64,
 }
@@ -51,13 +53,22 @@ def enrich_source(source):
         combined_tags.alias("tags"),
         account_source.alias("account_source"),
     )
+    source = _add_other_filters(source)
     source = source.sort("date", "tags", "amount", "description", "hash").with_columns(
-        pl.col("amount").cum_sum().alias("balance_total"),
-        pl.col("amount").cum_sum().over("account").alias("balance_account"),
-        pl.col("amount").cum_sum().over("account", "source").alias("balance_source"),
+        balance_total=pl.col("amount").cum_sum(),
+        balance_inexternal=pl.col("amount").cum_sum().over("external"),
+        balance_account=pl.col("amount").cum_sum().over("account"),
+        balance_source=pl.col("amount").cum_sum().over("account", "source"),
     )
     validate_schema(source, ENRICHED_SCHEMA)
     return source
+
+
+def _add_other_filters(df):
+    external_hashes = config().analysis.external_filters.apply(df)
+    is_external = pl.col("hash").is_in(external_hashes.select("hash"))
+    df = df.with_columns(external=is_external)
+    return df
 
 
 def validate_schema(df, expected_schema):

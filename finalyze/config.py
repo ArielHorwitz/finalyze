@@ -239,6 +239,8 @@ class Analysis(BaseModel):
     """Configuration for graphs."""
     anonymization: AnalysisAnonymization = AnalysisAnonymization()
     """Configuration for (weak) anonymization of output data."""
+    external_filters: Filters = Filters()
+    """Filters for external accounts."""
     breakdown_filters: Filters = Filters()
     """Filters for breakdown graphs."""
     breakdown_months: int = 3
