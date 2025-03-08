@@ -52,11 +52,11 @@ def get_post_processed_source_data():
         source_data,
         preset_rules=config().tag.preset_rules,
     )
-    source_data = config().analysis.filters.apply(source_data)
     source_data = _add_edge_ticks(source_data)
     if config().analysis.anonymization.enable:
         source_data = _anonymize_data(source_data)
     source_data = enrich_source(source_data)
+    source_data = config().analysis.filters.apply(source_data)
     return source_data
 
 
