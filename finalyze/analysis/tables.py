@@ -26,15 +26,12 @@ class SourceData:
         df = self._source
         if breakdown:
             df = config().analysis.breakdown_filters.apply(df, invert=True)
-
         if not include_external:
             df = config().analysis.external_filters.apply(df, invert=True)
-
         if incomes:
             df = df.filter(pl.col("amount") > 0)
         elif expenses:
             df = df.filter(pl.col("amount") < 0).with_columns(pl.col("amount") * -1)
-
         return df
 
     def __hash__(self):
