@@ -8,13 +8,12 @@ from pathlib import Path
 
 import polars as pl
 
+from finalyze.analysis import plot
+from finalyze.analysis.tables import get_tables
 from finalyze.config import config
 from finalyze.display import print_table
 from finalyze.source.data import enrich_source, load_source_data
 from finalyze.source.tag import apply_tags
-
-from . import plot
-from .tables import get_tables
 
 ANON_NAMES = ["Einstein", "Newton", "Curie", "Galileo", "Darwin", "Turing", "Planck", "Hawking", "Pasteur", "Lovelace", "Bohr", "Maxwell"]  # fmt: skip  # noqa: disable=E501
 ANON_SOURCES = ["Chemistry", "Biology", "Psychology", "Geology", "Sociology", "Philosophy", "Physics", "Mathematics", "Economics", "Astronomy"]  # fmt: skip  # noqa: disable=E501
