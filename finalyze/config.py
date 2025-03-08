@@ -242,7 +242,7 @@ class Analysis(BaseModel):
     external_filters: Filters = Filters()
     """Filters for external accounts."""
     breakdown_filters: Filters = Filters()
-    """Filters for breakdown graphs."""
+    """Filters for transactions not to be shown in breakdowns and cash flows."""
     breakdown_months: int = 3
     """Number of months back to breakdown in detail."""
     rolling_average_weights: list[list[float]] = Field(

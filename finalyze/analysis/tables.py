@@ -25,7 +25,7 @@ class SourceData:
     ):
         df = self._source
         if breakdown:
-            df = config().analysis.breakdown_filters.apply(df)
+            df = config().analysis.breakdown_filters.apply(df, invert=True)
 
         if not include_external:
             df = config().analysis.external_filters.apply(df, invert=True)
