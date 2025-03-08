@@ -121,12 +121,12 @@ def _balance(source: SourceData) -> list[Table]:
     )
     other_balances = Table(
         "Other balances",
-        source.get().with_columns(pl.lit("internal balance").alias("Balance")),
+        source.get().with_columns(pl.lit("internal balance").alias("color")),
         figure_constructor=px.line,
         figure_arguments=dict(
             x="date",
             y="balance_inexternal",
-            color="Balance",
+            color="color",
             hover_data=[
                 "amount",
                 "description",
@@ -142,13 +142,13 @@ def _balance(source: SourceData) -> list[Table]:
     balance = Table(
         "Balance",
         source.get(include_external=True).with_columns(
-            pl.lit("total balance").alias("Balance")
+            pl.lit("total balance").alias("color")
         ),
         figure_constructor=px.line,
         figure_arguments=dict(
             x="date",
             y="balance_total",
-            color="Balance",
+            color="color",
             hover_data=[
                 "balance_total",
                 "amount",
@@ -172,12 +172,12 @@ def _cash_flow(source: SourceData) -> list[Table]:
             df.group_by("month")
             .agg(pl.col("amount").sum())
             .sort("month")
-            .with_columns(pl.lit(name).alias("Flow")),
+            .with_columns(pl.lit(name).alias("color")),
             figure_constructor=px.bar,
             figure_arguments=dict(
                 x="month",
                 y="amount",
-                color="Flow",
+                color="color",
                 hover_data=["month", "amount"],
                 barmode="group",
             ),
@@ -195,7 +195,7 @@ def _cash_flow(source: SourceData) -> list[Table]:
                 .agg(pl.col("amount").sum())
                 .sort("month")
                 .with_columns(
-                    pl.lit(f"rolling {name} ({len(weights)})").alias("Flow"),
+                    pl.lit(f"rolling {name} ({len(weights)})").alias("color"),
                     pl.col("amount")
                     .rolling_mean(window_size=len(weights), weights=weights)
                     .alias("amount"),
@@ -209,8 +209,8 @@ def _cash_flow(source: SourceData) -> list[Table]:
                 hover_data=["month", "amount"],
                 markers=True,
                 line_shape="spline",
-                line_dash="Flow",
-                color="Flow",
+                line_dash="color",
+                color="color",
             ),
         )
         for df, name in [
@@ -225,12 +225,12 @@ def _cash_flow(source: SourceData) -> list[Table]:
         .group_by("month")
         .agg(pl.col("amount").sum())
         .sort("month")
-        .with_columns(pl.lit("total flow").alias("Flow")),
+        .with_columns(pl.lit("total flow").alias("color")),
         figure_constructor=px.bar,
         figure_arguments=dict(
             x="month",
             y="amount",
-            color="Flow",
+            color="color",
             hover_data=["month", "amount"],
             barmode="group",
         ),
