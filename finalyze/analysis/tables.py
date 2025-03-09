@@ -1,4 +1,5 @@
 import dataclasses
+import datetime
 import functools
 from typing import Any, Callable, Optional
 
@@ -7,7 +8,7 @@ import polars as pl
 from plotly.graph_objects import Figure
 
 from finalyze.config import config
-from finalyze.source.data import ENRICHED_SCHEMA, validate_schema
+from finalyze.source.data import ENRICHED_SCHEMA, enrich_month, validate_schema
 
 
 class SourceData:
@@ -93,6 +94,7 @@ def get_tables(source: pl.DataFrame) -> list[Table]:
         *_balance(source_data),
         *_cash_flow(source_data),
         *_breakdown_total(source_data),
+        *_breakdown_rolling(source_data),
         *_breakdown_monthly(source_data),
     ]
     return tables
@@ -273,28 +275,57 @@ def _breakdown_total(source: SourceData) -> list[Table]:
     return total_breakdowns
 
 
-def _breakdown_monthly(source: SourceData) -> list[Table]:
-    monthly_breakdowns = [
-        Table(
-            f"Monthly {name} breakdown",
-            df.group_by("month", "tag")
-            .agg(pl.col("amount").sum())
-            .sort("month", "tag"),
-            figure_constructor=px.area,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="tag",
-                line_shape="linear",
-                hover_data=["tag", "amount"],
-                labels=dict(tag="Tag", amount="Amount", month="Month"),
-            ),
+def _breakdown_rolling(source: SourceData) -> list[Table]:
+    monthly_breakdowns = []
+    months = _months_in_range(
+        source.get(breakdown=True)["date"].min(),
+        source.get(breakdown=True)["date"].max(),
+    )
+    sentinels = (
+        source.get(breakdown=True)
+        .group_by("tag")
+        .count()
+        .join(pl.DataFrame(dict(date=pl.Series(months))), how="cross")
+        .with_columns(amount=pl.lit(0))
+    )
+    sentinels = enrich_month(sentinels).select("tag", "amount", "month")
+    for df, name in [
+        (source.get(breakdown=True, incomes=True), "incomes"),
+        (source.get(breakdown=True, expenses=True), "expenses"),
+    ]:
+        data_with_sentinels = (
+            df.select("month", "tag", "amount")
+            .join(sentinels, how="right", on=("month", "tag"))
+            .with_columns(amount=pl.coalesce("amount", "amount_right"))
         )
-        for df, name in [
-            (source.get(breakdown=True, incomes=True), "incomes"),
-            (source.get(breakdown=True, expenses=True), "expenses"),
-        ]
-    ]
+        for weights in config().analysis.rolling_average_weights:
+            table = Table(
+                f"Monthly {name} breakdown (rolling {len(weights)})",
+                data_with_sentinels.group_by("month", "tag")
+                .agg(pl.col("amount").sum())
+                .sort("month", "tag")
+                .with_columns(
+                    # pl.lit(f"rolling {name} ({len(weights)})").alias("color"),
+                    pl.col("amount")
+                    .rolling_mean(window_size=len(weights), weights=weights)
+                    .over("tag")
+                    .alias("rolling"),
+                ),
+                figure_constructor=px.line,
+                figure_arguments=dict(
+                    x="month",
+                    y="rolling",
+                    color="tag",
+                    line_shape="spline",
+                    hover_data=["tag", "amount", "rolling"],
+                    labels=dict(tag="Tag", amount="Amount", month="Month"),
+                ),
+            )
+            monthly_breakdowns.append(table)
+    return monthly_breakdowns
+
+
+def _breakdown_monthly(source: SourceData) -> list[Table]:
     last_months = (
         source.get()
         .group_by("month")
@@ -329,7 +360,13 @@ def _breakdown_monthly(source: SourceData) -> list[Table]:
             (source.get(breakdown=True, expenses=True), "Expenses"),
         ]
     ]
-    return [
-        *monthly_breakdowns,
-        *last_month_breakdowns,
-    ]
+    return last_month_breakdowns
+
+
+def _months_in_range(min_date: datetime.date, max_date: datetime.date):
+    current = min_date.replace(day=1)
+    max_date = max_date.replace(day=2)
+    while current < max_date:
+        yield current
+        current = current + datetime.timedelta(days=32)
+        current = current.replace(day=1)
