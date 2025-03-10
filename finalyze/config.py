@@ -245,12 +245,12 @@ class Analysis(BaseModel):
     """Filters for transactions not to be shown in breakdowns and cash flows."""
     breakdown_months: int = 3
     """Number of months back to breakdown in detail."""
-    rolling_average_weights: list[list[float]] = Field(
-        default_factory=lambda: [
-            [3, 4],
-            [3, 4, 5, 6],
-            [3, 4, 5, 6, 7, 8],
-        ],
+    rolling_average_weights: dict[str, list[float]] = Field(
+        default_factory=lambda *_: {
+            "quarter": [3, 4, 5],
+            "semi": [3, 4, 5, 6, 7, 8],
+        },
+        validate_default=True,
     )
     """List of weights for each of the rolling averages."""
     edge_tick_min: AnalysisEdgeTick = AnalysisEdgeTick()

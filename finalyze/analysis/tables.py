@@ -197,12 +197,14 @@ def _cash_flow(source: SourceData) -> list[Table]:
                 .agg(pl.col("amount").sum())
                 .sort("month")
                 .with_columns(
-                    pl.lit(f"rolling {name} ({len(weights)})").alias("color"),
+                    pl.lit(f"{name} rolling {weight_name}").alias("color"),
                     pl.col("amount")
                     .rolling_mean(window_size=len(weights), weights=weights)
                     .alias("amount"),
                 )
-                for weights in config().analysis.rolling_average_weights
+                for weight_name, weights in (
+                    config().analysis.rolling_average_weights.items()
+                )
             ),
             figure_constructor=px.line,
             figure_arguments=dict(
@@ -298,9 +300,9 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
             .join(sentinels, how="right", on=("month", "tag"))
             .with_columns(amount=pl.coalesce("amount", "amount_right"))
         )
-        for weights in config().analysis.rolling_average_weights:
+        for weight_name, weights in config().analysis.rolling_average_weights.items():
             table = Table(
-                f"Monthly {name} breakdown (rolling {len(weights)})",
+                f"Monthly {name} breakdown - rolling {weight_name}",
                 data_with_sentinels.group_by("month", "tag")
                 .agg(pl.col("amount").sum())
                 .sort("month", "tag")
