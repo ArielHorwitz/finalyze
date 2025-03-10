@@ -43,13 +43,10 @@ def load_source_data():
 def enrich_source(source):
     delimiter = config().general.multi_column_delimiter
     validate_schema(source, TAGGED_SCHEMA)
-    year_str = pl.col("date").dt.year().cast(str)
-    month_str = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
-    month = year_str + "-" + month_str
+    source = enrich_month(source)
     combined_tags = pl.col("tag") + delimiter + pl.col("subtag")
     account_source = pl.col("account") + delimiter + pl.col("source")
     source = source.with_columns(
-        month.alias("month"),
         combined_tags.alias("tags"),
         account_source.alias("account_source"),
     )
@@ -62,6 +59,13 @@ def enrich_source(source):
     )
     validate_schema(source, ENRICHED_SCHEMA)
     return source
+
+
+def enrich_month(source):
+    year_str = pl.col("date").dt.year().cast(str)
+    month_str = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
+    month = year_str + "-" + month_str
+    return source.with_columns(month=month)
 
 
 def _add_other_filters(df):
