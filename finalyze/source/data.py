@@ -40,39 +40,11 @@ def load_source_data():
     ).sort("date", "amount")
 
 
-def enrich_source(source):
-    delimiter = config().general.multi_column_delimiter
-    validate_schema(source, TAGGED_SCHEMA)
-    source = enrich_month(source)
-    combined_tags = pl.col("tag") + delimiter + pl.col("subtag")
-    account_source = pl.col("account") + delimiter + pl.col("source")
-    source = source.with_columns(
-        combined_tags.alias("tags"),
-        account_source.alias("account_source"),
-    )
-    source = _add_other_filters(source)
-    source = source.sort("date", "tags", "amount", "description", "hash").with_columns(
-        balance_total=pl.col("amount").cum_sum(),
-        balance_inexternal=pl.col("amount").cum_sum().over("external"),
-        balance_account=pl.col("amount").cum_sum().over("account"),
-        balance_source=pl.col("amount").cum_sum().over("account", "source"),
-    )
-    validate_schema(source, ENRICHED_SCHEMA)
-    return source
-
-
-def enrich_month(source):
+def enrich_month(df):
     year_str = pl.col("date").dt.year().cast(str)
     month_str = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
     month = year_str + "-" + month_str
-    return source.with_columns(month=month)
-
-
-def _add_other_filters(df):
-    external_hashes = config().analysis.external_filters.apply(df)
-    is_external = pl.col("hash").is_in(external_hashes.select("hash"))
-    df = df.with_columns(external=is_external)
-    return df
+    return df.with_columns(month=month)
 
 
 def validate_schema(df, expected_schema):

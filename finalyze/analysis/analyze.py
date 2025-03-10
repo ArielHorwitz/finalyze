@@ -12,7 +12,13 @@ from finalyze.analysis import plot
 from finalyze.analysis.tables import get_tables
 from finalyze.config import config
 from finalyze.display import print_table
-from finalyze.source.data import enrich_source, load_source_data
+from finalyze.source.data import (
+    ENRICHED_SCHEMA,
+    TAGGED_SCHEMA,
+    enrich_month,
+    load_source_data,
+    validate_schema,
+)
 from finalyze.source.tag import apply_tags
 
 ANON_NAMES = ["Einstein", "Newton", "Curie", "Galileo", "Darwin", "Turing", "Planck", "Hawking", "Pasteur", "Lovelace", "Bohr", "Maxwell"]  # fmt: skip  # noqa: disable=E501
@@ -21,6 +27,7 @@ ANON_TAGS = ["Aardvark", "Albatross", "Alligator", "Ant", "Armadillo", "Avocet",
 EDGE_TICK_DESCRIPTION = "auto-generated tick"
 EDGE_TICK_TAG = "other"
 EDGE_TICK_SUBTAG = "auto-tick"
+SORT_ORDER = ("date", "tag", "subtag", "amount", "description", "hash")
 
 
 def run():
@@ -49,17 +56,51 @@ def run():
 
 
 def get_post_processed_source_data():
-    source_data = load_source_data()
-    source_data = apply_tags(
-        source_data,
+    source = load_source_data()
+    source = apply_tags(
+        source,
         preset_rules=config().tag.preset_rules,
     )
-    source_data = _add_edge_ticks(source_data)
+    delimiter = config().general.multi_column_delimiter
+    # Pre-validation
+    validate_schema(source, TAGGED_SCHEMA)
+
+    # Edge ticks
+    source = _add_edge_ticks(source)
+
+    # Anonymization
     if config().analysis.anonymization.enable:
-        source_data = _anonymize_data(source_data)
-    source_data = enrich_source(source_data)
-    source_data = config().analysis.filters.apply(source_data)
-    return source_data
+        source = _anonymize_data(source)
+
+    # External
+    external_hashes = config().analysis.external_filters.apply(source)
+    is_external = pl.col("hash").is_in(external_hashes.select("hash"))
+    source = source.with_columns(external=is_external)
+
+    # Cumulative balances
+    source = source.sort(SORT_ORDER).with_columns(
+        balance_total=pl.col("amount").cum_sum(),
+        balance_inexternal=pl.col("amount").cum_sum().over("external"),
+        balance_account=pl.col("amount").cum_sum().over("account"),
+        balance_source=pl.col("amount").cum_sum().over("account", "source"),
+    )
+
+    # Filter - can only happen after calculating cumulative balances
+    source = config().analysis.filters.apply(source)
+
+    # Month
+    source = enrich_month(source)
+
+    # Combined tags
+    combined_tags = pl.col("tag") + delimiter + pl.col("subtag")
+    source = source.with_columns(tags=combined_tags)
+
+    # Combined account sources
+    account_source = pl.col("account") + delimiter + pl.col("source")
+    source = source.with_columns(account_source=account_source)
+
+    validate_schema(source, ENRICHED_SCHEMA)
+    return source
 
 
 def _add_edge_ticks(df):
