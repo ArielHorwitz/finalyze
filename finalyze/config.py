@@ -388,3 +388,6 @@ if __name__ == "__main__":
     print("DEFAULT")
     default_config = Config()
     print(default_config)
+    print("USER")
+    user_config = load_config()
+    print(user_config)
