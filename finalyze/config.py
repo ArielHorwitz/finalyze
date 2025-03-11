@@ -261,6 +261,10 @@ class Analysis(BaseModel):
     """Add empty transactions for every account and source after the maximum date.
     May make some graphs more readable.
     May not work well with date filters."""
+    truncate_month_clock: bool = False
+    """Truncate data to the end of the last month."""
+    truncate_month_data: bool = False
+    """Truncate data to the end of the penultimate month in the data."""
     allow_untagged: bool = False
     """Bypass restriction requiring every entry to be tagged."""
     print_source: bool = False

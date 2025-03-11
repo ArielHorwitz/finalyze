@@ -65,6 +65,13 @@ def get_post_processed_source_data():
     # Pre-validation
     validate_schema(source, TAGGED_SCHEMA)
 
+    # Truncate
+    source = _truncate_month(
+        source,
+        by_clock=config().analysis.truncate_month_clock,
+        by_data=config().analysis.truncate_month_data,
+    )
+
     # Edge ticks
     source = _add_edge_ticks(source)
 
@@ -101,6 +108,19 @@ def get_post_processed_source_data():
 
     validate_schema(source, ENRICHED_SCHEMA)
     return source
+
+
+def _truncate_month(df, *, by_clock: bool = False, by_data: bool = False):
+    if not by_clock and not by_data:
+        return df
+    truncate_last_clock = datetime.date.today().replace(day=1)
+    truncate_last_data = df["date"].max().replace(day=1)
+    truncate_last = max(truncate_last_clock, truncate_last_data)
+    if by_clock:
+        truncate_last = min(truncate_last, truncate_last_clock)
+    if by_data:
+        truncate_last = min(truncate_last, truncate_last_data)
+    return df.filter(pl.col("date") < truncate_last)
 
 
 def _add_edge_ticks(df):
