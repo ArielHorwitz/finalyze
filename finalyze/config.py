@@ -247,8 +247,8 @@ class Analysis(BaseModel):
     """Number of months back to breakdown in detail."""
     rolling_average_weights: dict[str, list[float]] = Field(
         default_factory=lambda *_: {
-            "quarter": [3, 4, 5],
-            "semi": [3, 4, 5, 6, 7, 8],
+            "quarter": [4, 5, 6],
+            "semi": [7, 8, 9, 10, 11, 12],
         },
         validate_default=True,
     )
