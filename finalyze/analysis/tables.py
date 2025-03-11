@@ -318,6 +318,7 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
                     x="month",
                     y="rolling",
                     color="tag",
+                    markers=True,
                     line_shape="spline",
                     hover_data=["tag", "amount", "rolling"],
                     labels=dict(tag="Tag", amount="Amount", month="Month"),
