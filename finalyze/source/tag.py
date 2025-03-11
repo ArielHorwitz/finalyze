@@ -267,9 +267,10 @@ class Tagger:
             index = self.get_untagged_index(skipped_indices)
             if index is None:
                 return
+            print(f"\n\n{LINE_SEPARATOR}")
             guess = self.guess_tags(index)
+            print()
             prompt_text_lines = [
-                LINE_SEPARATOR,
                 "Currently tagging:",
                 self.describe_row(index),
                 f"   Guess: {guess}",
@@ -281,7 +282,9 @@ class Tagger:
                 "(q)               Quit",
             ]
             print("\n".join(prompt_text_lines))
+            print("> ", end="", flush=True)
             key = readchar.readkey()
+            print(f"{key}\n")
             if key in ("q"):
                 break
             elif key in ("t"):
@@ -289,12 +292,18 @@ class Tagger:
                 print(self.describe_all_tags())
             elif key in ("s"):
                 skipped_indices.add(index)
+                print("Skipped...")
             elif key in ("i", readchar.key.LF, readchar.key.SPACE):
                 if (tag := input("Tag (or 'cancel'): ")) == "cancel":
                     continue
                 if (subtag := input("Subtag (or 'cancel'): ")) == "cancel":
                     continue
-                self.apply_tags(index, Tags(tag, subtag))
+                new_tags = Tags(tag, subtag)
+                self.apply_tags(index, new_tags)
+                print(f"Applied: {new_tags}")
             elif key in ("g", readchar.key.TAB):
                 self.apply_tags(index, guess)
+                print(f"Applied: {guess}")
+            else:
+                print("No action selected.")
         return True
