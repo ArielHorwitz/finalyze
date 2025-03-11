@@ -254,9 +254,13 @@ class Analysis(BaseModel):
     )
     """List of weights for each of the rolling averages."""
     edge_tick_min: AnalysisEdgeTick = AnalysisEdgeTick()
-    """Add empty transactions for every account and source before the minimum date to make some graphs more readable."""  # fmt: skip  # noqa: disable=E501
+    """Add empty transactions for every account and source before the minimum date.
+    May make some graphs more readable.
+    May not work well with date filters."""
     edge_tick_max: AnalysisEdgeTick = AnalysisEdgeTick()
-    """Add empty transactions for every account and source after the maximum date to make some graphs more readable."""  # fmt: skip  # noqa: disable=E501
+    """Add empty transactions for every account and source after the maximum date.
+    May make some graphs more readable.
+    May not work well with date filters."""
     allow_untagged: bool = False
     """Bypass restriction requiring every entry to be tagged."""
     print_source: bool = False
