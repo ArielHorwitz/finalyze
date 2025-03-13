@@ -178,12 +178,8 @@ def _anonymize_data(df):
             .alias("description")
         )
     if conf.anonymize_tags:
-        new_columns.extend(
-            (
-                _remap_column(df, "tag", ANON_TAGS),
-                _remap_column(df, "subtag", ANON_TAGS),
-            )
-        )
+        new_columns.append(_remap_column(df, "tag", ANON_TAGS))
+        new_columns.append(_remap_column(df, "subtag", ANON_TAGS))
     return df.with_columns(new_columns)
 
 
