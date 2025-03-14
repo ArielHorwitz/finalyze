@@ -81,10 +81,6 @@ def get_post_processed_source_data():
     # Edge ticks
     source = _add_edge_ticks(source)
 
-    # Anonymization
-    if config().analysis.anonymization.enable:
-        source = _anonymize_data(source)
-
     # External
     external_hashes = config().analysis.external_filters.apply(source)
     is_external = pl.col("hash").is_in(external_hashes.select("hash"))
@@ -100,6 +96,11 @@ def get_post_processed_source_data():
 
     # Filter - can only happen after calculating cumulative balances
     source = config().analysis.filters.apply(source)
+
+    # Anonymization - after calculations and filters based on source info,
+    # but before creating new columns based on existing columns.
+    if config().analysis.anonymization.enable:
+        source = _anonymize_data(source)
 
     # Month
     source = enrich_month(source)
