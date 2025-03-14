@@ -279,9 +279,10 @@ class Analysis(BaseModel):
         "tag",
         "subtag",
         "description",
-        "hash",
+        "external",
+        "balance_total",
     ]
-    """List of columns to display for the full source table."""
+    """List of columns to display for the full source table. Leave blank to show all."""
 
 
 class Display(BaseModel):

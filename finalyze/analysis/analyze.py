@@ -46,18 +46,10 @@ def run():
             print(table)
             print_table(table.source, table.title)
     # Plots
-    try:
-        source_data_display = source_data.select(
-            *config().analysis.source_table_columns
-        )
-    except polars.exceptions.ColumnNotFoundError as e:
-        raise polars.exceptions.ColumnNotFoundError(
-            f"Available columns: {source_data.columns}"
-        ) from e
     output_file_stem = config().analysis.graphs.title.lower().replace(" ", "_")
     output_file = config().general.output_dir / f"{output_file_stem}.html"
     print(f"Exporting plots to: {output_file}")
-    html_text = plot.get_html(source_data_display, tables)
+    html_text = plot.get_html(_select_display_columns(source_data), tables)
     Path(output_file).write_text(html_text)
     if config().analysis.graphs.open:
         subprocess.run(["xdg-open", output_file])
@@ -110,6 +102,19 @@ def get_post_processed_source_data():
 
     validate_schema(source, ENRICHED_SCHEMA)
     return source
+
+
+def _select_display_columns(source_data):
+    display_columns = config().analysis.source_table_columns
+    if not display_columns:
+        return source_data
+    try:
+        return source_data.select(display_columns)
+    except polars.exceptions.ColumnNotFoundError as e:
+        raise ValueError(
+            "Available columns for analysis.source_table_columns config: "
+            f"{source_data.columns}"
+        ) from e
 
 
 def _truncate_month(df, *, by_clock: bool = False, by_data: bool = False):
