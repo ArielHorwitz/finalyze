@@ -223,13 +223,20 @@ class AnalysisAnonymization(BaseModel):
     """Also anonymize tags."""
 
 
-class AnalysisEdgeTick(BaseModel):
+class EdgeTick(BaseModel):
     enable: bool = False
     """Enable edge ticks."""
     pad_days: int = 31
     """Add edge ticks a number of days past the data."""
-    cap_same_month: bool = False
+    cap_same_month: bool = True
     """Don't allow edge tick to overflow past the edge of the month."""
+
+
+class AnalysisEdgeTicks(BaseModel):
+    min: EdgeTick = EdgeTick()
+    """Add edge ticks before the minimum date."""
+    max: EdgeTick = EdgeTick()
+    """Add edge ticks after the maximum date."""
 
 
 class Analysis(BaseModel):
@@ -253,14 +260,10 @@ class Analysis(BaseModel):
         validate_default=True,
     )
     """List of weights for each of the rolling averages."""
-    edge_tick_min: AnalysisEdgeTick = AnalysisEdgeTick()
-    """Add empty transactions for every account and source before the minimum date.
+    edge_ticks: AnalysisEdgeTicks = AnalysisEdgeTicks()
+    """Add empty transactions for every account and source.
     May make some graphs more readable.
-    May not work well with date filters."""
-    edge_tick_max: AnalysisEdgeTick = AnalysisEdgeTick()
-    """Add empty transactions for every account and source after the maximum date.
-    May make some graphs more readable.
-    May not work well with date filters."""
+    Does not work well with analysis date filters."""
     truncate_month_clock: bool = False
     """Truncate data to the end of the last month."""
     truncate_month_data: bool = False

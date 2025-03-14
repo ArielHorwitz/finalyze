@@ -131,19 +131,21 @@ def _truncate_month(df, *, by_clock: bool = False, by_data: bool = False):
 
 
 def _add_edge_ticks(df):
+    config_min = config().analysis.edge_ticks.min
+    config_max = config().analysis.edge_ticks.max
     dfs = [df]
-    if config().analysis.edge_tick_min.enable:
+    if config_min.enable:
         min_date = df["date"].min()
-        min_delta = datetime.timedelta(days=config().analysis.edge_tick_min.pad_days)
+        min_delta = datetime.timedelta(days=config_min.pad_days)
         edge_date = min_date - min_delta
-        if config().analysis.edge_tick_min.cap_same_month:
+        if config_min.cap_same_month:
             edge_date = max(min_date.replace(day=1), edge_date)
         dfs.append(_generate_edge_ticks(df, edge_date))
-    if config().analysis.edge_tick_max.enable:
+    if config_max.enable:
         max_date = df["date"].max()
-        max_delta = datetime.timedelta(days=config().analysis.edge_tick_max.pad_days)
+        max_delta = datetime.timedelta(days=config_max.pad_days)
         edge_date = max_date + max_delta
-        if config().analysis.edge_tick_max.cap_same_month:
+        if config_max.cap_same_month:
             last_day = calendar.monthrange(max_date.year, max_date.month)[1]
             edge_date = min(max_date.replace(day=last_day), edge_date)
         dfs.append(_generate_edge_ticks(df, edge_date))
