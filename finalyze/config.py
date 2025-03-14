@@ -239,7 +239,7 @@ class Analysis(BaseModel):
     """Configuration for graphs."""
     anonymization: AnalysisAnonymization = AnalysisAnonymization()
     """Configuration for (weak) anonymization of output data."""
-    external_filters: Filters = Filters()
+    external_filters: Filters = Filters(invert=True)
     """Filters for external accounts."""
     breakdown_filters: Filters = Filters()
     """Filters for transactions not to be shown in breakdowns and cash flows."""
