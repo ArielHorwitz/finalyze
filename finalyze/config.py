@@ -237,6 +237,8 @@ class AnalysisEdgeTicks(BaseModel):
     """Add edge ticks before the minimum date."""
     max: EdgeTick = EdgeTick()
     """Add edge ticks after the maximum date."""
+    auto_tag: bool = True
+    """Automatically tag the transactions with a tag preset rule."""
 
 
 class Analysis(BaseModel):

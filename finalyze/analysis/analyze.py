@@ -11,11 +11,10 @@ import polars.exceptions
 
 from finalyze.analysis import plot
 from finalyze.analysis.tables import get_tables
-from finalyze.config import config
+from finalyze.config import Filters, TagPresetRule, config
 from finalyze.display import print_table
 from finalyze.source.data import (
     ENRICHED_SCHEMA,
-    TAGGED_SCHEMA,
     derive_account_source,
     derive_month,
     derive_tags,
@@ -57,12 +56,6 @@ def run():
 
 def get_post_processed_source_data():
     source = load_source_data()
-    source = apply_tags(
-        source,
-        preset_rules=config().tag.preset_rules,
-    )
-    # Pre-validation
-    validate_schema(source, TAGGED_SCHEMA)
 
     # Truncate
     source = _truncate_month(
@@ -73,6 +66,17 @@ def get_post_processed_source_data():
 
     # Edge ticks
     source = _add_edge_ticks(source)
+
+    # Tags
+    tag_preset_rules = list(config().tag.preset_rules)
+    if config().analysis.edge_ticks.auto_tag:
+        edge_tick_rule = TagPresetRule(
+            tag=EDGE_TICK_TAG,
+            subtag=EDGE_TICK_SUBTAG,
+            filters=Filters(description=EDGE_TICK_DESCRIPTION),
+        )
+        tag_preset_rules.insert(0, edge_tick_rule)
+    source = apply_tags(source, preset_rules=tag_preset_rules)
 
     # External
     external_hashes = config().analysis.external_filters.apply(source)
@@ -162,9 +166,6 @@ def _generate_edge_ticks(df, date):
             date=pl.lit(date),
             amount=pl.lit(0.0),
             description=pl.lit(EDGE_TICK_DESCRIPTION),
-            tag=pl.lit(EDGE_TICK_TAG),
-            subtag=pl.lit(EDGE_TICK_SUBTAG),
-            hash=pl.lit(0).cast(pl.UInt64),
         )
         .select(df.columns)
     )
