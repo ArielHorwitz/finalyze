@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 import polars as pl
+import polars.exceptions
 
 from finalyze.analysis import plot
 from finalyze.analysis.tables import get_tables
@@ -43,9 +44,14 @@ def run():
             print(table)
             print_table(table.with_totals(), table.title)
     # Plots
-    source_data_display = source_data.select(
-        "account", "source", "date", "amount", "tag", "subtag", "description", "hash"
-    )
+    try:
+        source_data_display = source_data.select(
+            *config().analysis.source_table_columns
+        )
+    except polars.exceptions.ColumnNotFoundError as e:
+        raise polars.exceptions.ColumnNotFoundError(
+            f"Available columns: {source_data.columns}"
+        ) from e
     output_file_stem = config().analysis.graphs.title.lower().replace(" ", "_")
     output_file = config().general.output_dir / f"{output_file_stem}.html"
     print(f"Exporting plots to: {output_file}")

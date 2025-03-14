@@ -271,6 +271,17 @@ class Analysis(BaseModel):
     """Print all the source data for making the analysis."""
     print_tables: bool = False
     """Print the tables used for each graph."""
+    source_table_columns: list[str] = [
+        "account",
+        "source",
+        "date",
+        "amount",
+        "tag",
+        "subtag",
+        "description",
+        "hash",
+    ]
+    """List of columns to display for the full source table."""
 
 
 class Display(BaseModel):
