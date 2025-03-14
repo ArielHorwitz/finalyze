@@ -40,11 +40,23 @@ def load_source_data():
     ).sort("date", "amount")
 
 
-def enrich_month(df):
+def derive_month(df):
     year_str = pl.col("date").dt.year().cast(str)
     month_str = pl.col("date").dt.month().cast(str).str.pad_start(2, "0")
     month = year_str + "-" + month_str
     return df.with_columns(month=month)
+
+
+def derive_tags(df):
+    delimiter = config().general.multi_column_delimiter
+    tags = pl.col("tag") + delimiter + pl.col("subtag")
+    return df.with_columns(tags=tags)
+
+
+def derive_account_source(df):
+    delimiter = config().general.multi_column_delimiter
+    account_source = pl.col("account") + delimiter + pl.col("source")
+    return df.with_columns(account_source=account_source)
 
 
 def validate_schema(df, expected_schema):

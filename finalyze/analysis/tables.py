@@ -8,7 +8,7 @@ import polars as pl
 from plotly.graph_objects import Figure
 
 from finalyze.config import config
-from finalyze.source.data import ENRICHED_SCHEMA, enrich_month, validate_schema
+from finalyze.source.data import ENRICHED_SCHEMA, derive_month, validate_schema
 
 
 class SourceData:
@@ -290,7 +290,7 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
         .join(pl.DataFrame(dict(date=pl.Series(months))), how="cross")
         .with_columns(amount=pl.lit(0))
     )
-    sentinels = enrich_month(sentinels).select("tag", "amount", "month")
+    sentinels = derive_month(sentinels).select("tag", "amount", "month")
     for df, name in [
         (source.get(breakdown=True, incomes=True), "incomes"),
         (source.get(breakdown=True, expenses=True), "expenses"),

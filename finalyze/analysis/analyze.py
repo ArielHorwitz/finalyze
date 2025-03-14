@@ -16,7 +16,9 @@ from finalyze.display import print_table
 from finalyze.source.data import (
     ENRICHED_SCHEMA,
     TAGGED_SCHEMA,
-    enrich_month,
+    derive_account_source,
+    derive_month,
+    derive_tags,
     load_source_data,
     validate_schema,
 )
@@ -67,7 +69,6 @@ def get_post_processed_source_data():
         source,
         preset_rules=config().tag.preset_rules,
     )
-    delimiter = config().general.multi_column_delimiter
     # Pre-validation
     validate_schema(source, TAGGED_SCHEMA)
 
@@ -98,20 +99,14 @@ def get_post_processed_source_data():
     source = config().analysis.filters.apply(source)
 
     # Anonymization - after calculations and filters based on source info,
-    # but before creating new columns based on existing columns.
+    # but before deriving new columns based on existing columns.
     if config().analysis.anonymization.enable:
         source = _anonymize_data(source)
 
-    # Month
-    source = enrich_month(source)
-
-    # Combined tags
-    combined_tags = pl.col("tag") + delimiter + pl.col("subtag")
-    source = source.with_columns(tags=combined_tags)
-
-    # Combined account sources
-    account_source = pl.col("account") + delimiter + pl.col("source")
-    source = source.with_columns(account_source=account_source)
+    # Derived columns
+    source = derive_month(source)
+    source = derive_tags(source)
+    source = derive_account_source(source)
 
     validate_schema(source, ENRICHED_SCHEMA)
     return source
