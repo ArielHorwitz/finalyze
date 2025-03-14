@@ -279,15 +279,13 @@ def _breakdown_total(source: SourceData) -> list[Table]:
 
 def _breakdown_rolling(source: SourceData) -> list[Table]:
     monthly_breakdowns = []
-    months = _months_in_range(
-        source.get(breakdown=True)["date"].min(),
-        source.get(breakdown=True)["date"].max(),
-    )
+    all_dates = source.get(breakdown=True)["date"]
+    months = pl.Series(_months_in_range(all_dates.min(), all_dates.max()))
     sentinels = (
         source.get(breakdown=True)
         .group_by("tag")
         .count()
-        .join(pl.DataFrame(dict(date=pl.Series(months))), how="cross")
+        .join(pl.DataFrame(dict(date=months)), how="cross")
         .with_columns(amount=pl.lit(0))
     )
     sentinels = derive_month(sentinels).select("tag", "amount", "month")
@@ -367,9 +365,11 @@ def _breakdown_monthly(source: SourceData) -> list[Table]:
 
 
 def _months_in_range(min_date: datetime.date, max_date: datetime.date):
+    all_months = []
     current = min_date.replace(day=1)
     max_date = max_date.replace(day=2)
     while current < max_date:
-        yield current
+        all_months.append(current)
         current = current + datetime.timedelta(days=32)
         current = current.replace(day=1)
+    return all_months
