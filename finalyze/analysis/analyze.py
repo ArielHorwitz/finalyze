@@ -44,7 +44,7 @@ def run():
     if config().analysis.print_tables:
         for table in tables:
             print(table)
-            print_table(table.with_totals(), table.title)
+            print_table(table.source, table.title)
     # Plots
     try:
         source_data_display = source_data.select(
