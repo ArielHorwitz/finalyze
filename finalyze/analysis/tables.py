@@ -265,14 +265,23 @@ def _cash_flow(source: SourceData) -> list[Table]:
 
 
 def _breakdown_total(source: SourceData) -> list[Table]:
-    total_breakdowns = [
-        Table(
+    total_breakdowns = []
+    for df, name in [
+        (source.get(breakdown=True, incomes=True), "incomes"),
+        (source.get(breakdown=True, expenses=True), "expenses"),
+    ]:
+        data = df.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum())
+        total = data["amount"].sum()
+        percent_col = pl.col("amount") / total * 100
+        data = data.with_columns(percent_col.alias("percent"))
+        table = Table(
             f"Total {name} breakdown",
-            df.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum()),
+            data,
             figure_constructor=px.sunburst,
             figure_arguments=dict(
                 path=["tag", "subtag"],
-                values="amount",
+                values="percent",
+                hover_data={"tags": True, "amount": True, "percent": ":.2f"},
                 labels=dict(
                     parent="Tag",
                     id="Tags",
@@ -284,11 +293,7 @@ def _breakdown_total(source: SourceData) -> list[Table]:
                 color="tag",
             ),
         )
-        for df, name in [
-            (source.get(breakdown=True, incomes=True), "incomes"),
-            (source.get(breakdown=True, expenses=True), "expenses"),
-        ]
-    ]
+        total_breakdowns.append(table)
     return total_breakdowns
 
 
