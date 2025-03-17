@@ -254,6 +254,8 @@ class Analysis(BaseModel):
     """Filters for transactions not to be shown in breakdowns and cash flows."""
     breakdown_months: int = 3
     """Number of months back to breakdown in detail."""
+    net_by_tag: bool = False
+    """Break down incomes/expenses by tags rather than transactions."""
     rolling_average_weights: dict[str, list[float]] = Field(
         default_factory=lambda *_: {
             "quarter": [4, 5, 6],

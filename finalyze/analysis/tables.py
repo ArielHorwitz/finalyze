@@ -1,6 +1,7 @@
 import dataclasses
 import datetime
 import functools
+import operator
 from typing import Any, Callable, Optional
 
 import plotly.express as px
@@ -30,9 +31,23 @@ class SourceData:
         if not include_external:
             df = config().analysis.external_filters.apply(df, invert=True)
         if incomes:
-            df = df.filter(pl.col("amount") > 0)
+            df = self._filter_net(df, incomes_or_expenses=True)
         elif expenses:
-            df = df.filter(pl.col("amount") < 0).with_columns(pl.col("amount") * -1)
+            df = self._filter_net(df, incomes_or_expenses=False)
+        return df
+
+    def _filter_net(self, df, incomes_or_expenses: bool):
+        operation = operator.gt if incomes_or_expenses else operator.lt
+        amount_filter = operation(pl.col("amount"), 0)
+        if config().analysis.net_by_tag:
+            tags_net = self._source.group_by("tag").agg(pl.col("amount").sum())
+            tags = tags_net.filter(amount_filter)["tag"]
+            df = df.filter(pl.col("tag").is_in(tags))
+        else:
+            df = df.filter(amount_filter)
+        # Reverse (if expenses)
+        if not incomes_or_expenses:
+            df = df.with_columns(pl.col("amount") * -1)
         return df
 
     def __hash__(self):
@@ -339,7 +354,8 @@ def _breakdown_monthly(source: SourceData) -> list[Table]:
             f"{name} breakdown - {month}",
             df.filter(pl.col("month") == month)
             .group_by("tags", "tag", "subtag")
-            .agg(pl.col("amount").sum()),
+            .agg(pl.col("amount").sum())
+            .filter(pl.col("amount") >= 0),
             figure_constructor=px.sunburst,
             figure_arguments=dict(
                 path=["tag", "subtag"],
