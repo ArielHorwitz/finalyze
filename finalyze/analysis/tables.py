@@ -309,23 +309,26 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
         .with_columns(amount=pl.lit(0))
     )
     sentinels = derive_month(sentinels).select("tag", "amount", "month")
-    for df, name in [
-        (source.get(breakdown=True, incomes=True), "incomes"),
-        (source.get(breakdown=True, expenses=True), "expenses"),
-    ]:
-        data_with_sentinels = (
+    named_data = [
+        (
             df.select("month", "tag", "amount")
             .join(sentinels, how="right", on=("month", "tag"))
-            .with_columns(amount=pl.coalesce("amount", "amount_right"))
+            .with_columns(amount=pl.coalesce("amount", "amount_right")),
+            name,
         )
-        for weight_name, weights in config().analysis.rolling_average_weights.items():
+        for df, name in [
+            (source.get(breakdown=True, incomes=True), "incomes"),
+            (source.get(breakdown=True, expenses=True), "expenses"),
+        ]
+    ]
+    for weight_name, weights in config().analysis.rolling_average_weights.items():
+        for df, name in named_data:
             table = Table(
                 f"Monthly {name} breakdown - rolling {weight_name}",
-                data_with_sentinels.group_by("month", "tag")
+                df.group_by("month", "tag")
                 .agg(pl.col("amount").sum())
                 .sort("month", "tag")
                 .with_columns(
-                    # pl.lit(f"rolling {name} ({len(weights)})").alias("color"),
                     pl.col("amount")
                     .rolling_mean(window_size=len(weights), weights=weights)
                     .over("tag")
