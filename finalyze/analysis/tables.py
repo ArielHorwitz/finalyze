@@ -301,6 +301,13 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
     monthly_breakdowns = []
     all_dates = source.get(breakdown=True)["date"]
     months = pl.Series(_months_in_range(all_dates.min(), all_dates.max()))
+    tag_order = (
+        source.get(breakdown=True)
+        .group_by("tag")
+        .agg(pl.col("amount").sum())
+        .with_columns(pl.col("amount").abs())
+        .sort("amount", descending=True)["tag"]
+    )
     sentinels = (
         source.get(breakdown=True)
         .group_by("tag")
@@ -343,6 +350,7 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
                     line_shape="spline",
                     hover_data=["tag", "amount", "rolling"],
                     labels=dict(tag="Tag", amount="Amount", month="Month"),
+                    category_orders=dict(tag=tag_order),
                 ),
             )
             monthly_breakdowns.append(table)
