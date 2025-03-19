@@ -329,6 +329,7 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
         ]
     ]
     for weight_name, weights in config().analysis.rolling_average_weights.items():
+        line_shape = "spline" if len(weights) > 1 else "linear"
         for df, name in named_data:
             table = Table(
                 f"Monthly {name} breakdown - rolling {weight_name}",
@@ -347,7 +348,7 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
                     y="rolling",
                     color="tag",
                     markers=True,
-                    line_shape="spline",
+                    line_shape=line_shape,
                     hover_data=["tag", "amount", "rolling"],
                     labels=dict(tag="Tag", amount="Amount", month="Month"),
                     category_orders=dict(tag=tag_order),
