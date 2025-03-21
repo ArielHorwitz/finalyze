@@ -7,6 +7,7 @@ class InvalidSchema(Exception):
     """Raised when a schema is invalid."""
 
 
+HASH_COLUMNS = ("account", "source", "date", "description", "amount")
 RAW_SCHEMA = {
     "account": pl.String,
     "source": pl.String,
@@ -57,6 +58,10 @@ def derive_account_source(df):
     delimiter = config().general.multi_column_delimiter
     account_source = pl.col("account") + delimiter + pl.col("source")
     return df.with_columns(account_source=account_source)
+
+
+def derive_hash(df):
+    return df.with_columns(hash=pl.concat_str(HASH_COLUMNS).hash())
 
 
 def validate_schema(df, expected_schema):

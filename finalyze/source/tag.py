@@ -8,10 +8,14 @@ import readchar
 
 from finalyze.config import TagPresetRule, config
 from finalyze.display import flip_rtl_str, print_table
-from finalyze.source.data import TAGGED_SCHEMA, load_source_data, validate_schema
+from finalyze.source.data import (
+    TAGGED_SCHEMA,
+    derive_hash,
+    load_source_data,
+    validate_schema,
+)
 
 LINE_SEPARATOR = "===================="
-HASH_COLUMNS = ("account", "source", "date", "description", "amount")
 TAG_SCHEMA = {
     "tag": pl.String,
     "subtag": pl.String,
@@ -38,9 +42,8 @@ def run():
 
 
 def tag_interactively():
-    source_data = load_source_data().with_columns(
-        pl.concat_str(*HASH_COLUMNS).hash().alias("hash")
-    )
+    source_data = load_source_data()
+    source_data = derive_hash(source_data)
     preset_hashes = get_tag_preset_hashes(source_data)
     source_data = source_data.filter(~pl.col("hash").is_in(preset_hashes)).drop("hash")
     if config().tag.default_tag:
@@ -59,17 +62,12 @@ def tag_interactively():
 def apply_tags(
     data,
     *,
-    hash_columns: list[str] = HASH_COLUMNS,
     preset_rules: Optional[list[TagPresetRule]] = None,
 ):
-    if not hash_columns:
-        raise ValueError("Need columns for hashing")
     tags = read_tags_file()
-    tagged = (
-        data.drop(*TAG_SCHEMA, strict=False)
-        .with_columns(pl.concat_str(*hash_columns).hash().alias("hash"))
-        .join(tags, on="hash", how="left")
-    )
+    cleaned_data = data.drop(*TAG_SCHEMA, strict=False)
+    hashed_data = derive_hash(cleaned_data)
+    tagged = hashed_data.join(tags, on="hash", how="left")
     if preset_rules is not None:
         tagged = apply_tag_presets(tagged, preset_rules)
     validate_schema(tagged, TAGGED_SCHEMA)
@@ -224,11 +222,6 @@ class Tagger:
         tag_descriptions = collections.defaultdict(set)
         row = self.get_row(index)
         target_description = row["description"]
-        if any(row[k] is None for k in HASH_COLUMNS):
-            raise ValueError(
-                "Row missing required fields;"
-                " possibly an empty line in source csv file?"
-            )
         for row in self.source.sort("date", descending=True).iter_rows(named=True):
             if row["tag"] is None:
                 continue
