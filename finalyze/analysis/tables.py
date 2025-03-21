@@ -183,28 +183,55 @@ def _balance(source: SourceData) -> list[Table]:
 
 
 def _cash_flow(source: SourceData) -> list[Table]:
-    incomes_flow, expenses_flow = [
-        Table(
-            f"Cash flow - {name.capitalize()}",
-            df.group_by("month")
-            .agg(pl.col("amount").sum())
-            .sort("month")
-            .with_columns(pl.lit(name).alias("color")),
-            figure_constructor=px.bar,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                color="color",
-                hover_data=["month", "amount"],
-                barmode="group",
-            ),
-        )
-        for df, name in [
-            (source.get(breakdown=True, incomes=True), "income"),
-            (source.get(breakdown=True, expenses=True), "expense"),
-        ]
-    ]
-    rolling_total_flow, rolling_incomes_flow, rolling_expenses_flow = [
+    total_flow = Table(
+        "Cash flow - net",
+        source.get(breakdown=True)
+        .group_by("month")
+        .agg(pl.col("amount").sum())
+        .sort("month")
+        .with_columns(pl.lit("net flow").alias("color")),
+        figure_constructor=px.line,
+        figure_arguments=dict(
+            x="month",
+            y="amount",
+            color="color",
+            hover_data=["month", "amount"],
+            markers=True,
+        ),
+    )
+    incomes_flow = Table(
+        "Cash flow - incomes",
+        source.get(breakdown=True, incomes=True)
+        .group_by("month")
+        .agg(pl.col("amount").sum())
+        .sort("month")
+        .with_columns(pl.lit("incomes flow").alias("color")),
+        figure_constructor=px.bar,
+        figure_arguments=dict(
+            x="month",
+            y="amount",
+            color="color",
+            hover_data=["month", "amount"],
+            barmode="relative",
+        ),
+    )
+    expenses_flow = Table(
+        "Cash flow - expenses",
+        source.get(breakdown=True, expenses=True)
+        .group_by("month")
+        .agg(pl.col("amount").sum() * -1)
+        .sort("month")
+        .with_columns(pl.lit("expenses flow").alias("color")),
+        figure_constructor=px.bar,
+        figure_arguments=dict(
+            x="month",
+            y="amount",
+            color="color",
+            hover_data=["month", "amount"],
+            barmode="relative",
+        ),
+    )
+    rolling_flows = [
         Table(
             "Cash flow (rolling mean)",
             pl.concat(
@@ -220,6 +247,7 @@ def _cash_flow(source: SourceData) -> list[Table]:
                 for weight_name, weights in (
                     config().analysis.rolling_average_weights.items()
                 )
+                if len(weights) > 1
             ),
             figure_constructor=px.line,
             figure_arguments=dict(
@@ -240,25 +268,17 @@ def _cash_flow(source: SourceData) -> list[Table]:
     ]
     cash_flow = Table(
         "Cash flow",
-        source.get(breakdown=True)
-        .group_by("month")
-        .agg(pl.col("amount").sum())
-        .sort("month")
-        .with_columns(pl.lit("total flow").alias("color")),
+        pl.DataFrame(),
         figure_constructor=px.bar,
         figure_arguments=dict(
-            x="month",
-            y="amount",
-            color="color",
-            hover_data=["month", "amount"],
-            barmode="group",
+            barmode="relative",
+            # color="color",
         ),
         extra_traces=[
+            total_flow,
             incomes_flow,
             expenses_flow,
-            rolling_total_flow,
-            rolling_incomes_flow,
-            rolling_expenses_flow,
+            *rolling_flows,
         ],
     )
     return [cash_flow]
