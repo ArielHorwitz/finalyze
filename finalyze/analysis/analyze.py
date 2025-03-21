@@ -11,11 +11,12 @@ import polars.exceptions
 
 from finalyze.analysis import plot
 from finalyze.analysis.tables import get_tables
-from finalyze.config import Filters, TagPresetRule, config
+from finalyze.config import config
 from finalyze.display import print_table
 from finalyze.source.data import (
     ENRICHED_SCHEMA,
     derive_account_source,
+    derive_hash,
     derive_month,
     derive_tags,
     load_source_data,
@@ -64,19 +65,11 @@ def get_post_processed_source_data():
         by_data=config().analysis.truncate_month_data,
     )
 
+    # Tags
+    source = apply_tags(source, preset_rules=config().tag.preset_rules)
+
     # Edge ticks
     source = _add_edge_ticks(source)
-
-    # Tags
-    tag_preset_rules = list(config().tag.preset_rules)
-    if config().analysis.edge_ticks.auto_tag:
-        edge_tick_rule = TagPresetRule(
-            tag=EDGE_TICK_TAG,
-            subtag=EDGE_TICK_SUBTAG,
-            filters=Filters(description=EDGE_TICK_DESCRIPTION),
-        )
-        tag_preset_rules.insert(0, edge_tick_rule)
-    source = apply_tags(source, preset_rules=tag_preset_rules)
 
     # External
     external_hashes = config().analysis.external_filters.apply(source)
@@ -158,17 +151,16 @@ def _add_edge_ticks(df):
 
 def _generate_edge_ticks(df, date):
     account_sources = df.group_by("account", "source").agg(pl.len())
-    return (
-        pl.DataFrame()
-        .with_columns(
-            account=account_sources["account"],
-            source=account_sources["source"],
-            date=pl.lit(date),
-            amount=pl.lit(0.0),
-            description=pl.lit(EDGE_TICK_DESCRIPTION),
-        )
-        .select(df.columns)
+    generated = pl.DataFrame().with_columns(
+        account=account_sources["account"],
+        source=account_sources["source"],
+        date=pl.lit(date),
+        amount=pl.lit(0.0),
+        description=pl.lit(EDGE_TICK_DESCRIPTION),
+        tag=pl.lit(EDGE_TICK_TAG),
+        subtag=pl.lit(EDGE_TICK_SUBTAG),
     )
+    return derive_hash(generated).select(df.columns)
 
 
 def _anonymize_data(df):
