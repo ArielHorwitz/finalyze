@@ -132,6 +132,11 @@ class Filters(BaseModel):
             predicate = ~predicate
         return df.filter(predicate)
 
+    def inverted(self):
+        new = copy.deepcopy(self)
+        new.invert = not new.invert
+        return new
+
 
 class Ingestion(BaseModel):
     directories: dict[str, list[Path]] = Field(
