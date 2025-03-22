@@ -278,6 +278,8 @@ class Analysis(BaseModel):
     """Print all the source data for making the analysis."""
     print_tables: bool = False
     """Print the tables used for each graph."""
+    print_table_names: list[str] = Field(default_factory=list, validate_default=True)
+    """List of table names to print. Leave blank to print all tables."""
     source_table_columns: list[str] = [
         "account",
         "source",

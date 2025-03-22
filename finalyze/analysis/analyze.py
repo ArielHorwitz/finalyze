@@ -21,7 +21,10 @@ def run():
     # Tables
     tables = get_tables(source_data)
     if config().analysis.print_tables:
+        table_names = config().analysis.print_table_names
         for table in tables:
+            if table_names and table.title not in table_names:
+                continue
             print(table)
             print_table(table.source, table.title)
     # Plots
