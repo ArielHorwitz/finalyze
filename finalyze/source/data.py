@@ -240,8 +240,13 @@ def _anonymize_data(df):
     conf = config().analysis.anonymization
     min_scale, max_scale = conf.scale
     scale = random.random() * (max_scale - min_scale) + min_scale
-    amount_col = pl.col("amount") * scale
-    new_columns = [amount_col.alias("amount")]
+    schema = df.collect_schema()
+    rescaled_columns = [
+        name
+        for name, dtype in zip(schema.names(), schema.dtypes())
+        if dtype.is_float()
+    ]
+    new_columns = [pl.col(c) * scale for c in rescaled_columns]
     if conf.anonymize_accounts:
         new_columns.append(_remap_column(df, "account", ANON_NAMES))
     if conf.anonymize_sources:
