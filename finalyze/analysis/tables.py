@@ -72,7 +72,7 @@ def get_tables(source: SourceData) -> list[Table]:
 def _balance(source) -> list[Table]:
     account_balances = Table(
         "Account balances",
-        source.get(include_external=True),
+        source.get(include_external=True, edge_ticks=True),
         figure_constructor=px.line,
         figure_arguments=dict(
             x="date",
@@ -92,7 +92,9 @@ def _balance(source) -> list[Table]:
     )
     other_balances = Table(
         "Other balances",
-        source.get().with_columns(pl.lit("internal balance").alias("color")),
+        source.get(edge_ticks=True).with_columns(
+            pl.lit("internal balance").alias("color")
+        ),
         figure_constructor=px.line,
         figure_arguments=dict(
             x="date",
@@ -112,7 +114,7 @@ def _balance(source) -> list[Table]:
     )
     balance = Table(
         "Balance",
-        source.get(include_external=True).with_columns(
+        source.get(include_external=True, edge_ticks=True).with_columns(
             pl.lit("total balance").alias("color")
         ),
         figure_constructor=px.line,

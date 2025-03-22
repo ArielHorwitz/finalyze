@@ -39,6 +39,7 @@ class SourceData:
         incomes: bool = False,
         expenses: bool = False,
         sentinels: bool = False,
+        edge_ticks: bool = False,
     ):
         df = self._source
         if breakdown:
@@ -52,6 +53,9 @@ class SourceData:
         if not sentinels:
             sentinel_filter = Filters(description=SENTINEL_TICK_DESCRIPTION)
             df = sentinel_filter.apply(df, invert=True)
+        if not edge_ticks:
+            edge_filter = Filters(description=EDGE_TICK_DESCRIPTION)
+            df = edge_filter.apply(df, invert=True)
         return df
 
     def _filter_net(self, df, incomes_or_expenses: bool):
