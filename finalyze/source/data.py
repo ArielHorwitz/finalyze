@@ -7,7 +7,7 @@ import string
 
 import polars as pl
 
-from finalyze.config import Filters, config
+from finalyze.config import config
 from finalyze.display import round_columns
 from finalyze.source import ENRICHED_SCHEMA, validate_schema
 from finalyze.source.raw import derive_hash, load_source_data
@@ -45,19 +45,17 @@ class SourceData:
     ):
         df = self._source
         if breakdown:
-            df = config().analysis.breakdown_filters.apply(df, invert=True)
+            df = df.filter(pl.col("is_breakdown"))
         if not include_external:
-            df = config().analysis.external_filters.apply(df, invert=True)
+            df = df.filter(~pl.col("is_external"))
         if incomes:
             df = self._filter_net(df, incomes_or_expenses=True)
         elif expenses:
             df = self._filter_net(df, incomes_or_expenses=False)
         if not sentinels:
-            sentinel_filter = Filters(description=SENTINEL_TICK_DESCRIPTION)
-            df = sentinel_filter.apply(df, invert=True)
+            df = df.filter(~pl.col("is_sentinel_tick"))
         if not edge_ticks:
-            edge_filter = Filters(description=EDGE_TICK_DESCRIPTION)
-            df = edge_filter.apply(df, invert=True)
+            df = df.filter(~pl.col("is_edge_tick"))
         if round:
             df = round_columns(df)
         return df
@@ -97,15 +95,17 @@ def get_post_processed_source_data() -> SourceData:
     source = _add_edge_ticks(source)
     source = _add_sentinel_ticks(source)
 
+    # Breakdown
+    breakdown_filter = config().analysis.breakdown_filters.inverted()
+    source = _add_boolean_column(source, "is_breakdown", breakdown_filter)
     # External
-    external_hashes = config().analysis.external_filters.apply(source)
-    is_external = pl.col("hash").is_in(external_hashes.select("hash"))
-    source = source.with_columns(external=is_external)
+    external_filter = config().analysis.external_filters
+    source = _add_boolean_column(source, "is_external", external_filter)
 
     # Cumulative balances
     source = source.sort(SORT_ORDER).with_columns(
         balance_total=pl.col("amount").cum_sum(),
-        balance_inexternal=pl.col("amount").cum_sum().over("external"),
+        balance_inexternal=pl.col("amount").cum_sum().over("is_external"),
         balance_account=pl.col("amount").cum_sum().over("account"),
         balance_source=pl.col("amount").cum_sum().over("account", "source"),
     )
@@ -159,17 +159,24 @@ def _truncate_month(df, *, by_clock: bool = False, by_data: bool = False):
     return df.filter(pl.col("date") < truncate_last)
 
 
+def _add_boolean_column(df, name, filters):
+    hashes = filters.apply(df).select("hash")
+    return df.with_columns(pl.col("hash").is_in(hashes).alias(name))
+
+
 def _add_edge_ticks(df):
     config_min = config().analysis.edge_ticks.min
     config_max = config().analysis.edge_ticks.max
-    dfs = [df]
+    dfs = [df.with_columns(is_edge_tick=pl.lit(False))]
     if config_min.enable:
         min_date = df["date"].min()
         min_delta = datetime.timedelta(days=config_min.pad_days)
         edge_date = min_date - min_delta
         if config_min.cap_same_month:
             edge_date = max(min_date.replace(day=1), edge_date)
-        dfs.append(_generate_edge_ticks(df, edge_date))
+        new_df = _generate_edge_ticks(df, edge_date)
+        new_df = new_df.with_columns(is_edge_tick=pl.lit(True))
+        dfs.append(new_df)
     if config_max.enable:
         max_date = df["date"].max()
         max_delta = datetime.timedelta(days=config_max.pad_days)
@@ -177,7 +184,9 @@ def _add_edge_ticks(df):
         if config_max.cap_same_month:
             last_day = calendar.monthrange(max_date.year, max_date.month)[1]
             edge_date = min(max_date.replace(day=last_day), edge_date)
-        dfs.append(_generate_edge_ticks(df, edge_date))
+        new_df = _generate_edge_ticks(df, edge_date)
+        new_df = new_df.with_columns(is_edge_tick=pl.lit(True))
+        dfs.append(new_df)
     return pl.concat(dfs)
 
 
@@ -196,6 +205,7 @@ def _generate_edge_ticks(df, date):
 
 
 def _add_sentinel_ticks(df):
+    df = df.with_columns(is_sentinel_tick=pl.lit(False))
     all_dates = df["date"]
     months = pl.Series(_months_in_range(all_dates.min(), all_dates.max()))
     combinations = (
@@ -208,6 +218,8 @@ def _add_sentinel_ticks(df):
     sentinels = combinations.with_columns(
         amount=pl.lit(0.0),
         description=pl.lit(SENTINEL_TICK_DESCRIPTION),
+        is_edge_tick=pl.lit(False),
+        is_sentinel_tick=pl.lit(True),
     )
     sentinels = derive_hash(sentinels).select(df.columns)
     return pl.concat((df, sentinels))

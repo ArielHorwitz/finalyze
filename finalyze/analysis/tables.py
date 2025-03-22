@@ -108,7 +108,7 @@ def _balance(source) -> list[Table]:
                 "tags",
                 "account",
                 "source",
-                "external",
+                "is_external",
             ],
             line_shape="hv",
             # labels=dict(balance_other="Balance (other)"),

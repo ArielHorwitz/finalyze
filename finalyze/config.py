@@ -293,7 +293,7 @@ class Analysis(BaseModel):
         "tag",
         "subtag",
         "description",
-        "external",
+        "is_external",
         "balance_total",
     ]
     """List of columns to display for the full source table. Leave blank to show all."""
