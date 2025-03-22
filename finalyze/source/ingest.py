@@ -5,7 +5,7 @@ import polars as pl
 
 from finalyze.config import config
 from finalyze.display import print_table
-from finalyze.source.data import RAW_SCHEMA, validate_schema
+from finalyze.source import RAW_SCHEMA, validate_schema
 from finalyze.source.parsing import PARSED_SCHEMA, parse_file
 
 

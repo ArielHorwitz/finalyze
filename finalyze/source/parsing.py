@@ -16,7 +16,7 @@ from typing import Callable
 
 import polars as pl
 
-from finalyze.source.data import InvalidSchema, validate_schema
+from finalyze.source import InvalidSchema, validate_schema
 
 PARSING_FUNC = Callable[[Path], pl.DataFrame]
 REGISTERED_PARSERS = {}

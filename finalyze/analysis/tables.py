@@ -1,7 +1,5 @@
 import dataclasses
 import datetime
-import functools
-import operator
 from typing import Any, Callable, Optional
 
 import plotly.express as px
@@ -9,49 +7,7 @@ import polars as pl
 from plotly.graph_objects import Figure
 
 from finalyze.config import config
-from finalyze.source.data import ENRICHED_SCHEMA, derive_month, validate_schema
-
-
-class SourceData:
-    def __init__(self, source: pl.DataFrame):
-        self._source = source
-
-    @functools.cache
-    def get(
-        self,
-        *,
-        breakdown: bool = False,
-        include_external: bool = False,
-        incomes: bool = False,
-        expenses: bool = False,
-    ):
-        df = self._source
-        if breakdown:
-            df = config().analysis.breakdown_filters.apply(df, invert=True)
-        if not include_external:
-            df = config().analysis.external_filters.apply(df, invert=True)
-        if incomes:
-            df = self._filter_net(df, incomes_or_expenses=True)
-        elif expenses:
-            df = self._filter_net(df, incomes_or_expenses=False)
-        return df
-
-    def _filter_net(self, df, incomes_or_expenses: bool):
-        operation = operator.gt if incomes_or_expenses else operator.lt
-        amount_filter = operation(pl.col("amount"), 0)
-        if config().analysis.net_by_tag:
-            tags_net = self._source.group_by("tag").agg(pl.col("amount").sum())
-            tags = tags_net.filter(amount_filter)["tag"]
-            df = df.filter(pl.col("tag").is_in(tags))
-        else:
-            df = df.filter(amount_filter)
-        # Reverse (if expenses)
-        if not incomes_or_expenses:
-            df = df.with_columns(pl.col("amount") * -1)
-        return df
-
-    def __hash__(self):
-        return id(self)
+from finalyze.source.data import SourceData
 
 
 @dataclasses.dataclass
@@ -102,20 +58,18 @@ def add_totals(df, collect=True):
     return final
 
 
-def get_tables(source: pl.DataFrame) -> list[Table]:
-    validate_schema(source, ENRICHED_SCHEMA)
-    source_data = SourceData(source)
+def get_tables(source: SourceData) -> list[Table]:
     tables = [
-        *_balance(source_data),
-        *_cash_flow(source_data),
-        *_breakdown_total(source_data),
-        *_breakdown_rolling(source_data),
-        *_breakdown_monthly(source_data),
+        *_balance(source),
+        *_cash_flow(source),
+        *_breakdown_total(source),
+        *_breakdown_rolling(source),
+        *_breakdown_monthly(source),
     ]
     return tables
 
 
-def _balance(source: SourceData) -> list[Table]:
+def _balance(source) -> list[Table]:
     account_balances = Table(
         "Account balances",
         source.get(include_external=True),
@@ -182,7 +136,7 @@ def _balance(source: SourceData) -> list[Table]:
     return [balance]
 
 
-def _cash_flow(source: SourceData) -> list[Table]:
+def _cash_flow(source) -> list[Table]:
     total_flow = Table(
         "Cash flow - net",
         source.get(breakdown=True)
@@ -284,7 +238,7 @@ def _cash_flow(source: SourceData) -> list[Table]:
     return [cash_flow]
 
 
-def _breakdown_total(source: SourceData) -> list[Table]:
+def _breakdown_total(source) -> list[Table]:
     total_breakdowns = []
     for df, name in [
         (source.get(breakdown=True, incomes=True), "incomes"),
@@ -317,10 +271,8 @@ def _breakdown_total(source: SourceData) -> list[Table]:
     return total_breakdowns
 
 
-def _breakdown_rolling(source: SourceData) -> list[Table]:
+def _breakdown_rolling(source) -> list[Table]:
     monthly_breakdowns = []
-    all_dates = source.get(breakdown=True)["date"]
-    months = pl.Series(_months_in_range(all_dates.min(), all_dates.max()))
     tag_order = (
         source.get(breakdown=True)
         .group_by("tag")
@@ -328,29 +280,12 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
         .with_columns(pl.col("amount").abs())
         .sort("amount", descending=True)["tag"]
     )
-    sentinels = (
-        source.get(breakdown=True)
-        .group_by("tag")
-        .count()
-        .join(pl.DataFrame(dict(date=months)), how="cross")
-        .with_columns(amount=pl.lit(0))
-    )
-    sentinels = derive_month(sentinels).select("tag", "amount", "month")
-    named_data = [
-        (
-            df.select("month", "tag", "amount")
-            .join(sentinels, how="right", on=("month", "tag"))
-            .with_columns(amount=pl.coalesce("amount", "amount_right")),
-            name,
-        )
-        for df, name in [
-            (source.get(breakdown=True, incomes=True), "incomes"),
-            (source.get(breakdown=True, expenses=True), "expenses"),
-        ]
-    ]
     for weight_name, weights in config().analysis.rolling_average_weights.items():
         line_shape = "spline" if len(weights) > 1 else "linear"
-        for df, name in named_data:
+        for df, name in [
+            (source.get(sentinels=True, breakdown=True, incomes=True), "incomes"),
+            (source.get(sentinels=True, breakdown=True, expenses=True), "expenses"),
+        ]:
             table = Table(
                 f"Monthly {name} breakdown - rolling {weight_name}",
                 df.group_by("month", "tag")
@@ -378,7 +313,7 @@ def _breakdown_rolling(source: SourceData) -> list[Table]:
     return monthly_breakdowns
 
 
-def _breakdown_monthly(source: SourceData) -> list[Table]:
+def _breakdown_monthly(source) -> list[Table]:
     last_months = (
         source.get()
         .group_by("month")
