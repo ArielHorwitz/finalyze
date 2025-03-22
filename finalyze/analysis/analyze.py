@@ -28,7 +28,7 @@ def run():
     output_file_stem = config().analysis.graphs.title.lower().replace(" ", "_")
     output_file = config().general.output_dir / f"{output_file_stem}.html"
     print(f"Exporting plots to: {output_file}")
-    display_table = source_data.get(round=True)
+    display_table = source_data.get(round=True, include_external=True)
     html_text = plot.get_html(_select_display_columns(display_table), tables)
     Path(output_file).write_text(html_text)
     if config().analysis.graphs.open:
