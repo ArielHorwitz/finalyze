@@ -7,6 +7,7 @@ import polars as pl
 from plotly.graph_objects import Figure
 
 from finalyze.config import config
+from finalyze.display import round_columns
 from finalyze.source.data import SourceData
 
 
@@ -19,6 +20,7 @@ class Table:
     extra_traces: list["Table"] = dataclasses.field(default_factory=list)
 
     def __post_init__(self):
+        self.source = round_columns(self.source)
         if isinstance(self.source, pl.LazyFrame):
             self.source = self.source.collect()
 

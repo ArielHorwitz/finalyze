@@ -290,6 +290,8 @@ class Analysis(BaseModel):
         "balance_total",
     ]
     """List of columns to display for the full source table. Leave blank to show all."""
+    rounding_decimals: int = 2
+    """Round numbers to decimal places. Set to negative to disable."""
 
 
 class Display(BaseModel):

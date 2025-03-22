@@ -8,6 +8,7 @@ import string
 import polars as pl
 
 from finalyze.config import Filters, config
+from finalyze.display import round_columns
 from finalyze.source import ENRICHED_SCHEMA, validate_schema
 from finalyze.source.raw import derive_hash, load_source_data
 from finalyze.source.tag import apply_tags
@@ -40,6 +41,7 @@ class SourceData:
         expenses: bool = False,
         sentinels: bool = False,
         edge_ticks: bool = False,
+        round: bool = False,
     ):
         df = self._source
         if breakdown:
@@ -56,6 +58,8 @@ class SourceData:
         if not edge_ticks:
             edge_filter = Filters(description=EDGE_TICK_DESCRIPTION)
             df = edge_filter.apply(df, invert=True)
+        if round:
+            df = round_columns(df)
         return df
 
     def _filter_net(self, df, incomes_or_expenses: bool):

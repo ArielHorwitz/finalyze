@@ -52,6 +52,18 @@ def flip_rtl_columns(df):
     )
 
 
+def round_columns(df):
+    decimals = config().analysis.rounding_decimals
+    if decimals < 0:
+        return df
+    schema = df.collect_schema()
+    return df.with_columns(
+        pl.col(name).round(decimals)
+        for name, dtype in zip(schema.names(), schema.dtypes())
+        if dtype.is_float()
+    )
+
+
 def flip_rtl_str(text):
     if set(text) - ENGLISH:
         return text[::-1]
