@@ -64,12 +64,12 @@ class Filters(BaseModel):
     """Account."""
     source: Optional[str] = None
     """Source."""
-    invert: bool = False
-    """Invert results."""
     and_filters: Optional[list["Filters"]] = None
     """Logically AND filters (does not work with other predicates)."""
     or_filters: Optional[list["Filters"]] = None
     """Logically OR filters (does not work with other predicates)."""
+    invert: bool = False
+    """Invert results."""
 
     def _get_predicates(self):
         predicates = []
@@ -104,7 +104,7 @@ class Filters(BaseModel):
     @property
     def predicate(self):
         exclusive_predicates = (
-            bool(self._get_predicates()) or self.invert,
+            len(self._get_predicates()) > 0,
             bool(self.and_filters),
             bool(self.or_filters),
         )
