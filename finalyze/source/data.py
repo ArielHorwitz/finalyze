@@ -9,8 +9,8 @@ import polars as pl
 
 from finalyze.config import config
 from finalyze.display import round_columns
-from finalyze.source import ENRICHED_SCHEMA, validate_schema
 from finalyze.source.raw import derive_hash, load_source_data
+from finalyze.source.schema import ENRICHED_SCHEMA, validate_schema
 from finalyze.source.tag import apply_tags
 
 ANON_NAMES = ["Einstein", "Newton", "Curie", "Galileo", "Darwin", "Turing", "Planck", "Hawking", "Pasteur", "Lovelace", "Bohr", "Maxwell"]  # fmt: skip  # noqa: disable=E501

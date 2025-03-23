@@ -8,8 +8,8 @@ import readchar
 
 from finalyze.config import TagPresetRule, config
 from finalyze.display import flip_rtl_str, print_table
-from finalyze.source import TAGGED_SCHEMA, validate_schema
 from finalyze.source.raw import derive_hash, load_source_data
+from finalyze.source.schema import TAGGED_SCHEMA, validate_schema
 
 LINE_SEPARATOR = "===================="
 TAG_SCHEMA = {

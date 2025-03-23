@@ -1,7 +1,7 @@
 import polars as pl
 
 from finalyze.config import config
-from finalyze.source import HASH_COLUMNS, RAW_SCHEMA
+from finalyze.source.schema import HASH_COLUMNS, RAW_SCHEMA
 
 
 def load_source_data():
