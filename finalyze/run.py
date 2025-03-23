@@ -5,6 +5,7 @@ from finalyze import APP_DESCRIPTION, APP_NAME
 from finalyze.analysis import analyze
 from finalyze.config import (
     CONFIG_DIR,
+    do_backup,
     get_config_file_names,
     load_config,
     write_default_config,
@@ -96,3 +97,5 @@ def main():
         pprint.pprint(config.model_dump())
     config.general.create_directories()
     args.run()
+    if config.general.backup_dir is not None:
+        do_backup(config_dir=args.config_dir)

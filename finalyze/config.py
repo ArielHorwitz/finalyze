@@ -1,7 +1,9 @@
 import copy
+import datetime
 import functools
 import json
 import operator
+import shutil
 from pathlib import Path
 from typing import Any, Literal, Optional
 
@@ -47,6 +49,7 @@ as a charge of 100 USD from the credit card: replace it with a transaction for
 transaction for +100 described as a transfer under the "card" account. This
 assumes the same -100 USD is found in the "card" account.
 """
+BACKUP_PREFIX = f"{APP_NAME}-backup_"
 
 
 class Filters(BaseModel):
@@ -317,6 +320,10 @@ class Display(BaseModel):
 class General(BaseModel):
     data_dir: Path = Field(default=DEFAULT_DATA_DIR, validate_default=True)
     """Default directory for storing app data."""
+    backup_dir: Optional[Path] = None
+    """Directory for backing up all config and data."""
+    maximum_backups: Optional[int] = None
+    """Start deleting oldest backups once above maximum."""
     dataset: str = "default"
     """Dataset name to use"""
     tag_set: str = "default"
@@ -346,7 +353,7 @@ class General(BaseModel):
         for directory in (self.source_dir, self.tags_dir, self.output_dir):
             directory.mkdir(parents=True, exist_ok=True)
 
-    @field_validator("data_dir", mode="after")
+    @field_validator("data_dir", "backup_dir", mode="after")
     @classmethod
     def resolve_directory(cls, directory):
         return directory.expanduser().resolve()
@@ -404,6 +411,30 @@ def write_default_config(*, config_dir: Path = CONFIG_FILE):
         print(f"Creating default config at: {config_file}")
         config_dump = json.loads(Config().model_dump_json())
         config_file.write_text(toml.dumps(config_dump))
+
+
+def do_backup(*, config_dir: Path = CONFIG_DIR):
+    config = load_config()
+    now_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    backup_dir_root = config.general.backup_dir
+    backup_dir_root.mkdir(parents=True, exist_ok=True)
+    backup_dir = config.general.backup_dir / f"{BACKUP_PREFIX}{now_str}"
+    print(f"Backing up to: {backup_dir}.tar.gz")
+    shutil.copytree(config_dir, backup_dir / "config")
+    shutil.copytree(config.general.data_dir, backup_dir / "data")
+    for account_name, account_dir in config.ingestion.directories.items():
+        backup_account_dir = backup_dir / "raw" / account_name
+        for index, subdir in enumerate(account_dir):
+            shutil.copytree(subdir, backup_account_dir / f"{index:0>3}")
+    shutil.make_archive(backup_dir, "gztar", backup_dir)
+    shutil.rmtree(backup_dir)
+    # Cap maximum backup
+    maximum_backups = config.general.maximum_backups
+    if maximum_backups is None or maximum_backups <= 0:
+        return
+    current_backups = sorted(backup_dir_root.glob(f"{BACKUP_PREFIX}*.tar.gz"))
+    while len(current_backups) > maximum_backups:
+        current_backups.pop(0).unlink()
 
 
 def _depth_first_merge(base: dict, other: dict):
