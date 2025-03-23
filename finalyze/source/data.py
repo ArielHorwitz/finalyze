@@ -242,9 +242,7 @@ def _anonymize_data(df):
     scale = random.random() * (max_scale - min_scale) + min_scale
     schema = df.collect_schema()
     rescaled_columns = [
-        name
-        for name, dtype in zip(schema.names(), schema.dtypes())
-        if dtype.is_float()
+        name for name, dtype in zip(schema.names(), schema.dtypes()) if dtype.is_float()
     ]
     new_columns = [pl.col(c) * scale for c in rescaled_columns]
     if conf.anonymize_accounts:
