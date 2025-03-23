@@ -39,7 +39,10 @@ def parse_args():
     parser.add_argument(
         "-o",
         "--config-override",
-        help="Override config using 'CATEGORY.OPTION=\"new_value\"'",
+        help=(
+            "Override config using a valid TOML string "
+            "(e.g. 'CATEGORY.OPTION=\"new_value\"')"
+        ),
         action="append",
         default=[],
     )
