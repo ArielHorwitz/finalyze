@@ -1,8 +1,6 @@
 import collections
-import shutil
 from typing import NamedTuple, Optional
 
-import arrow
 import polars as pl
 import readchar
 
@@ -154,14 +152,6 @@ def _delete_tags(tag_hashes):
     if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
         print("Aborted deleting tags.")
         return
-    tags_file = config().general.tags_file
-    if tags_file.is_file():
-        timestamp = arrow.now().format("YYYY-MM-DD_HH-mm-ssSS")
-        bak_filename = f"{tags_file.stem}__{timestamp}.csv"
-        backup_file_path = tags_file.parent / "bak" / bak_filename
-        shutil.copy2(tags_file, backup_file_path)
-        backup_file_path.parent.mkdir(parents=True, exist_ok=True)
-        print(f"Backed up tags at {backup_file_path}")
     write_tags_file(remaining_tags)
     print("Deleted tags.")
 
