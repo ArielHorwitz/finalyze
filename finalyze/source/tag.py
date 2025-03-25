@@ -47,7 +47,7 @@ def tag_interactively():
     tagger = Tagger(source_data=source_data, default_tags=default_tags)
     performed_tagging = tagger.tag_interactively()
     if not performed_tagging:
-        print("No tags missing.")
+        print(f"Tags saved at: {config().general.tags_file}")
     if config().tag.print_result:
         print(LINE_SEPARATOR)
         print(tagger.describe_all_tags())

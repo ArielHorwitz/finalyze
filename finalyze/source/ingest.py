@@ -14,8 +14,8 @@ def run():
         raise ValueError("No accounts directories specified")
     if config().ingestion.clear_previous:
         for file in config().general.source_dir.glob("*.csv"):
-            print(f"Removing file: {file}")
             file.unlink()
+    print(f"Ingested data saved at: {config().general.source_dir}")
     for account_name, files in config().ingestion.directories.items():
         input_files = _get_files(files)
         output_file = config().general.source_dir / f"{account_name}.csv"
@@ -23,6 +23,7 @@ def run():
             print(f"Source files for account {account_name!r}:")
             for f in input_files:
                 print(f"  {f}")
+            print(f"Outputting parsed account to: {output_file}")
         # Parse sources
         parsed_data = pl.concat(
             parse_file(input_file=file).select(*PARSED_SCHEMA.keys())
@@ -33,7 +34,6 @@ def run():
         source_data = filtered_data.select(*RAW_SCHEMA.keys()).sort("date", "amount")
         if config().ingestion.print_result:
             print_table(source_data, f"Parsed data for account: {account_name}")
-        print(f"Parsed account {account_name!r} to: {output_file}")
         output_file.parent.mkdir(parents=True, exist_ok=True)
         source_data.write_csv(output_file)
 
