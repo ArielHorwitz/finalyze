@@ -60,14 +60,13 @@ def add_totals(df, collect=True):
     return final
 
 
-def get_tables(source: SourceData) -> list[Table]:
-    tables = [
-        *_balance(source),
-        *_cash_flow(source),
-        *_breakdown_total(source),
-        *_breakdown_rolling(source),
-        *_breakdown_monthly(source),
-    ]
+def get_tables(source: SourceData) -> dict[str, list[Table]]:
+    tables = {
+        "Balance": [*_balance(source), *_cash_flow(source)],
+        "Total Breakdown": _breakdown_total(source),
+        "Rolling breakdowns": _breakdown_rolling(source),
+        "Monthly breakdowns": _breakdown_monthly(source),
+    }
     return tables
 
 

@@ -2,6 +2,11 @@ body {
   background-color:#205050;
 }
 
+h1 {
+  color: #bbffdd;
+  text-align: center;
+}
+
 h2 {
   color: #205050;
   text-align: center;
@@ -18,48 +23,29 @@ h3 {
   margin-bottom:20px;
 }
 
-.figure-box {
+.box {
   width:98%;
   padding:1%;
   float:left;
   margin-left:auto;
   margin-right:1%;
   margin-bottom:1%;
-  background-color:#40b080;
   border-radius:10px;
   box-shadow: 2px 2px 15px -5px;
 }
 
-.filters-box {
-  width:98%;
-  padding:1%;
-  float:left;
-  margin-left:auto;
-  margin-right:1%;
-  margin-bottom:1%;
-  background-color:#22aaff;
-  border-radius:10px;
-  box-shadow: 2px 2px 15px -5px;
+.figure-box {
+  background-color:#40b080;
 }
 
 .table-box {
-  width:98%;
-  padding:1%;
-  float:left;
-  margin-left:auto;
-  margin-right:1%;
-  margin-bottom:1%;
   background-color:#22aaff;
-  border-radius:10px;
-  box-shadow: 2px 2px 15px -5px;
 }
 
-
-.collapsible, .collapse-all {
-  cursor: pointer;
-}
-.collapsible-content {
-  display: block;
+.link-box {
+  background-color:#22aaff;
+  font-family: monospace;
+  font-size: 3em;
 }
 
 tr:nth-child(even) {
