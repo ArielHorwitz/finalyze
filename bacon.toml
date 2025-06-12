@@ -1,0 +1,19 @@
+default_job = "lint"
+summary = false
+
+[jobs.lint]
+command = ["./scripts/lint.sh"]
+need_stdout = true
+watch = [
+    "pyproject.toml",
+    "uv.lock",
+    ".python-version",
+    ".gitignore",
+    "./src",
+    "./scripts",
+]
+
+[jobs.format]
+command = ["./scripts/format.sh"]
+need_stdout = true
+on_success = "back"
