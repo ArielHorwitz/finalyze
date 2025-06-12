@@ -49,7 +49,7 @@ def add_totals(df, collect=True):
     for name, dtype in dtypes.items():
         if dtype.is_numeric():
             col = df.lazy().select(pl.col(name).sum()).collect()
-        elif dtype.to_python() == str:
+        elif dtype.to_python() is str:
             col = "<< TOTAL >>"
         else:
             col = None
