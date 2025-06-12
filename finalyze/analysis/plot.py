@@ -3,13 +3,14 @@ from pathlib import Path
 from finalyze.config import config
 
 TEMPLATE_DIR = Path(__file__).parent.parent.joinpath("templates").resolve()
-HTML = (TEMPLATE_DIR / "index.html").read_text()
+TABLE_PAGE = (TEMPLATE_DIR / "table.html").read_text()
+PLOTS_PAGE = (TEMPLATE_DIR / "plots.html").read_text()
+INDEX_PAGE = (TEMPLATE_DIR / "index.html").read_text()
 CSS = (TEMPLATE_DIR / "style.css").read_text()
-SCRIPT = (TEMPLATE_DIR / "script.js").read_text()
 FIGURE_DIV = (TEMPLATE_DIR / "figure.html").read_text()
 
 
-def get_html(source_table, tables):
+def plots_html(tables, title):
     color_map = {
         name: color.as_hex() for name, color in config().analysis.graphs.colors.items()
     }
@@ -31,36 +32,34 @@ def get_html(source_table, tables):
         fig_html = fig.to_html(full_html=False, include_plotlyjs=include_plotlyjs)
         div = FIGURE_DIV.format(figure=fig_html, plot_title=table.title)
         divs.append(div)
-    content = "\n".join(divs)
-    # Filters
-    filters = config().analysis.filters
-    if filters.has_effect:
-        field_values = {
-            field_name: getattr(filters, field_name)
-            for field_name in filters.model_fields_set
-        }
-        formatted_filters = "<br>".join(
-            f"<b>{name}:</b> {value}"
-            for name, value in field_values.items()
-            if value is not None
-        )
-    else:
-        formatted_filters = "No filters."
-    if config().analysis.anonymization.enable:
-        formatted_filters = f"{formatted_filters}<br><br><i><b>Anonymized.</b></i>"
-    # Source data table
-    formatted_source_rows = ["".join(f"<th>{v}</th>" for v in source_table.columns)]
-    for row in source_table.iter_rows():
-        formatted_source_rows.append("".join(f"<td>{v}</td>" for v in row))
-    formatted_source_rows = "".join(f"<tr>{r}</tr>" for r in formatted_source_rows)
-    formatted_source_table = f"<table>{formatted_source_rows}</table>"
+    all_figures = "\n".join(divs)
     # Generate and export html
-    html_text = HTML.format(
+    return PLOTS_PAGE.format(
         css=CSS,
-        script=SCRIPT,
         title=title,
-        main_content=content,
-        filters=formatted_filters,
-        source_table=formatted_source_table,
+        figures=all_figures,
     )
-    return html_text
+
+
+def table_html(table, title):
+    formatted_rows = ["".join(f"<th>{v}</th>" for v in table.columns)]
+    for row in table.iter_rows():
+        formatted_rows.append("".join(f"<td>{v}</td>" for v in row))
+    formatted_rows = "".join(f"<tr>{r}</tr>" for r in formatted_rows)
+    formatted_table = f"<table>{formatted_rows}</table>"
+    return TABLE_PAGE.format(
+        css=CSS,
+        title=title,
+        table=formatted_table,
+    )
+
+
+def index_html(links, title):
+    formatted_links = "<br>".join(
+        f"<a href={link}>{name}</li>" for name, link in links.items()
+    )
+    return INDEX_PAGE.format(
+        css=CSS,
+        title=title,
+        links=formatted_links,
+    )
