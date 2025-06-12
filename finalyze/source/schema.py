@@ -49,8 +49,7 @@ def validate_schema(df, expected_schema):
         actual_dtype = actual_schema[column]
         if actual_dtype != expected_dtype:
             errors.append(
-                f"Column {column!r}"
-                f" [dtype: {actual_dtype} expected: {expected_dtype}]"
+                f"Column {column!r} [dtype: {actual_dtype} expected: {expected_dtype}]"
             )
     if errors:
         raise InvalidSchema(", ".join(errors))

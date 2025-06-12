@@ -124,9 +124,7 @@ class CardFormat:
         for column_index in range(raw_df.shape[1]):
             actual_title = raw_df.iloc[0, column_index]
             if actual_title != title:
-                raise ParsingError(
-                    f"Expected title {title!r}" f", got: {actual_title!r}"
-                )
+                raise ParsingError(f"Expected title {title!r}, got: {actual_title!r}")
         # Check headers row
         for column_index, expected_header in enumerate(cls.HEADERS):
             actual_header = raw_df.iloc[1, column_index]
@@ -138,8 +136,7 @@ class CardFormat:
         actual_totals_name = raw_df.iloc[-1, 4]
         if actual_totals_name != cls.TOTALS_NAME:
             raise ParsingError(
-                f"Expected {cls.TOTALS_NAME!r} in last row"
-                f", got: {actual_totals_name!r}"
+                f"Expected {cls.TOTALS_NAME!r} in last row, got: {actual_totals_name!r}"
             )
         for column_index in range(4):
             expected_nan = raw_df.iloc[-1, column_index]
