@@ -9,7 +9,7 @@ watch = [
     "uv.lock",
     ".python-version",
     ".gitignore",
-    "./src",
+    "./finalyze",
     "./scripts",
 ]
 
