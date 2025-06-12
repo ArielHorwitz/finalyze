@@ -42,6 +42,7 @@ class SourceData:
         sentinels: bool = False,
         edge_ticks: bool = False,
         round: bool = False,
+        net_by_subtag: bool = False,
     ):
         df = self._source
         if breakdown:
@@ -49,9 +50,17 @@ class SourceData:
         if not include_external:
             df = df.filter(~pl.col("is_external"))
         if incomes:
-            df = self._filter_net(df, incomes_or_expenses=True)
+            df = self._filter_net(
+                df,
+                incomes_or_expenses=True,
+                by_subtag=net_by_subtag,
+            )
         elif expenses:
-            df = self._filter_net(df, incomes_or_expenses=False)
+            df = self._filter_net(
+                df,
+                incomes_or_expenses=False,
+                by_subtag=net_by_subtag,
+            )
         if not sentinels:
             df = df.filter(~pl.col("is_sentinel_tick"))
         if not edge_ticks:
@@ -60,13 +69,15 @@ class SourceData:
             df = round_columns(df)
         return df
 
-    def _filter_net(self, df, incomes_or_expenses: bool):
+    @staticmethod
+    def _filter_net(df, incomes_or_expenses: bool, by_subtag: bool):
         operation = operator.gt if incomes_or_expenses else operator.lt
         amount_filter = operation(pl.col("amount"), 0)
         if config().analysis.net_by_tag:
-            tags_net = self._source.group_by("tag").agg(pl.col("amount").sum())
-            tags = tags_net.filter(amount_filter)["tag"]
-            df = df.filter(pl.col("tag").is_in(tags))
+            tag_cols = ("tag", "subtag") if by_subtag else ("tag",)
+            tags_net = df.group_by(tag_cols).agg(pl.col("amount").sum())
+            tags = tags_net.filter(amount_filter).drop("amount")
+            df = df.join(tags, on=tag_cols, how="inner")
         else:
             df = df.filter(amount_filter)
         # Reverse (if expenses)

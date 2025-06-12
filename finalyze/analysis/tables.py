@@ -245,8 +245,8 @@ def _cash_flow(source) -> list[Table]:
 def _breakdown_total(source) -> list[Table]:
     total_breakdowns = []
     for df, name in [
-        (source.get(breakdown=True, incomes=True), "incomes"),
-        (source.get(breakdown=True, expenses=True), "expenses"),
+        (source.get(breakdown=True, incomes=True, net_by_subtag=True), "incomes"),
+        (source.get(breakdown=True, expenses=True, net_by_subtag=True), "expenses"),
     ]:
         data = df.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum())
         total = data["amount"].sum()
