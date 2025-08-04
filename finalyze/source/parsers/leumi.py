@@ -57,8 +57,12 @@ class CheckingFormat:
         raw = pl.from_pandas(raw_df)
         # Compile data
         amount_expression = pl.col("5").cast(pl.Float64) - pl.col("4").cast(pl.Float64)
+        try:
+            date_data = raw.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%y"))
+        except Exception:
+            date_data = raw.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%Y"))
         data = {
-            "date": raw.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%y")),
+            "date": date_data,
             "amount": raw.select(amount_expression),
             "description": raw.select(pl.col("2").cast(pl.String)),
         }
