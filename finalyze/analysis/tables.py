@@ -86,6 +86,38 @@ def get_tables(source: SourceData) -> dict[str, list[Table]]:
     return tables
 
 
+def _account_balances_table(source: SourceData) -> Table:
+    df = source.get(include_external=True, edge_ticks=True)
+    balances = (
+        df.sort("date")
+        .group_by("account", "source")
+        .agg(
+            pl.col("balance_source").last().alias("balance"),
+            pl.col("is_external").last().alias("is_external"),
+        )
+        .sort("balance", descending=True)
+        .select(
+            pl.col("account"),
+            pl.col("source"),
+            pl.col("balance"),
+            pl.col("is_external"),
+        )
+    )
+    total_internal = balances.filter(~pl.col("is_external"))["balance"].sum()
+    total_external = balances.filter(pl.col("is_external"))["balance"].sum()
+    total_all = balances["balance"].sum()
+    balances = balances.select("account", "source", "balance")
+    totals = pl.DataFrame(
+        {
+            "account": ["total", "total", "total"],
+            "source": ["total", "internal", "external"],
+            "balance": [total_all, total_internal, total_external],
+        }
+    )
+    final_balances = pl.concat([totals, balances])
+    return Table("Account balances", final_balances)
+
+
 def _balance(source) -> list[Table]:
     account_balances = Table(
         "Account balances",
@@ -152,7 +184,7 @@ def _balance(source) -> list[Table]:
         ),
         extra_traces=[other_balances, account_balances],
     )
-    return [balance]
+    return [_account_balances_table(source), balance]
 
 
 def _cash_flow(source) -> list[Table]:
