@@ -3,7 +3,6 @@ import subprocess
 import sys
 
 import polars as pl
-import polars.exceptions
 
 from finalyze.analysis import plot
 from finalyze.analysis.tables import get_tables
@@ -47,14 +46,6 @@ def run():
         output_file = write_html(title, content)
         links[title] = output_file
 
-    source_table = source_data.get(round=True, include_external=True)
-    source_table = _select_display_columns(source_table)
-    source_table_file = write_html(
-        "Source data",
-        plot.table_html(source_table, "Source data"),
-    )
-    links["Source data"] = source_table_file
-
     index_content = plot.index_html(links, top_title)
     index_file_name = write_html("index", index_content)
 
@@ -68,16 +59,3 @@ def _validate_tags(df):
         print_table(null_tags, "Missing tags")
         print(f"Missing {null_tags.height} tags", file=sys.stderr)
         exit(1)
-
-
-def _select_display_columns(source_data):
-    display_columns = config().analysis.source_table_columns
-    if not display_columns:
-        return source_data
-    try:
-        return source_data.select(display_columns)
-    except polars.exceptions.ColumnNotFoundError as e:
-        raise ValueError(
-            "Available columns for analysis.source_table_columns config: "
-            f"{source_data.columns}"
-        ) from e

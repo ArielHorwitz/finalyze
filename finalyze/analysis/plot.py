@@ -18,23 +18,29 @@ def plots_html(tables, title):
     }
     lightweight = config().analysis.graphs.lightweight_html
     template = config().analysis.graphs.plotly_template
-    # Plots
     divs = []
+    plotly_js_included = False
     for i, table in enumerate(tables):
-        fig = table.get_figure(
-            template=template,
-            color_discrete_map=color_map,
-            **config().analysis.graphs.plotly_arguments,
-        )
-        if not fig:
-            continue
-        is_first = i == 0
-        include_plotlyjs = "cdn" if (is_first and lightweight) else is_first
-        fig_html = fig.to_html(full_html=False, include_plotlyjs=include_plotlyjs)
-        div = FIGURE_DIV.format(figure=fig_html, plot_title=table.title)
-        divs.append(div)
+        if table.has_figure:
+            fig = table.get_figure(
+                template=template,
+                color_discrete_map=color_map,
+                **config().analysis.graphs.plotly_arguments,
+            )
+            if not fig:
+                continue
+            include_plotlyjs = False
+            if not plotly_js_included:
+                include_plotlyjs = "cdn" if lightweight else True
+            plotly_js_included = True
+            fig_html = fig.to_html(full_html=False, include_plotlyjs=include_plotlyjs)
+            div = FIGURE_DIV.format(figure=fig_html, plot_title=table.title)
+            divs.append(div)
+        else:
+            formatted_table = format_table_html(table.source)
+            div = f'<div class="box table-box">\n<h2>{table.title}</h2>\n<div>\n{formatted_table}\n</div>\n</div>'
+            divs.append(div)
     all_figures = "\n".join(divs)
-    # Generate and export html
     return PLOTS_PAGE.format(
         css=CSS,
         title=title,
@@ -43,12 +49,16 @@ def plots_html(tables, title):
     )
 
 
-def table_html(table, title):
+def format_table_html(table):
     formatted_rows = ["".join(f"<th>{v}</th>" for v in table.columns)]
     for row in table.iter_rows():
         formatted_rows.append("".join(f"<td>{v}</td>" for v in row))
     formatted_rows = "".join(f"<tr>{r}</tr>" for r in formatted_rows)
-    formatted_table = f"<table>{formatted_rows}</table>"
+    return f"<table>{formatted_rows}</table>"
+
+
+def table_html(table, title):
+    formatted_table = format_table_html(table)
     return TABLE_PAGE.format(
         css=CSS,
         title=title,

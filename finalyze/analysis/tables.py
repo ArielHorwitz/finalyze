@@ -4,6 +4,7 @@ from typing import Any, Callable, Optional
 
 import plotly.express as px
 import polars as pl
+import polars.exceptions
 from plotly.graph_objects import Figure
 
 from finalyze.config import config
@@ -60,12 +61,27 @@ def add_totals(df, collect=True):
     return final
 
 
+def _source_data_table(source: SourceData) -> Table:
+    source_table = source.get(round=True, include_external=True)
+    display_columns = config().analysis.source_table_columns
+    if display_columns:
+        try:
+            source_table = source_table.select(display_columns)
+        except polars.exceptions.ColumnNotFoundError as e:
+            raise ValueError(
+                "Available columns for analysis.source_table_columns config: "
+                f"{source_table.columns}"
+            ) from e
+    return Table("Source data", source_table)
+
+
 def get_tables(source: SourceData) -> dict[str, list[Table]]:
     tables = {
         "Balance": [*_balance(source), *_cash_flow(source)],
         "Total Breakdown": _breakdown_total(source),
         "Rolling breakdowns": _breakdown_rolling(source),
         "Monthly breakdowns": _breakdown_monthly(source),
+        "Source data": [_source_data_table(source)],
     }
     return tables
 
