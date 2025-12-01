@@ -77,7 +77,7 @@ def _source_data_table(source: SourceData) -> Table:
 
 def get_tables(source: SourceData) -> dict[str, list[Table]]:
     tables = {
-        "Balance": [*_balance(source), *_cash_flow(source)],
+        "Balance": _balance(source),
         "Total Breakdown": _breakdown_total(source),
         "Rolling breakdowns": _breakdown_rolling(source),
         "Monthly breakdowns": _breakdown_monthly(source),
@@ -116,6 +116,69 @@ def _account_balances_table(source: SourceData) -> Table:
     )
     final_balances = pl.concat([totals, balances])
     return Table("Account balances", final_balances)
+
+
+def _rolling_balances(source: SourceData) -> Table:
+    df = source.get(include_external=True, edge_ticks=True)
+    df_internal = df.filter(~pl.col("is_external")).sort("date")
+    df_total = df.sort("date")
+    df_internal = df_internal.select("date", "balance_inexternal").unique(
+        "date", keep="last"
+    )
+    df_total = df_total.select("date", "balance_total").unique("date", keep="last")
+    all_rolling_data = []
+    for weight_name, weights in config().analysis.rolling_average_weights.items():
+        if len(weights) <= 1:
+            continue
+        window_size_days = len(weights) * 30
+        weights_expanded = []
+        for w in weights:
+            weights_expanded.extend([w] * 30)
+        if df_total.height > 0:
+            rolling_total = df_total.with_columns(
+                pl.col("balance_total")
+                .rolling_mean(window_size=window_size_days, weights=weights_expanded)
+                .alias("balance"),
+                pl.lit("total").alias("type"),
+                pl.lit(weight_name).alias("weight"),
+            ).select("date", "balance", "type", "weight")
+            all_rolling_data.append(rolling_total)
+        if df_internal.height > 0:
+            rolling_internal = df_internal.with_columns(
+                pl.col("balance_inexternal")
+                .rolling_mean(window_size=window_size_days, weights=weights_expanded)
+                .alias("balance"),
+                pl.lit("internal").alias("type"),
+                pl.lit(weight_name).alias("weight"),
+            ).select("date", "balance", "type", "weight")
+            all_rolling_data.append(rolling_internal)
+    if not all_rolling_data:
+        return Table(
+            "Balance (rolling average)",
+            pl.DataFrame({"date": [], "balance": [], "type": [], "weight": []}),
+            figure_constructor=px.line,
+            figure_arguments=dict(
+                x="date",
+                y="balance",
+                color="type",
+                line_dash="weight",
+            ),
+        )
+    combined = pl.concat(all_rolling_data)
+    return Table(
+        "Balance (rolling average)",
+        combined,
+        figure_constructor=px.line,
+        figure_arguments=dict(
+            x="date",
+            y="balance",
+            hover_data=["date", "balance"],
+            line_shape="spline",
+            line_dash="weight",
+            color="type",
+            labels=dict(balance="Balance", date="Date", type="Type", weight="Window"),
+        ),
+    )
 
 
 def _balance(source) -> list[Table]:
@@ -184,7 +247,12 @@ def _balance(source) -> list[Table]:
         ),
         extra_traces=[other_balances, account_balances],
     )
-    return [_account_balances_table(source), balance]
+    return [
+        _account_balances_table(source),
+        balance,
+        *_cash_flow(source),
+        _rolling_balances(source),
+    ]
 
 
 def _cash_flow(source) -> list[Table]:
