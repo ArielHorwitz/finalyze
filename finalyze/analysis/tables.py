@@ -78,9 +78,10 @@ def _source_data_table(source: SourceData) -> Table:
 def get_tables(source: SourceData) -> dict[str, list[Table]]:
     tables = {
         "Balance": _balance(source),
-        "Total Breakdown": _breakdown_total(source),
-        "Rolling breakdowns": _breakdown_rolling(source),
-        "Monthly breakdowns": _breakdown_monthly(source),
+        "Breakdown - Overview": _breakdown_total(source)
+        + _breakdown_rolling_sunburst(source),
+        "Breakdown - Trends": _breakdown_rolling(source),
+        "Breakdown - Monthly": _breakdown_monthly(source),
         "Source data": [_source_data_table(source)],
     }
     return tables
@@ -388,6 +389,57 @@ def _breakdown_total(source) -> list[Table]:
         )
         total_breakdowns.append(table)
     return total_breakdowns
+
+
+def _breakdown_rolling_sunburst(source) -> list[Table]:
+    tables = []
+    for weight_name, weights in config().analysis.rolling_average_weights.items():
+        for df, name in [
+            (source.get(sentinels=True, breakdown=True, incomes=True), "incomes"),
+            (source.get(sentinels=True, breakdown=True, expenses=True), "expenses"),
+        ]:
+            data = (
+                df.group_by("month", "tags", "tag", "subtag")
+                .agg(pl.col("amount").sum())
+                .sort("month", "tags")
+                .with_columns(
+                    pl.col("amount")
+                    .rolling_mean(window_size=len(weights), weights=weights)
+                    .over("tags")
+                    .alias("rolling"),
+                )
+            )
+            last_month = data["month"].unique().sort(descending=True)[0]
+            data = (
+                data.filter(pl.col("month") == last_month)
+                .drop_nulls("rolling")
+                .filter(pl.col("rolling") > 0)
+            )
+            total = data["rolling"].sum()
+            data = data.with_columns((pl.col("rolling") / total * 100).alias("percent"))
+            tables.append(
+                Table(
+                    f"Total {name} breakdown - rolling {weight_name}",
+                    data,
+                    figure_constructor=px.sunburst,
+                    figure_arguments=dict(
+                        path=["tag", "subtag"],
+                        values="rolling",
+                        hover_data={"tags": True, "rolling": True, "percent": ":.2f"},
+                        labels=dict(
+                            parent="Tag",
+                            id="Tags",
+                            labels="Tags",
+                            tag="Tag",
+                            subtag="Subtag",
+                            rolling="Rolling",
+                            percent="Percent",
+                        ),
+                        color="tag",
+                    ),
+                )
+            )
+    return tables
 
 
 def _breakdown_rolling(source) -> list[Table]:

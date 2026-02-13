@@ -69,14 +69,8 @@ def table_html(table, title):
 def index_html(links, title):
     link_keys = {}
     named_links = {}
-    for name, link in links.items():
-        keys = list(link_keys.values())
-        available_keys = [c for c in name.lower() if c not in keys]
-        if not available_keys:
-            available_keys = [str(i) for i in range(1, 10) if str(i) not in keys]
-            if not available_keys:
-                continue
-        key = available_keys[0]
+    for i, (name, link) in enumerate(links.items(), start=1):
+        key = str(i)
         link_keys[key] = link
         named_links[f"[{key}] {name}"] = link
 
