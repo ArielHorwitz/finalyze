@@ -48,7 +48,7 @@ def run():
 
     index_content = plot.index_html(links, top_title)
     index_file_name = write_html("index", index_content)
-    print(f"Plots index: {output_dir / index_file_name}")
+    print(f"Plots index: file://{output_dir / index_file_name}")
 
     if config().analysis.graphs.open:
         subprocess.run(["xdg-open", output_dir / index_file_name])
