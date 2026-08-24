@@ -1,6 +1,10 @@
 # Finalyze
 A bespoke personal financial analysis tool.
 
+![Account balances over time](docs/screenshots/face.png)
+
+![Monthly cash flow](docs/screenshots/cash_flow.png)
+
 Originally a small script meant to parse files exported from the bank website and produce simple graphs for personal financial planning. It has grown in scope to be quite elaborate, but still intended for my own personal financial planning.
 
 ## Usage
@@ -28,6 +32,10 @@ The pipeline includes the following three subcommands:
 - **Ingest**: Import data from exported files. Supports excel (.xls) file exports from Leumi bank.
 - **Tag**: Categorize transactions for later grouping in the analysis.
 - **Analyze**: Produce tables to an html file.
+
+![Income and expense breakdowns](docs/screenshots/readme_breakdown.png)
+
+*Example reports generated from mock demo data.*
 
 Run `finalyze <SUBCOMMAND>` to run only a specific subcommand of the pipeline.
 
