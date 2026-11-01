@@ -1,534 +1,243 @@
-import dataclasses
-import datetime
-from typing import Any, Callable, Optional
+"""The analysis tables: frames computed from the source data and options alone,
+which the dashboard (`finalyze.analysis.dashboard`) is built from.
 
-import plotly.express as px
+Incomes and expenses are told apart one way everywhere (by tag when netting by
+tag, see `SourceData`), and rolling means are plain means over the calendar
+months of a window, with 0 in months without rows."""
+
+from collections.abc import Sequence
+from typing import Literal, Optional
+
 import polars as pl
-import polars.exceptions
-from plotly.graph_objects import Figure
 
-from finalyze.config import config
-from finalyze.display import round_columns
-from finalyze.source.data import SourceData
+from finalyze.source.data import FLOW_KINDS, SourceData
+from finalyze.store import TagKind
 
-
-@dataclasses.dataclass
-class Table:
-    title: str
-    source: pl.DataFrame = dataclasses.field(repr=False)
-    figure_constructor: Optional[Callable[[Any], Figure]] = None
-    figure_arguments: dict[str, Any] = dataclasses.field(default_factory=dict)
-    extra_traces: list["Table"] = dataclasses.field(default_factory=list)
-
-    def __post_init__(self):
-        self.source = round_columns(self.source)
-        if isinstance(self.source, pl.LazyFrame):
-            self.source = self.source.collect()
-
-    @property
-    def has_figure(self):
-        return self.figure_constructor is not None
-
-    def get_figure(self, **kwargs):
-        if self.figure_constructor is None:
-            return None
-        self_kwargs = self.figure_arguments | kwargs
-        figure = self.figure_constructor(self.source.to_pandas(), **self_kwargs)
-        for extra_table in self.extra_traces:
-            for trace in extra_table.get_figure(**kwargs).data:
-                figure.add_trace(trace)
-        return figure
-
-    def with_totals(self):
-        return add_totals(self.source)
+Direction = Literal["incomes", "expenses"]
+Flow = Literal["net", "incomes", "expenses", "saved"]
+DIRECTIONS: tuple[Direction, ...] = ("incomes", "expenses")
+FLOWS: tuple[Flow, ...] = ("net", "incomes", "expenses", "saved")
+SAVING_KINDS: frozenset[TagKind] = frozenset({"saving"})
+ROLLING_WINDOWS: tuple[int, ...] = (1, 3, 6, 12)
+"""Rolling means to choose from, by their number of months. A month compared
+with the 1-month mean before it is compared with the month before."""
+DEFAULT_ROLLING_WINDOW = 6
 
 
-def add_totals(df, collect=True):
-    schema = df.collect_schema()
-    dtypes = dict(zip(schema.names(), schema.dtypes()))
-    totals_row = {}
-    for name, dtype in dtypes.items():
-        if dtype.is_numeric():
-            col = df.lazy().select(pl.col(name).sum()).collect()
-        elif dtype.to_python() is str:
-            col = "<< TOTAL >>"
-        else:
-            col = None
-        totals_row[name] = col
-    final = pl.concat([df.lazy(), pl.LazyFrame(totals_row)])
-    if collect or isinstance(df, pl.DataFrame):
-        return final.collect()
-    return final
+def _direction_flags(flow: Flow) -> dict[str, bool]:
+    return {"incomes": flow == "incomes", "expenses": flow == "expenses"}
 
 
-def _source_data_table(source: SourceData) -> Table:
-    source_table = source.get(round=True, include_external=True)
-    display_columns = config().analysis.source_table_columns
-    if display_columns:
-        try:
-            source_table = source_table.select(display_columns)
-        except polars.exceptions.ColumnNotFoundError as e:
-            raise ValueError(
-                "Available columns for analysis.source_table_columns config: "
-                f"{source_table.columns}"
-            ) from e
-    return Table("Source data", source_table)
-
-
-def get_tables(source: SourceData) -> dict[str, list[Table]]:
-    tables = {
-        "Balance": _balance(source),
-        "Breakdown - Overview": _breakdown_total(source)
-        + _breakdown_rolling_sunburst(source),
-        "Breakdown - Trends": _breakdown_rolling(source),
-        "Breakdown - Monthly": _breakdown_monthly(source),
-        "Source data": [_source_data_table(source)],
-    }
-    return tables
-
-
-def _account_balances_table(source: SourceData) -> Table:
-    df = source.get(include_external=True, edge_ticks=True)
-    balances = (
-        df.sort("date")
-        .group_by("account", "source")
+def account_balances(source: SourceData) -> pl.DataFrame:
+    """The last balance of every account and source, with its group and the
+    group's role, largest first."""
+    df = source.get(all_groups=True)
+    # In the order balances accumulate, so the last is the end balance
+    return (
+        df.sort("date", maintain_order=True)
+        .group_by("account", "source", maintain_order=True)
         .agg(
             pl.col("balance_source").last().alias("balance"),
-            pl.col("is_external").last().alias("is_external"),
+            pl.col("group").last(),
+            pl.col("group_role").last(),
         )
-        .sort("balance", descending=True)
-        .select(
-            pl.col("account"),
-            pl.col("source"),
-            pl.col("balance"),
-            pl.col("is_external"),
+        .sort("balance", "account", "source", descending=[True, False, False])
+        .select("account", "source", "group", "group_role", "balance")
+    )
+
+
+def flow_rows(
+    source: SourceData,
+    flow: Optional[Flow],
+    kinds: Optional[frozenset[TagKind]] = FLOW_KINDS,
+    **flags,
+) -> pl.DataFrame:
+    """Rows of a flow: every row of tags of these kinds (net, or None), incomes,
+    or expenses (as positive amounts) among them, or money saved (positive
+    when set aside).
+
+    Saved is measured on the spending side (rows of saving tags in accounts of
+    groups for spending), so that both sides of a saving don't cancel out when
+    holding groups are in the flows too."""
+    if flow == "saved":
+        df = source.get(kinds=SAVING_KINDS, **flags)
+        return df.filter(pl.col("group_role") == "spending").with_columns(
+            pl.col("amount") * -1
         )
-    )
-    total_internal = balances.filter(~pl.col("is_external"))["balance"].sum()
-    total_external = balances.filter(pl.col("is_external"))["balance"].sum()
-    total_all = balances["balance"].sum()
-    balances = balances.select("account", "source", "balance")
-    totals = pl.DataFrame(
-        {
-            "account": ["total", "total", "total"],
-            "source": ["total", "internal", "external"],
-            "balance": [total_all, total_internal, total_external],
-        }
-    )
-    final_balances = pl.concat([totals, balances])
-    return Table("Account balances", final_balances)
+    return source.get(kinds=kinds, **_direction_flags(flow), **flags)
 
 
-def _rolling_balances(source: SourceData) -> Table:
-    df = source.get(include_external=True, edge_ticks=True)
-    df_internal = df.filter(~pl.col("is_external")).sort("date")
-    df_total = df.sort("date")
-    df_internal = df_internal.select("date", "balance_inexternal").unique(
-        "date", keep="last"
-    )
-    df_total = df_total.select("date", "balance_total").unique("date", keep="last")
-    all_rolling_data = []
-    for weight_name, weights in config().analysis.rolling_average_weights.items():
-        if len(weights) <= 1:
-            continue
-        window_size_days = len(weights) * 30
-        weights_expanded = []
-        for w in weights:
-            weights_expanded.extend([w] * 30)
-        if df_total.height > 0:
-            rolling_total = df_total.with_columns(
-                pl.col("balance_total")
-                .rolling_mean(window_size=window_size_days, weights=weights_expanded)
-                .alias("balance"),
-                pl.lit("total").alias("type"),
-                pl.lit(weight_name).alias("weight"),
-            ).select("date", "balance", "type", "weight")
-            all_rolling_data.append(rolling_total)
-        if df_internal.height > 0:
-            rolling_internal = df_internal.with_columns(
-                pl.col("balance_inexternal")
-                .rolling_mean(window_size=window_size_days, weights=weights_expanded)
-                .alias("balance"),
-                pl.lit("internal").alias("type"),
-                pl.lit(weight_name).alias("weight"),
-            ).select("date", "balance", "type", "weight")
-            all_rolling_data.append(rolling_internal)
-    if not all_rolling_data:
-        return Table(
-            "Balance (rolling average)",
-            pl.DataFrame({"date": [], "balance": [], "type": [], "weight": []}),
-            figure_constructor=px.line,
-            figure_arguments=dict(
-                x="date",
-                y="balance",
-                color="type",
-                line_dash="weight",
-            ),
-        )
-    combined = pl.concat(all_rolling_data)
-    return Table(
-        "Balance (rolling average)",
-        combined,
-        figure_constructor=px.line,
-        figure_arguments=dict(
-            x="date",
-            y="balance",
-            hover_data=["date", "balance"],
-            line_shape="spline",
-            line_dash="weight",
-            color="type",
-            labels=dict(balance="Balance", date="Date", type="Type", weight="Window"),
-        ),
-    )
-
-
-def _balance(source) -> list[Table]:
-    account_balances = Table(
-        "Account balances",
-        source.get(include_external=True, edge_ticks=True),
-        figure_constructor=px.line,
-        figure_arguments=dict(
-            x="date",
-            y="balance_source",
-            color="account_source",
-            hover_data=[
-                "balance_source",
-                "amount",
-                "description",
-                "tags",
-                "account",
-                "source",
-            ],
-            line_shape="hv",
-            labels=dict(balance_source="Balance", account_source="Source"),
-        ),
-    )
-    other_balances = Table(
-        "Other balances",
-        source.get(edge_ticks=True).with_columns(
-            pl.lit("internal balance").alias("color")
-        ),
-        figure_constructor=px.line,
-        figure_arguments=dict(
-            x="date",
-            y="balance_inexternal",
-            color="color",
-            hover_data=[
-                "amount",
-                "description",
-                "tags",
-                "account",
-                "source",
-                "is_external",
-            ],
-            line_shape="hv",
-            # labels=dict(balance_other="Balance (other)"),
-        ),
-    )
-    balance = Table(
-        "Balance",
-        source.get(include_external=True, edge_ticks=True).with_columns(
-            pl.lit("total balance").alias("color")
-        ),
-        figure_constructor=px.line,
-        figure_arguments=dict(
-            x="date",
-            y="balance_total",
-            color="color",
-            hover_data=[
-                "balance_total",
-                "amount",
-                "description",
-                "tags",
-                "account",
-                "source",
-            ],
-            line_shape="hv",
-            labels=dict(balance_total="Balance"),
-        ),
-        extra_traces=[other_balances, account_balances],
-    )
-    return [
-        _account_balances_table(source),
-        balance,
-        *_cash_flow(source),
-        _rolling_balances(source),
-    ]
-
-
-def _cash_flow(source) -> list[Table]:
-    total_flow = Table(
-        "Cash flow - net",
-        source.get(breakdown=True)
+def monthly_flow(
+    source: SourceData, flow: Flow, kinds: frozenset[TagKind] = FLOW_KINDS
+) -> pl.DataFrame:
+    """Monthly sums of a flow (see `flow_rows`)."""
+    return (
+        flow_rows(source, flow, kinds)
         .group_by("month")
         .agg(pl.col("amount").sum())
         .sort("month")
-        .with_columns(pl.lit("net flow").alias("color")),
-        figure_constructor=px.line,
-        figure_arguments=dict(
-            x="month",
-            y="amount",
-            color="color",
-            hover_data=["month", "amount"],
-            markers=True,
-        ),
     )
-    incomes_flow = Table(
-        "Cash flow - incomes",
-        source.get(breakdown=True, incomes=True)
-        .group_by("month")
-        .agg(pl.col("amount").sum())
-        .sort("month")
-        .with_columns(pl.lit("incomes flow").alias("color")),
-        figure_constructor=px.bar,
-        figure_arguments=dict(
-            x="month",
-            y="amount",
-            color="color",
-            hover_data=["month", "amount"],
-            barmode="relative",
-        ),
+
+
+def calendar(source: SourceData, last_month: Optional[str] = None) -> pl.DataFrame:
+    """Every month of the data (up to `last_month`), as a "month" column."""
+    months = source.months
+    if last_month is not None:
+        months = months.filter(pl.col("month") <= last_month)
+    return months
+
+
+def _monthly_grid(
+    sums: pl.DataFrame, keys: Sequence[str], months: pl.DataFrame
+) -> pl.DataFrame:
+    """Monthly sums by keys, in every month (0 without rows), sorted by keys
+    and month. Keys may be null (e.g. untagged)."""
+    grid = sums.select(keys).unique().join(months, how="cross")
+    return (
+        grid.join(sums, on=[*keys, "month"], how="left", nulls_equal=True)
+        .with_columns(pl.col("amount").fill_null(0.0))
+        .sort(*keys, "month", nulls_last=True)
     )
-    expenses_flow = Table(
-        "Cash flow - expenses",
-        source.get(breakdown=True, expenses=True)
-        .group_by("month")
-        .agg(pl.col("amount").sum() * -1)
-        .sort("month")
-        .with_columns(pl.lit("expenses flow").alias("color")),
-        figure_constructor=px.bar,
-        figure_arguments=dict(
-            x="month",
-            y="amount",
-            color="color",
-            hover_data=["month", "amount"],
-            barmode="relative",
-        ),
+
+
+def _rolling_mean(window: int) -> pl.Expr:
+    return pl.col("amount").rolling_mean(window_size=window)
+
+
+def rolling_column(window: int) -> str:
+    """The column of a window's rolling means, in tables of several windows."""
+    return f"rolling_{window}"
+
+
+def _rolling_means(windows: Sequence[int], keys: Sequence[str] = ()) -> list[pl.Expr]:
+    """The rolling means of every window (by keys), see `rolling_column`."""
+    means = []
+    for window in windows:
+        mean = _rolling_mean(window)
+        if keys:
+            mean = mean.over(keys)
+        means.append(mean.alias(rolling_column(window)))
+    return means
+
+
+def rolling_flow_of_windows(
+    source: SourceData, flow: Flow, windows: Sequence[int] = ROLLING_WINDOWS
+) -> pl.DataFrame:
+    """`monthly_flow` of the averaged kinds over every month of the data (0 in
+    months without rows, e.g. without savings), and its rolling means of every
+    window (see `rolling_column`)."""
+    sums = monthly_flow(source, flow, source.averaged_kinds)
+    return (
+        calendar(source)
+        .join(sums, on="month", how="left")
+        .with_columns(pl.col("amount").fill_null(0.0))
+        .with_columns(_rolling_means(windows))
     )
-    rolling_flows = [
-        Table(
-            "Cash flow (rolling mean)",
-            pl.concat(
-                df.group_by("month")
-                .agg(pl.col("amount").sum())
-                .sort("month")
-                .with_columns(
-                    pl.lit(f"{name} rolling {weight_name}").alias("color"),
-                    pl.col("amount")
-                    .rolling_mean(window_size=len(weights), weights=weights)
-                    .alias("amount"),
-                )
-                for weight_name, weights in (
-                    config().analysis.rolling_average_weights.items()
-                )
-                if len(weights) > 1
-            ),
-            figure_constructor=px.line,
-            figure_arguments=dict(
-                x="month",
-                y="amount",
-                hover_data=["month", "amount"],
-                markers=True,
-                line_shape="spline",
-                line_dash="color",
-                color="color",
-            ),
+
+
+def rolling_flow(source: SourceData, flow: Flow, window: int) -> pl.DataFrame:
+    """Rolling means of `monthly_flow` of the averaged kinds, over every month
+    of the data (0 in months without rows, e.g. without savings)."""
+    flows = rolling_flow_of_windows(source, flow, (window,))
+    return flows.select("month", amount=rolling_column(window))
+
+
+def _percent(column: str) -> pl.Expr:
+    """Percent of the column's (signed) total, 0 if the total is 0."""
+    total = pl.col(column).sum()
+    return (
+        pl.when(total != 0)
+        .then(pl.col(column) / total * 100)
+        .otherwise(0.0)
+        .alias("percent")
+    )
+
+
+def breakdown_total(source: SourceData, direction: Direction) -> pl.DataFrame:
+    """Sums by tag and subtag (with its kind), and their percent of the total.
+    Sums are signed (e.g. a tag of expenses that was refunded more than it
+    spent in the period is negative)."""
+    df = flow_rows(source, direction)
+    data = df.group_by("tags", "tag", "subtag", "kind").agg(pl.col("amount").sum())
+    return data.with_columns(_percent("amount"))
+
+
+def breakdown_rolling_total_of_windows(
+    source: SourceData, direction: Direction, windows: Sequence[int], month: str
+) -> dict[int, pl.DataFrame]:
+    """`breakdown_rolling_total` of every window."""
+    keys = ("tag", "subtag", "kind")
+    df = flow_rows(source, direction, source.averaged_kinds)
+    sums = df.group_by("month", *keys).agg(pl.col("amount").sum())
+    grid = _monthly_grid(sums, keys, calendar(source, month)).with_columns(
+        _rolling_means(windows, keys)
+    )
+    in_month = grid.filter(pl.col("month") == month)
+    totals = {}
+    for window in windows:
+        data = (
+            in_month.select(*keys, "month", "amount", rolling=rolling_column(window))
+            .drop_nulls("rolling")
+            .filter(pl.col("rolling") != 0)
         )
-        for df, name in [
-            (source.get(breakdown=True), "total"),
-            (source.get(breakdown=True, incomes=True), "incomes"),
-            (source.get(breakdown=True, expenses=True), "expenses"),
-        ]
+        totals[window] = data.with_columns(_percent("rolling"))
+    return totals
+
+
+def breakdown_rolling_total(
+    source: SourceData, direction: Direction, window: int, month: str
+) -> pl.DataFrame:
+    """Rolling means of the averaged kinds by tag, subtag and kind in a month,
+    and their percent of the total. Means are signed, and those of 0 left out,
+    so the means add up to the rolling mean of the flow. A subtag has a mean by
+    kind when some of its transactions have a kind set."""
+    return breakdown_rolling_total_of_windows(source, direction, (window,), month)[
+        window
     ]
-    cash_flow = Table(
-        "Cash flow",
-        pl.DataFrame(),
-        figure_constructor=px.bar,
-        figure_arguments=dict(
-            barmode="relative",
-            # color="color",
-        ),
-        extra_traces=[
-            total_flow,
-            incomes_flow,
-            expenses_flow,
-            *rolling_flows,
-        ],
+
+
+def tag_trends_of_windows(
+    source: SourceData,
+    direction: Direction,
+    windows: Sequence[int] = ROLLING_WINDOWS,
+    by_subtag: bool = False,
+) -> pl.DataFrame:
+    """`tag_trends` with the rolling means of every window (see
+    `rolling_column`)."""
+    keys = ("tag", "subtag") if by_subtag else ("tag",)
+    df = flow_rows(source, direction, source.averaged_kinds)
+    sums = df.group_by("month", *keys).agg(pl.col("amount").sum())
+    return _monthly_grid(sums, keys, calendar(source)).with_columns(
+        _rolling_means(windows, keys)
     )
-    return [cash_flow]
 
 
-def _breakdown_total(source) -> list[Table]:
-    total_breakdowns = []
-    for df, name in [
-        (source.get(breakdown=True, incomes=True, net_by_subtag=True), "incomes"),
-        (source.get(breakdown=True, expenses=True, net_by_subtag=True), "expenses"),
-    ]:
-        data = df.group_by("tags", "tag", "subtag").agg(pl.col("amount").sum())
-        total = data["amount"].sum()
-        percent_col = pl.col("amount") / total * 100
-        data = data.with_columns(percent_col.alias("percent"))
-        table = Table(
-            f"Total {name} breakdown",
-            data,
-            figure_constructor=px.sunburst,
-            figure_arguments=dict(
-                path=["tag", "subtag"],
-                values="percent",
-                hover_data={"tags": True, "amount": True, "percent": ":.2f"},
-                labels=dict(
-                    parent="Tag",
-                    id="Tags",
-                    labels="Tags",
-                    tag="Tag",
-                    subtag="Subtag",
-                    amount="Amount",
-                ),
-                color="tag",
-            ),
-        )
-        total_breakdowns.append(table)
-    return total_breakdowns
+def tag_trends(
+    source: SourceData, direction: Direction, window: int, by_subtag: bool = False
+) -> pl.DataFrame:
+    """Monthly sums of the averaged kinds by tag (or by tag and subtag), in
+    every month of the data (0 without rows), and their rolling means. A tag's
+    subtags add up to the tag, means too."""
+    trends = tag_trends_of_windows(source, direction, (window,), by_subtag)
+    return trends.rename({rolling_column(window): "rolling"})
 
 
-def _breakdown_rolling_sunburst(source) -> list[Table]:
-    tables = []
-    for weight_name, weights in config().analysis.rolling_average_weights.items():
-        for df, name in [
-            (source.get(sentinels=True, breakdown=True, incomes=True), "incomes"),
-            (source.get(sentinels=True, breakdown=True, expenses=True), "expenses"),
-        ]:
-            data = (
-                df.group_by("month", "tags", "tag", "subtag")
-                .agg(pl.col("amount").sum())
-                .sort("month", "tags")
-                .with_columns(
-                    pl.col("amount")
-                    .rolling_mean(window_size=len(weights), weights=weights)
-                    .over("tags")
-                    .alias("rolling"),
-                )
-            )
-            last_month = data["month"].unique().sort(descending=True)[0]
-            data = (
-                data.filter(pl.col("month") == last_month)
-                .drop_nulls("rolling")
-                .filter(pl.col("rolling") > 0)
-            )
-            total = data["rolling"].sum()
-            data = data.with_columns((pl.col("rolling") / total * 100).alias("percent"))
-            tables.append(
-                Table(
-                    f"Total {name} breakdown - rolling {weight_name}",
-                    data,
-                    figure_constructor=px.sunburst,
-                    figure_arguments=dict(
-                        path=["tag", "subtag"],
-                        values="rolling",
-                        hover_data={"tags": True, "rolling": True, "percent": ":.2f"},
-                        labels=dict(
-                            parent="Tag",
-                            id="Tags",
-                            labels="Tags",
-                            tag="Tag",
-                            subtag="Subtag",
-                            rolling="Rolling",
-                            percent="Percent",
-                        ),
-                        color="tag",
-                    ),
-                )
-            )
-    return tables
-
-
-def _breakdown_rolling(source) -> list[Table]:
-    monthly_breakdowns = []
-    tag_order = (
-        source.get(breakdown=True)
+def tag_order(source: SourceData) -> pl.Series:
+    """Tags of incomes and expenses by their absolute net amount, largest first."""
+    return (
+        source.get(kinds=FLOW_KINDS)
         .group_by("tag")
         .agg(pl.col("amount").sum())
         .with_columns(pl.col("amount").abs())
-        .sort("amount", descending=True)["tag"]
+        .sort("amount", "tag", descending=[True, False])["tag"]
     )
-    for weight_name, weights in config().analysis.rolling_average_weights.items():
-        line_shape = "spline" if len(weights) > 1 else "linear"
-        for df, name in [
-            (source.get(sentinels=True, breakdown=True, incomes=True), "incomes"),
-            (source.get(sentinels=True, breakdown=True, expenses=True), "expenses"),
-        ]:
-            table = Table(
-                f"Monthly {name} breakdown - rolling {weight_name}",
-                df.group_by("month", "tag")
-                .agg(pl.col("amount").sum())
-                .sort("month", "tag")
-                .with_columns(
-                    pl.col("amount")
-                    .rolling_mean(window_size=len(weights), weights=weights)
-                    .over("tag")
-                    .alias("rolling"),
-                ),
-                figure_constructor=px.line,
-                figure_arguments=dict(
-                    x="month",
-                    y="rolling",
-                    color="tag",
-                    markers=True,
-                    line_shape=line_shape,
-                    hover_data=["tag", "amount", "rolling"],
-                    labels=dict(tag="Tag", amount="Amount", month="Month"),
-                    category_orders=dict(tag=tag_order),
-                ),
-            )
-            monthly_breakdowns.append(table)
-    return monthly_breakdowns
 
 
-def _breakdown_monthly(source) -> list[Table]:
-    last_months = (
-        source.get()
-        .group_by("month")
-        .agg(pl.col("amount").count())
-        .select(pl.col("month"))
-        .sort("month", descending=True)["month"][: config().analysis.breakdown_months]
+def breakdown_months(source: SourceData, direction: Direction) -> pl.DataFrame:
+    """Sums by month, tag and subtag (with its kind). Sums may be negative (e.g.
+    a refund subtag, when netting by tag)."""
+    return (
+        flow_rows(source, direction)
+        .group_by("month", "tags", "tag", "subtag", "kind")
+        .agg(pl.col("amount").sum())
     )
-    last_month_breakdowns = [
-        Table(
-            f"{name} breakdown - {month}",
-            df.filter(pl.col("month") == month)
-            .group_by("tags", "tag", "subtag")
-            .agg(pl.col("amount").sum())
-            .filter(pl.col("amount") >= 0),
-            figure_constructor=px.sunburst,
-            figure_arguments=dict(
-                path=["tag", "subtag"],
-                values="amount",
-                labels=dict(
-                    parent="Tag",
-                    id="Tags",
-                    labels="Tags",
-                    tag="Tag",
-                    subtag="Subtag",
-                    amount="Amount",
-                ),
-                color="tag",
-            ),
-        )
-        for month in last_months
-        for df, name in [
-            (source.get(breakdown=True, incomes=True), "Incomes"),
-            (source.get(breakdown=True, expenses=True), "Expenses"),
-        ]
-    ]
-    return last_month_breakdowns
-
-
-def _months_in_range(min_date: datetime.date, max_date: datetime.date):
-    all_months = []
-    current = min_date.replace(day=1)
-    max_date = max_date.replace(day=2)
-    while current < max_date:
-        all_months.append(current)
-        current = current + datetime.timedelta(days=32)
-        current = current.replace(day=1)
-    return all_months

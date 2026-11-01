@@ -1,0 +1,1475 @@
+# What every figure, label and concept of the app means: the source of the web
+# app's tooltips and its Glossary page (GET /api/glossary), written to also
+# serve as a primer for assistants.
+#
+# Each entry is a table under `term`, keyed by a stable key (the web app's
+# <Term key="...">), in the order of the Glossary page, with:
+# - title: its name on the Glossary page
+# - section: the page's heading it is under
+# - labels: the labels as shown (placeholders: N, <month>, <date>, <tag>)
+# - short: the tooltip, one or two sentences
+# - computed: how it is computed (what is included and left out), in Markdown
+#   (paragraphs, "- " lists, **bold**, `code`, and [text](#key) links to
+#   other entries)
+# - related: keys of related entries
+#
+# Unless an entry says otherwise, a dashboard figure is subject to the shared
+# scope of the "Scope of the dashboard" section: the accounts chosen, the
+# groups under "flows of", "Only these tags", the period, and complete months.
+
+# Scope of the dashboard
+
+[term.period]
+title = "Period"
+section = "Scope of the dashboard"
+labels = ["3M", "6M", "12M", "24M", "YTD", "All", "‹ <month> – <month> · N mo ›"]
+short = "The months shown: the last 3, 6, 12 or 24, the year to date, or all of them. The arrows move the period by its own length."
+computed = """
+Presets count back from the **last month offered**: the last month with transactions (in the chosen accounts), without the current month when [complete months only](#complete_months_only) is on. YTD starts in January of that month's year, and All at the first month with transactions. Both end months are included.
+
+The arrows (and the `,` and `.` keys) turn the preset into explicit months (shown in the accent color), moved by the period's length, and stop at the first and last month offered. Choosing a preset returns to the latest months. Explicit months may include the current month even with complete months only.
+
+Every month of the period is shown, also months without rows (their sums are 0).
+"""
+related = ["complete_months_only", "as_of"]
+
+[term.complete_months_only]
+title = "Complete months only"
+section = "Scope of the dashboard"
+labels = ["complete months only"]
+short = "Leaves the current calendar month, which is incomplete, out of monthly figures. Balances still run to the latest data."
+computed = """
+On (the default), the months offered for monthly figures (cash flows, breakdowns, trends, averages, the month cards) stop at the month before today's. Months chosen explicitly with the period's arrows are kept as chosen.
+
+Balances, the balance cards, the bridge's "then" line and the Ledger run to the latest data either way, unless the period ends earlier: see [as of](#as_of).
+
+The default is set in Settings › Dashboard defaults.
+"""
+related = ["period", "as_of"]
+
+[term.as_of]
+title = "As of (the balances' date)"
+section = "Scope of the dashboard"
+labels = ["as of <date>", "Balances · as of <date>", "balances as of <date>"]
+short = "The date balances are at: the latest transaction's, or the last one in the period if the period ends before the last month offered."
+computed = """
+Balances (the cards, the Balance view, the Ledger's running balances) include every row up to the end of that day, of every kind and group in the chosen accounts.
+
+When the period ends at the last month offered, they run past it to the latest data, so they can be later than the month cards' month (e.g. balances as of 22 Oct with Sep as the last complete month).
+"""
+related = ["available", "net_worth", "complete_months_only"]
+
+[term.accounts_filter]
+title = "Accounts"
+section = "Scope of the dashboard"
+labels = ["account chips", "accounts"]
+short = "Only these accounts, as if the others didn't exist. None chosen means all of them."
+computed = """
+The chosen accounts' rows are kept before anything else is computed, so balances, the net worth, the period's months and the Ledger are theirs only. A chip marked `hold` is an account in a [holding](#role_holding) group.
+"""
+related = ["flows_of", "group"]
+
+[term.flows_of]
+title = "Flows of"
+section = "Scope of the dashboard"
+labels = ["flows of"]
+short = "Which groups' accounts count in cash flows, breakdowns, trends and averages. By default, the spending groups."
+computed = """
+Incomes, expenses, kept, set aside, breakdowns, trends, movers, averages and the runway's expenses use only the accounts of these groups. Balances, the bridge, the data checks and the Ledger always have every group.
+
+[Set aside](#set_aside) counts only the saving rows of **spending** groups among them, so adding a holding group (the other side of a saving) doesn't cancel it out.
+
+The last group can't be left out: flows need one. `e` toggles every group.
+"""
+related = ["group", "role_spending", "role_holding", "set_aside"]
+
+[term.dashboard_controls]
+title = "The dashboard's controls"
+section = "Scope of the dashboard"
+labels = ["When", "Which money", "How to compute"]
+short = "The dashboard's options, grouped by what they do. A group's label lights up, with a dot, while any of its options isn't the default."
+computed = """
+- When: the [period](#period), a preset or explicit months, on the first line.
+- Which money: the [accounts](#accounts_filter), the groups whose [flows](#flows_of) count, and [only these tags](#only_these_tags).
+- How to compute: the [average](#average_of)'s window, [one-offs in averages](#one_offs_in_averages), [net by tag](#net_by_tag), [complete months only](#complete_months_only) and the [Monthly view's months](#monthly_view_months). An option that isn't the default (Settings' Dashboard defaults) is in the accent color, and [reset](#reset_defaults) sets them all back.
+
+The label's tooltip lists what isn't the default. Every option is in the page's URL, and the keys are as before (`?` lists them).
+"""
+related = ["period", "accounts_filter", "flows_of", "only_these_tags", "reset_defaults"]
+
+[term.only_these_tags]
+title = "Only these tags"
+section = "Scope of the dashboard"
+labels = ["Only these tags", "tags: all", "tags: <tag>, <tag>", "N tags", "only <tag>, <tag>"]
+short = "Only these tags in cash flows, breakdowns, trends, averages and Set aside. Balances and the Ledger have every tag."
+computed = """
+Applies to every figure of incomes, expenses and money set aside, and to the runway's expenses. It doesn't apply to balances, the bridge, the data checks or the Ledger. Untagged rows are left out while it is set.
+"""
+related = ["flows_of", "untagged"]
+
+[term.one_offs_in_averages]
+title = "One-offs in averages"
+section = "Scope of the dashboard"
+labels = ["one-offs in averages", "excl. one-offs", "incl. one-offs"]
+short = "Whether one-offs also count in averages, trends and comparisons. They are always in monthly sums, breakdown totals and balances."
+computed = """
+Off (the default, `excl. one-offs`): averages, rolling averages, baselines, trends, movers, the Avg/mo card and the income check count only [regular](#regular) tags. On (`incl. one-offs`, key `O`): regular and [one-off](#one_off) tags.
+
+Monthly sums (the month cards' amounts, Cash flow's bars and table, Breakdown's totals and months, Monthly's cells, the period's totals and rates) always include one-offs. The [runway](#runway) always leaves them out.
+"""
+related = ["one_off", "regular", "rolling_average", "baseline"]
+
+[term.net_by_tag]
+title = "Net by tag"
+section = "Scope of the dashboard"
+labels = ["net by tag"]
+short = "Counts each tag as income or expense by its total, so a refund lowers the tag's expenses instead of adding an income."
+computed = """
+On: a tag's rows are summed over **all the data** (in the chosen accounts and the groups of the figure, of the figure's kinds). A positive sum makes all its rows incomes, a sum of 0 or less makes them expenses (so a refund is a negative expense). [Untagged](#untagged) rows go by their own sign. The classification is the same in every period, so a tag may show as a negative expense in a period where it was refunded more than it spent.
+
+Off: each row goes by its own sign (positive: income, negative: expense).
+
+Net ([kept](#kept)) is the same either way. Set in Settings › Dashboard defaults, toggled with `n`.
+"""
+related = ["incomes", "expenses", "sign_flip"]
+
+[term.average_of]
+title = "Average of"
+section = "Scope of the dashboard"
+labels = ["average of", "previous month", "3 months", "6 months", "12 months"]
+short = "The rolling average shown, and what months are compared with: the plain average of the last 1, 3, 6 or 12 months."
+computed = """
+Chooses the window of every [rolling average](#rolling_average) and [baseline](#baseline) on the dashboard, and of the [runway](#runway). Every window is computed in one response, so switching doesn't reload. With "previous month", a month is compared with the month before, and Cash flow doesn't draw rolling lines (they would equal the bars).
+
+The default (6 months) is set in Settings, and `w` / `W` step through the windows.
+"""
+related = ["rolling_average", "baseline"]
+
+[term.rolling_average]
+title = "Rolling average"
+section = "Scope of the dashboard"
+labels = ["N-mo avg", "N-mo avg through <month>", "Net, N-mo avg through"]
+short = "The plain average of the last N calendar months, up to and including the month."
+computed = """
+The sum of the last N calendar months divided by N, with 0 for months without rows. It uses the months before the period too, and is empty until the data has N months. Of [averaged kinds](#one_offs_in_averages): without one-offs unless they are included.
+
+Not the same as a [baseline](#baseline), which ends the month before.
+"""
+related = ["baseline", "average_of", "one_offs_in_averages"]
+
+[term.baseline]
+title = "Baseline (vs N-mo avg)"
+section = "Scope of the dashboard"
+labels = ["vs N-mo avg", "N-mo avg before", "vs previous month", "▲▼ vs N-mo avg"]
+short = "What a month is compared with: the rolling average of the N months before it, without the month itself."
+computed = """
+The [rolling average](#rolling_average) ending the month before. With "previous month", it is that month's amount. Both the month and its baseline are of [averaged kinds](#one_offs_in_averages), so when one-offs are left out, the compared amount isn't the monthly sum shown (the cards then show it as "X excl. one-offs").
+
+The change is (month − baseline) / |baseline|, blank without a baseline (or with a baseline of 0).
+"""
+related = ["rolling_average", "change_percent", "average_of"]
+
+[term.change_percent]
+title = "Change from the baseline (▲▼ %)"
+section = "Scope of the dashboard"
+labels = ["▲ N%", "▼ N%", "0%"]
+short = "The change from the baseline, in percent. Red when it's bad news (more spent, less earned), green when good."
+computed = """
+(month − [baseline](#baseline)) / |baseline| × 100, rounded. A change that rounds to 0% has no arrow. Both are of averaged kinds (without one-offs unless included).
+
+Colors start at: any change on the month cards and Monthly's totals, ±5% in Top expenses and Cash flow's table, ±10% in Trends. Monthly's arrows show from 10%.
+"""
+related = ["baseline", "movers"]
+
+[term.monthly_view_months]
+title = "Monthly view months"
+section = "Scope of the dashboard"
+labels = ["Monthly view N mo", "months − N +"]
+short = "How many of the period's last months the Monthly view shows side by side."
+computed = """
+Up to 36, and never more than the period has. The default is set in Settings, and `+` / `-` step it in the Monthly view.
+"""
+related = ["monthly_table"]
+
+[term.reset_defaults]
+title = "Reset to the defaults"
+section = "Scope of the dashboard"
+labels = ["reset"]
+short = "Sets the options of How to compute back to their defaults: the rolling average, one-offs in averages, netting, complete months only and the Monthly view's months."
+computed = """
+The defaults are Settings' (Dashboard defaults: the defaults… link beside it goes there), and one-offs are left out of averages. It shows while any of them isn't the default, and doesn't reset the period, the accounts, the groups or the tags.
+"""
+related = ["dashboard_controls", "net_by_tag", "one_offs_in_averages", "monthly_view_months", "complete_months_only", "average_of"]
+
+# Kinds and groups
+
+[term.kind]
+title = "Kind"
+section = "Kinds and groups"
+labels = ["Kind", "kind"]
+short = "What a tag's transactions are: regular, one-off, saving, transfer or reconciliation. It decides where they count."
+computed = """
+Set on a tag (Tags page). A subtag has its tag's kind unless it has its [own](#own). One transaction can also have a [kind set on it](#kind_set), over its tag's. Untagged rows (and unknown tags) are regular.
+
+- [regular](#regular) and [one-off](#one_off): incomes and expenses
+- [saving](#saving): money set aside
+- [transfer](#transfer): neither, only in balances, with both sides recorded
+- [reconciliation](#reconciliation): neither, only in balances, with no other side (e.g. an opening balance)
+"""
+related = ["regular", "one_off", "saving", "transfer", "reconciliation", "own", "kind_set"]
+
+[term.regular]
+title = "Regular"
+section = "Kinds and groups"
+labels = ["regular"]
+short = "Ordinary incomes and expenses: in monthly sums, averages, trends and comparisons."
+computed = """
+The default kind, also of untagged rows. Regular rows are the only ones in averages, trends and baselines while [one-offs](#one_offs_in_averages) are left out.
+"""
+related = ["kind", "one_off"]
+
+[term.one_off]
+title = "One-off"
+section = "Kinds and groups"
+labels = ["one-off", "◆", "one-offs hatched"]
+short = "A real but unusual income or expense (e.g. a wedding, a car sale). It's in monthly sums and balances, but left out of averages and comparisons unless included."
+computed = """
+Rows whose effective kind is `one-off`: of a one-off tag, a subtag whose [own](#own) kind is one-off, or a transaction [set as one](#kind_set). They count in monthly sums, breakdown totals, the period's totals and balances. They are left out of averages, rolling averages, baselines, trends and movers unless [one-offs in averages](#one_offs_in_averages) is on, and always out of the [runway](#runway).
+
+◆ marks an amount that contains a one-off part, and hatching marks the one-off part of a bar. The hatched part is drawn within the bar (a refunded one-off only lowers the total).
+"""
+related = ["kind", "one_offs_in_averages", "regular", "kind_set"]
+
+[term.saving]
+title = "Saving"
+section = "Kinds and groups"
+labels = ["saving"]
+short = "Money moved out to be kept: shown as Set aside, never as an expense."
+computed = """
+Rows of saving tags are neither incomes nor expenses. Those of spending accounts make up [Set aside](#set_aside). Usually both sides are recorded (out of checking, into a savings account), and they cancel out in the net worth.
+"""
+related = ["set_aside", "kind", "transfer"]
+
+[term.transfer]
+title = "Transfer"
+section = "Kinds and groups"
+labels = ["transfer", "± transfers"]
+short = "Money moving between own accounts (e.g. a card payment). Never an income or expense, only in balances."
+computed = """
+Rows of transfer tags count only in balances, the bridge's transfers term and the Ledger. When both sides of every transfer are recorded, they add up to 0 over every group (see [transfers off](#transfer_residual)). A row with no other side, such as an opening balance, is a [reconciliation](#reconciliation).
+"""
+related = ["kind", "transfer_residual", "bridge", "reconciliation"]
+
+[term.reconciliation]
+title = "Reconciliation"
+section = "Kinds and groups"
+labels = ["reconciliation", "+ reconciliations"]
+short = "A row that re-anchors a balance, e.g. an opening balance, or a wallet counted short of its rows. Only in balances."
+computed = """
+Rows of reconciliation tags count in balances (of their account and source, group, the net worth and available), the bridge's reconciliations term and the Ledger. They are never incomes or expenses, so they are out of cash flows, averages, trends and breakdowns, and they aren't [transfers](#transfer), so they never show as [transfers off](#transfer_residual).
+
+To re-anchor a balance on a date, add a row of the counted amount less the [balance on that date](#balance_on_date), tagged with a reconciliation tag.
+"""
+related = ["kind", "transfer", "bridge", "balance_on_date"]
+
+[term.untagged]
+title = "Untagged"
+section = "Kinds and groups"
+labels = ["untagged"]
+short = "A transaction without a tag, neither by a rule nor by an annotation. It counts as regular."
+computed = """
+Untagged rows are regular incomes or expenses, by their own sign even when [netting by tag](#net_by_tag). They are left out while [Only these tags](#only_these_tags) is set. The Annotate page's first queue lists them.
+"""
+related = ["queue", "regular", "rule", "annotation"]
+
+[term.split]
+title = "Split"
+section = "Kinds and groups"
+labels = ["split", "part", "parts"]
+short = "A transaction divided into parts, each with its own tag and amount."
+computed = """
+An [annotation](#annotation) can have several parts, which sum to the transaction's amount. On the dashboard each part is a row of its own, with its own kind, so one transaction can be partly an expense and partly a saving.
+"""
+related = ["annotation"]
+
+[term.group]
+title = "Group"
+section = "Kinds and groups"
+labels = ["Group", "group", "groups"]
+short = "A set of accounts with a role: spending (day-to-day money) or holding (savings, investments, debt)."
+computed = """
+Every account is in one group (accounts not set up yet are in the default spending group). The role decides where the accounts count:
+
+- [spending](#role_spending): cash flows (by default) and the available balance
+- [holding](#role_holding): only the net worth (unless added under [flows of](#flows_of))
+
+Groups are edited on the Accounts page.
+"""
+related = ["role_spending", "role_holding", "flows_of", "account"]
+
+[term.role_spending]
+title = "Spending (role)"
+section = "Kinds and groups"
+labels = ["spending", "spending groups"]
+short = "Day-to-day money: its accounts are in cash flows, breakdowns and the available balance."
+computed = """
+Groups with the spending role make up the [available](#available) balance, the default [flows of](#flows_of), and the only side [Set aside](#set_aside) is measured on.
+"""
+related = ["group", "role_holding", "available"]
+
+[term.role_holding]
+title = "Holding (role)"
+section = "Kinds and groups"
+labels = ["holding", "hold"]
+short = "Savings, investments or debts: only in the net worth, not in cash flows or the available balance."
+computed = """
+Accounts of holding groups count in the [net worth](#net_worth) at their recorded balance (what went in and out, not a market value). They are left out of cash flows unless their group is added under [flows of](#flows_of). A positive balance is owned (or owed to the household).
+"""
+related = ["group", "role_spending", "net_worth"]
+
+[term.account]
+title = "Account and source"
+section = "Kinds and groups"
+labels = ["Account", "Source", "account/source"]
+short = "An account is a bank account (or the like). A source is a kind of file within it, e.g. its card, shown as account/source."
+computed = """
+Transactions come from the raw files of each account: the files in its folder of the [raw folder](#raw_folder). A file can hold several sources (e.g. the checking account and a credit card). Balances are kept per account and source, and summed into groups.
+
+A card source's balance is usually negative (charges not yet paid), and is part of the available balance.
+"""
+related = ["group", "available", "raw_folder"]
+
+# Incomes and expenses
+
+[term.incomes]
+title = "Incomes"
+section = "Incomes and expenses"
+labels = ["Incomes", "incomes", "earned", "+ incomes"]
+short = "Money that came in: positive rows of regular and one-off tags (or tags that are net incomes, when netting by tag)."
+computed = """
+Rows of [regular](#regular) and [one-off](#one_off) tags, in the accounts of [flows of](#flows_of) and [only these tags](#only_these_tags), that are incomes: positive ones, or every row of a tag whose total is positive when [netting by tag](#net_by_tag). Savings and transfers are never incomes.
+
+Monthly sums include one-offs. Averages and comparisons don't, unless included.
+"""
+related = ["expenses", "kept", "net_by_tag"]
+
+[term.expenses]
+title = "Expenses"
+section = "Incomes and expenses"
+labels = ["Expenses", "expenses", "spent", "− expenses"]
+short = "Money spent: negative rows of regular and one-off tags (or tags that are net expenses, when netting by tag), shown as positive amounts."
+computed = """
+Rows of [regular](#regular) and [one-off](#one_off) tags, in the accounts of [flows of](#flows_of) and [only these tags](#only_these_tags), that are expenses: negative ones, or every row of a tag whose total is 0 or less when [netting by tag](#net_by_tag) (then a refund lowers its expenses, and a tag can be negative in a month). Savings and transfers are never expenses.
+
+Monthly sums include one-offs. Averages and comparisons don't, unless included.
+"""
+related = ["incomes", "kept", "net_by_tag"]
+
+[term.kept]
+title = "Kept (net)"
+section = "Incomes and expenses"
+labels = ["Kept", "Net (kept)", "Net", "Kept %", "kept"]
+short = "Incomes less expenses (the net), before money set aside. Kept % is its share of incomes."
+computed = """
+The signed sum of regular and one-off rows in the flow scope: [incomes](#incomes) − [expenses](#expenses). Savings and transfers aren't in it. It is the same whether or not netting by tag.
+
+Kept % = kept / incomes, blank ("–") when incomes are 0 or less. It can be negative, or over 100% with negative expenses.
+"""
+related = ["incomes", "expenses", "set_aside"]
+
+[term.set_aside]
+title = "Set aside"
+section = "Incomes and expenses"
+labels = ["Set aside", "Set aside %", "set aside", "− set aside"]
+short = "Money moved out under saving tags from spending accounts. It measures what was tagged as saving, not money simply left unspent."
+computed = """
+−(sum of [saving](#saving) rows) in the accounts of spending groups among [flows of](#flows_of) (and [only these tags](#only_these_tags)): positive when money went out to savings, lowered by withdrawals. Only the spending side counts, so a saving's other side in a holding account doesn't cancel it.
+
+Set aside % = set aside / incomes (one-offs included), blank when incomes are 0 or less. When nothing in the period is tagged as saving it is 0, and the cards say so.
+"""
+related = ["saving", "kept", "nothing_tagged_as_saving"]
+
+[term.nothing_tagged_as_saving]
+title = "Nothing tagged as saving"
+section = "Incomes and expenses"
+labels = ["nothing tagged as saving", "nothing tagged as saving in N mo"]
+short = "No row in the period has a saving tag: Set aside is 0 because nothing is tagged, not necessarily because nothing was saved."
+computed = """
+Counts the saving rows of the spending groups in the period's months, whatever [only these tags](#only_these_tags) says. Tag the moves to savings with a [saving](#saving) tag to see them.
+"""
+related = ["set_aside", "saving", "data_checks"]
+
+# Cards
+
+[term.available]
+title = "Available"
+section = "Cards"
+labels = ["Available", "available"]
+short = "Money in the spending groups' accounts, as of the balances' date. Card charges already recorded lower it."
+computed = """
+The sum of the balances of every account and source in [spending](#role_spending) groups, with every row up to the [as-of date](#as_of) (all kinds). Card sources are usually negative, so their recorded charges are already taken. Unaffected by flows of, tags and one-offs.
+
+The line below is its change since the period's first day (since the first data for All).
+"""
+related = ["net_worth", "runway", "balance_change", "role_spending"]
+
+[term.net_worth]
+title = "Net worth"
+section = "Cards"
+labels = ["Net worth", "net worth"]
+short = "Every account's balance added up, in every group, as of the balances' date."
+computed = """
+The sum of the balances of every account and source (spending and holding groups), with every row up to the [as-of date](#as_of). Holdings are at their recorded value (what went in and out), not market value.
+
+The line below is its change since the period's first day, and the one-offs in that change.
+"""
+related = ["available", "balance_change", "role_holding"]
+
+[term.balance_change]
+title = "Change since the period's start"
+section = "Cards"
+labels = ["since <date>", "Change in period", "incl. N one-offs"]
+short = "How much the balance moved from the period's first day to the balances' date."
+computed = """
+The balance as of the [as-of date](#as_of) minus the balance before the period's first day. For All, since the first data (the balance itself). Includes every kind (transfers and savings too), so it isn't the net.
+
+"incl. N one-offs" on Net worth is the sum of the one-off rows of every group in that span.
+"""
+related = ["available", "net_worth", "bridge"]
+
+[term.runway]
+title = "Runway"
+section = "Cards"
+labels = ["Runway", "N mo runway", "of N/mo spent"]
+short = "How many months of typical expenses the available balance covers."
+computed = """
+[Available](#available) ÷ the [rolling average](#rolling_average) of expenses through the period's last month, of the window chosen under [average of](#average_of). The expenses are always **without one-offs** (whatever one-offs in averages says), in the flow scope ([flows of](#flows_of), [only these tags](#only_these_tags)). Blank when those expenses are 0 or less.
+
+Card balances are already in the available balance, so their charges aren't taken again.
+"""
+related = ["available", "rolling_average", "expenses"]
+
+[term.month_cards]
+title = "The month's cards"
+section = "Cards"
+labels = ["<month> · ▲▼ vs N-mo avg, excl. one-offs"]
+short = "The period's last month: incomes, expenses, kept and set aside, each compared with the baseline."
+computed = """
+The amounts are the month's sums, one-offs included. The ▲▼ compare the month with its [baseline](#baseline), both of averaged kinds (without one-offs unless included). With complete months only, it's the last complete month.
+"""
+related = ["incomes", "expenses", "kept", "set_aside", "baseline"]
+
+[term.compared_amount]
+title = "Compared amount (excl. one-offs)"
+section = "Cards"
+labels = ["N excl. one-offs", "N excl. ·", "incl. N one-off"]
+short = "The month's amount as it is compared: without its one-offs (unless included), or the one-off part it includes."
+computed = """
+When the month has one-offs and they are left out of comparisons, "N excl. one-offs" is the amount the ▲▼ compares with the [baseline](#baseline). With one-offs included, "incl. N one-off" is the one-off part of the amount shown.
+"""
+related = ["one_off", "baseline", "one_offs_in_averages"]
+
+[term.period_rates]
+title = "The period's sums and rates"
+section = "Cards"
+labels = ["N mo: <amount> · N%", "of incomes"]
+short = "The same figure over the whole period, and its share of the period's incomes."
+computed = """
+Sums over every month of the period, one-offs included: Σ kept / Σ incomes, or Σ set aside / Σ incomes. Blank when the period's incomes are 0 or less.
+"""
+related = ["kept", "set_aside"]
+
+[term.avg_per_month]
+title = "Avg/mo"
+section = "Cards"
+labels = ["Avg/mo", "net", "spent", "earned", "avg/mo, N mo"]
+short = "The period's average month: the net (kept), and below it what was spent and earned, without one-offs unless included."
+computed = """
+Σ over the period's months, of averaged kinds, ÷ the number of months (months without rows count as 0). Independent of the rolling window. Without one-offs unless [one-offs in averages](#one_offs_in_averages) is on.
+"""
+related = ["kept", "one_offs_in_averages", "rolling_average"]
+
+[term.top_expenses]
+title = "Top expenses"
+section = "Cards"
+labels = ["Top expenses · <month>"]
+short = "The month's five expense tags that moved most from their baseline (movers), or the five largest."
+computed = """
+- [movers](#movers): tags by their change from their baseline in ₪, either way, of averaged kinds.
+- [largest](#largest): the month's largest expense tags, one-offs included (their one-off part hatched), with the change from the baseline (colored beyond ±5%).
+
+The default is movers on the Overview and largest elsewhere, and the choice stays in the URL.
+"""
+related = ["movers", "largest", "baseline"]
+
+[term.movers]
+title = "Movers"
+section = "Cards"
+labels = ["movers"]
+short = "Tags ranked by how far the last month is from their baseline, in ₪, either way."
+computed = """
+For each tag: the period's last month − its [baseline](#baseline), both of averaged kinds (without one-offs unless included), largest |difference| first. Tags whose difference rounds to 0 are left out. Red is bad news (more spent, less earned), green good. "new" when the tag has no baseline (or a baseline of 0).
+"""
+related = ["largest", "baseline", "what_changed"]
+
+[term.largest]
+title = "Largest"
+section = "Cards"
+labels = ["largest"]
+short = "Tags ranked by their amount: the month's largest (Top expenses), or the period's largest totals (Trends)."
+computed = """
+Top expenses: the month's sums by tag, one-offs included. Trends: the tags' totals over the period, of averaged kinds.
+"""
+related = ["movers", "top_expenses", "trends_table"]
+
+[term.new_tag]
+title = "New"
+section = "Cards"
+labels = ["new"]
+short = "The tag has no baseline to compare with: nothing in the months before, or not enough months of data."
+computed = """
+Shown instead of a percent when the [baseline](#baseline) is empty or 0 and the month isn't.
+"""
+related = ["baseline", "movers"]
+
+[term.card_strip]
+title = "Card strip"
+section = "Cards"
+labels = ["Available · N mo runway", "Net worth", "Incomes", "Expenses", "Kept", "Set aside"]
+short = "The headline numbers in one line, on views other than the Overview."
+computed = """
+The same figures as the cards: balances as of the balances' date, then the period's last month. Click a balance for the Balance view, or a month's figure for its rows.
+"""
+related = ["available", "net_worth", "runway", "kept", "set_aside"]
+
+# Views
+
+[term.view_overview]
+title = "Overview"
+section = "Views"
+labels = ["Overview"]
+short = "Answers rather than small copies of the views: the cards, what the numbers are of, the month in a sentence, what changed, where the money went, and checks."
+computed = """
+The default view. From top to bottom: the cards, the [scope line](#scope_line), [in short](#in_short), Cash flow, [What changed](#what_changed), Net worth and available, [Where it went](#where_it_went), [The period](#the_period) and [Checks](#checks).
+"""
+related = ["scope_line", "what_changed"]
+
+[term.scope_line]
+title = "Scope line"
+section = "Views"
+labels = ["accounts", "flows of", "compared with", "balances"]
+short = "What the numbers are of: the period, the accounts, the groups of the flows, what months are compared with, and the balances' date."
+computed = """
+A summary of the dashboard's options: [period](#period), [accounts](#accounts_filter), [flows of](#flows_of), the [baseline](#baseline) with [one-offs in averages](#one_offs_in_averages), and [as of](#as_of). "only <tag>" warns that [only these tags](#only_these_tags) is set.
+"""
+related = ["period", "flows_of", "baseline", "as_of"]
+
+[term.in_short]
+title = "The month in a sentence"
+section = "Views"
+labels = ["In <month>, …"]
+short = "The last month in a sentence: what was kept (or overspent), set aside, how expenses compare with usual, and the runway."
+computed = """
+From the [month cards](#month_cards): kept and its share of incomes, set aside, the change of expenses from their baseline (without one-offs unless included), and the [runway](#runway).
+"""
+related = ["kept", "set_aside", "runway", "baseline"]
+
+[term.what_changed]
+title = "What changed"
+section = "Views"
+labels = ["What changed"]
+short = "The last month's incomes and expenses tags furthest from their baseline, in ₪."
+computed = """
+The seven largest [movers](#movers) among incomes and expenses. Each row shows the difference, the change in percent and baseline → month. Click for the rows.
+"""
+related = ["movers", "baseline"]
+
+[term.where_it_went]
+title = "Where it went"
+section = "Views"
+labels = ["Where it went", "other (N tags)", "Total N · N/mo with one-offs"]
+short = "The period's expenses (or incomes) by tag: the eight largest, then the rest as one, one-offs hatched."
+computed = """
+The [Breakdown total](#breakdown_total) by tag: sums over the period, one-offs included. The percent is of the signed total, and the monthly figure divides it by the period's months.
+"""
+related = ["breakdown_total", "one_off"]
+
+[term.the_period]
+title = "The period"
+section = "Views"
+labels = ["The period", "Kept without one-offs", "of which one-offs", "Largest one-offs"]
+short = "What the period kept and set aside, and what one-offs did to it."
+computed = """
+- Kept: Σ [kept](#kept) over the period, one-offs included, with its share of incomes.
+- of which one-offs: one-off incomes − one-off expenses.
+- Kept without one-offs: the difference, with its share of incomes without one-offs.
+- Set aside: Σ [set aside](#set_aside).
+- Largest one-offs: the period's largest one-off subtags, either side.
+"""
+related = ["kept", "one_off", "set_aside"]
+
+[term.checks]
+title = "Checks"
+section = "Views"
+labels = ["Checks"]
+short = "Does the balance add up, and does the data need a look: the available balance's bridge on one line, and the data checks that need attention."
+computed = """
+The compact [bridge](#bridge) of the available balance, then a chip per [data check](#data_checks) that needs a look (or "accounts up to date").
+"""
+related = ["bridge", "data_checks"]
+
+[term.view_balance]
+title = "Balance (view)"
+section = "Views"
+labels = ["Balance"]
+short = "Balances over time and as of the latest data, the bridge of how they changed, and checks of the data."
+computed = """
+Balances have every group and kind, over the days from the period's start to the [as-of date](#as_of).
+"""
+related = ["balances_over_time", "balances_table", "bridge", "data_checks"]
+
+[term.view_flow]
+title = "Cash flow (view)"
+section = "Views"
+labels = ["Cash flow"]
+short = "Incomes, expenses, money set aside and the net, month by month."
+computed = """
+The [flow scope](#flows_of)'s monthly sums, with one-offs hatched, rolling averages, and a table by month.
+"""
+related = ["cash_flow_chart", "by_month"]
+
+[term.view_breakdown]
+title = "Breakdown (view)"
+section = "Views"
+labels = ["Breakdown"]
+short = "Incomes or expenses by tag and subtag: over the period, as rolling averages, or in one month."
+computed = """
+Tags are told apart as incomes or expenses as in Cash flow, so the breakdown adds up to it.
+"""
+related = ["breakdown_total", "breakdown_rolling", "breakdown_month"]
+
+[term.view_trends]
+title = "Trends (view)"
+section = "Views"
+labels = ["Trends"]
+short = "Each tag's (or subtag's) incomes or expenses over time, and a table of the last month against its baseline."
+computed = """
+Of averaged kinds: without one-offs unless included.
+"""
+related = ["trends_by_subtag", "trends_values", "trends_table"]
+
+[term.view_monthly]
+title = "Monthly (view)"
+section = "Views"
+labels = ["Monthly"]
+short = "The period's last months side by side, by tag and subtag."
+computed = """
+The [monthly table](#monthly_table)'s sums include one-offs, and its arrows compare with the baseline.
+"""
+related = ["monthly_table", "monthly_view_months"]
+
+[term.view_ledger]
+title = "Ledger (view)"
+section = "Views"
+labels = ["Ledger"]
+short = "Every row of the period, of every group and kind, with running balances."
+computed = """
+See [Ledger](#ledger).
+"""
+related = ["ledger"]
+
+# Balance
+
+[term.balances_over_time]
+title = "Balances over time"
+section = "Balance"
+labels = ["Balances over time", "Net worth and available"]
+short = "The balance at the end of each day: net worth, available, and each group (stacked or as lines) or account and source."
+computed = """
+One point a day, at the day's end, from the period's start to the [as-of date](#as_of). The balance before the period carries into its first day. Click a point for that day's rows.
+"""
+related = ["net_worth", "available", "groups_shown"]
+
+[term.groups_shown]
+title = "Groups and accounts shown"
+section = "Balance"
+labels = ["groups stacked", "as lines", "hidden", "accounts and sources"]
+short = "How the chart shows groups: stacked areas (they add up to the net worth), lines, or not at all. Accounts and sources adds a line for each."
+computed = """
+Presentation only, kept in the URL.
+"""
+related = ["balances_over_time", "group"]
+
+[term.balances_table]
+title = "Balances"
+section = "Balance"
+labels = ["Balances", "Balance", "Group or account", "every group", "spending groups"]
+short = "Closing balances as of the balances' date, of the net worth, the available balance, each group and each account and source."
+computed = """
+Every row up to the end of the [as-of date](#as_of), all kinds. Net worth has every group, Available the [spending](#role_spending) groups. [Change in period](#balance_change) is from the period's first day. Click a line for its rows.
+"""
+related = ["net_worth", "available", "balance_change"]
+
+[term.bridge]
+title = "Bridge"
+section = "Balance"
+labels = ["Bridge", "Opening", "Closing", "Then, to <date>", "Balance · as of"]
+short = "How the available balance and the net worth went from the period's start to its end: opening + incomes − expenses − set aside ± transfers ± reconciliations = closing."
+computed = """
+Over the period's months, every row of the line is in exactly one term, so the terms add up to the cent (the closing's tooltip shows any rounding):
+
+- Opening: the balance before the period's first day.
+- [incomes](#incomes) and [expenses](#expenses): of regular and one-off tags, told apart as in Cash flow among the line's accounts (the spending groups for Available, every group for Net worth), with every tag.
+- [set aside](#set_aside): for Available, as in Cash flow. For Net worth, minus every group's saving rows: both sides cancel out, so what is left is a saving with one side recorded.
+- [transfers](#transfer): transfer rows of the line's accounts. For Net worth, 0 when both sides of every transfer are recorded.
+- [reconciliations](#reconciliation): reconciliation rows of the line's accounts, e.g. opening balances.
+- Closing: the balance at the end of the period's last month.
+
+Then, to the [as-of date](#as_of): the rows after the months (e.g. of the current month), and the balance they lead to. Unlike Cash flow, the bridge ignores [flows of](#flows_of) and [only these tags](#only_these_tags).
+"""
+related = ["available", "net_worth", "transfer_residual", "reconciliation", "bridge_one_offs"]
+
+[term.bridge_one_offs]
+title = "One-offs in the bridge"
+section = "Balance"
+labels = ["of which one-offs (in incomes and expenses)"]
+short = "The part of the bridge's incomes and expenses that is one-off, as a signed sum."
+computed = """
+The sum of the line's [one-off](#one_off) rows over the period's months (incomes positive, expenses negative).
+"""
+related = ["bridge", "one_off"]
+
+[term.data_checks]
+title = "Data checks"
+section = "Balance"
+labels = ["Data checks"]
+short = "Checks of the data behind the numbers: missing files, nothing tagged as saving, tags on the unusual side, one-sided transfers, unusual income months."
+computed = """
+- [Latest rows](#latest_rows): each account and source's last date.
+- [Nothing tagged as saving](#nothing_tagged_as_saving).
+- [Transfers](#transfer_residual) of every group, which should add up to 0.
+- [Sign flips](#sign_flip): tags on the other side than usual.
+- [Income months](#income_outliers) far from the usual.
+
+Saving rows and transfers are checked whatever [only these tags](#only_these_tags) says: they check the data, not what is shown.
+"""
+related = ["latest_rows", "transfer_residual", "sign_flip", "income_outliers", "checks"]
+
+[term.latest_rows]
+title = "Latest rows (behind, quiet)"
+section = "Balance"
+labels = ["Latest rows", "behind", "quiet", "latest", "N days before", "N sources behind by over a month", "accounts up to date"]
+short = "Each account and source's last transaction. Behind: it usually has rows, but none for over a month before the latest data, so its raw files may be missing."
+computed = """
+Behind means the last row is more than 31 days before the latest row of all the data, and the source has rows in at least half of the period's months. Quiet means it has rows in fewer than half of them (often naturally dormant, e.g. a rarely used card), so it isn't flagged.
+"""
+related = ["data_checks", "account"]
+
+[term.transfer_residual]
+title = "Transfers off"
+section = "Balance"
+labels = ["transfers off by N", "Transfers of every group"]
+short = "Transfers of every group should add up to 0. What is left is a transfer with one side recorded, e.g. cash taken out with no wallet."
+computed = """
+The sum of the [transfer](#transfer) rows of every group in the period's months (in the chosen accounts, whatever [only these tags](#only_these_tags) says). Flagged when it rounds to anything but 0. [Reconciliations](#reconciliation) (e.g. opening balances) have no other side, and are left out.
+"""
+related = ["transfer", "bridge", "data_checks", "reconciliation"]
+
+[term.sign_flip]
+title = "Sign flip"
+section = "Balance"
+labels = ["<tag> flipped sign", "Tags on the other side than over all the data"]
+short = "A tag that is usually an expense but came out as income in the period (or the reverse), e.g. a refund larger than the spending."
+computed = """
+For each tag, the signed sum of its regular and one-off rows (in the flow scope) over the period's months, against its sum over all the data. Flagged when the signs differ and the period's sum isn't about 0. When [netting by tag](#net_by_tag), such a tag shows as a negative expense (or income).
+"""
+related = ["net_by_tag", "data_checks"]
+
+[term.income_outliers]
+title = "Income months far from the usual"
+section = "Balance"
+labels = ["incomes +N% in <month>", "Incomes far from the usual month"]
+short = "Months whose incomes are more than 40% away from the period's usual month, e.g. a paycheck landing in the month before."
+computed = """
+The usual month is the median of the period's monthly incomes, of averaged kinds (without one-offs unless included). A month is flagged when |incomes − usual| > 40% of usual.
+"""
+related = ["incomes", "data_checks"]
+
+# Cash flow
+
+[term.cash_flow_chart]
+title = "Cash flow chart"
+section = "Cash flow"
+labels = ["Incomes", "One-off incomes", "Expenses", "One-off expenses", "Set aside", "Net", "<flow> · N-mo avg"]
+short = "Each month's incomes (up), expenses and money set aside (down), with one-offs hatched, the net as a line, and the rolling averages dashed."
+computed = """
+Monthly sums of the flow scope, one-offs included (their part hatched). The dashed lines are [rolling averages](#rolling_average) through each month, without one-offs unless included. Click a bar for its rows.
+"""
+related = ["incomes", "expenses", "set_aside", "kept", "axis_break"]
+
+[term.axis_break]
+title = "Axis break"
+section = "Cash flow"
+labels = ["the axis breaks (≈)"]
+short = "A month far beyond the others (e.g. of a large one-off) breaks the axis, so it doesn't flatten the routine months. Click the break to expand it."
+computed = """
+On each side of 0, the axis breaks when the largest month is at least 2.5 times the routine months, measured without their one-offs.
+"""
+related = ["cash_flow_chart", "one_off"]
+
+[term.by_month]
+title = "By month"
+section = "Cash flow"
+labels = ["By month", "Month"]
+short = "The period's monthly figures, latest first: incomes, expenses, the change from the baseline, kept and set aside with their shares."
+computed = """
+Monthly sums, one-offs included (◆ marks months with one-offs). The change column compares expenses with their [baseline](#baseline), both of averaged kinds, colored beyond ±5%: "N excl. ·" is the compared amount when one-offs are left out. The last column is the net's [rolling average](#rolling_average) through the month.
+"""
+related = ["kept", "set_aside", "baseline", "cash_flow_total"]
+
+[term.cash_flow_total]
+title = "Totals, with and without one-offs"
+section = "Cash flow"
+labels = ["Total · N months", "of which one-offs", "without one-offs"]
+short = "The period's sums, then their one-off part, and the sums without it."
+computed = """
+Plain sums over the period's months, one-offs included, with Kept % and Set aside % of the period's incomes. "of which one-offs" is the one-off incomes and expenses (net: one-off incomes − one-off expenses), and "without one-offs" the difference.
+"""
+related = ["by_month", "one_off", "period_rates"]
+
+# Breakdown
+
+[term.breakdown_total]
+title = "Breakdown: total"
+section = "Breakdown"
+labels = ["Total", "N a month"]
+short = "Sums by tag and subtag over the period, one-offs included. They add up to Cash flow's incomes or expenses."
+computed = """
+Regular and one-off rows of the flow scope, told apart as incomes or expenses by tag as in Cash flow. Sums are signed: a refunded tag can be negative. "N a month" divides the total by the period's months. Unaffected by one-offs in averages.
+"""
+related = ["breakdown_rolling", "breakdown_month", "breakdown_share"]
+
+[term.breakdown_rolling]
+title = "Breakdown: rolling average"
+section = "Breakdown"
+labels = ["N-mo avg"]
+short = "Each tag and subtag's rolling average in the period's last month."
+computed = """
+Of averaged kinds (without one-offs unless included), with 0 for months without rows. Signed means, without those of 0, so they add up to Cash flow's rolling average. Click for the rows of the last month alone.
+"""
+related = ["rolling_average", "breakdown_total"]
+
+[term.breakdown_month]
+title = "Breakdown: month"
+section = "Breakdown"
+labels = ["Month"]
+short = "Sums by tag and subtag in one month of the period, one-offs included."
+computed = """
+Any month of the period, the last by default (`h` / `l` step it). Subtags can be negative, e.g. a refund when netting by tag.
+"""
+related = ["breakdown_total"]
+
+[term.breakdown_treemap]
+title = "Treemap"
+section = "Breakdown"
+labels = ["By tag and subtag", "area is the amount"]
+short = "A treemap: each tag's area is proportional to its amount, split into its subtags."
+computed = """
+Only positive tags and subtags can be drawn. The percents are of the signed total, like the list's. Click for the rows.
+"""
+related = ["breakdown_share", "breakdown_sorted"]
+
+[term.breakdown_sorted]
+title = "Sorted list"
+section = "Breakdown"
+labels = ["Sorted"]
+short = "Tags largest first: click a tag for its subtags, an amount for its rows."
+computed = """
+Signed sums, negative tags last. "one-off" marks a tag whose subtags are all one-off, and a one-off subtag of a mixed tag.
+"""
+related = ["breakdown_share", "one_off"]
+
+[term.breakdown_share]
+title = "Share (N%)"
+section = "Breakdown"
+labels = ["N%"]
+short = "The share of the total shown (incomes or expenses)."
+computed = """
+amount / the signed total × 100. A tag that was refunded more than it spent has a negative share.
+"""
+related = ["breakdown_total"]
+
+# Trends
+
+[term.trends_by_subtag]
+title = "Trends: by tag or by subtag"
+section = "Trends"
+labels = ["By tag", "By subtag", "of every tag", "of <tag>"]
+short = "Trends of tags, or of subtags: of every tag, or of one tag (e.g. food's)."
+computed = """
+Subtags are counted as their tags are: the same kinds (one-offs only if included), sides and rolling averages, so a tag's subtags add up to the tag, averages and baselines too. Movers and largest rank them the same way. A tag's rows without a subtag are its "–" subtag. Click a tag's name in the table for its subtags. Kept in the URL (`trends_level=subtag`, `trends_of=food`).
+"""
+related = ["tag", "trends_table", "view_trends"]
+
+[term.trends_values]
+title = "Trends: averages or sums, lines or stacked"
+section = "Trends"
+labels = ["N-mo avg", "Monthly sums", "Lines", "Stacked"]
+short = "Each tag's rolling average or its plain monthly sums, as lines or stacked bars."
+computed = """
+Both are of averaged kinds, so monthly sums too are without one-offs unless included. A stack shows only the tags shown, not every expense. Click the legend to show or hide tags, and a point for its rows.
+"""
+related = ["rolling_average", "one_offs_in_averages", "first_shown"]
+
+[term.first_shown]
+title = "First shown"
+section = "Trends"
+labels = ["first shown", "top N", "all"]
+short = "How many of the largest tags the chart draws at first. The others are in the legend, to click."
+computed = """
+Tags ranked by their total over the period, of averaged kinds.
+"""
+related = ["trends_values"]
+
+[term.trends_table]
+title = "Tags table"
+section = "Trends"
+labels = ["Tags", "Tag", "Subtags", "Subtag"]
+short = "Every tag (or subtag) of the side: the last month against its baseline, ranked by movers or by their period's total."
+computed = """
+Every tag (or [subtag](#trends_by_subtag)) with an amount or an average in the period, of averaged kinds (without one-offs unless included). Ranked by [movers](#movers) or [largest](#largest) (the default), kept in the URL. Click a tag's name for its subtags.
+"""
+related = ["movers", "largest", "baseline", "trends_by_subtag"]
+
+[term.sparkline]
+title = "Monthly (sparkline)"
+section = "Trends"
+labels = ["Monthly"]
+short = "The tag's monthly sums over the period, as a tiny line."
+computed = """
+Each line has its own scale, which includes 0 (negative months are below it).
+"""
+related = ["trends_table"]
+
+[term.trends_total]
+title = "Trends: total"
+section = "Trends"
+labels = ["Total"]
+short = "The tag's sum over the period, without one-offs unless included."
+computed = """
+Of averaged kinds, so it can be lower than the Breakdown total, which includes one-offs.
+"""
+related = ["breakdown_total", "period_average"]
+
+[term.period_average]
+title = "Average per month (avg/mo, N mo)"
+section = "Trends"
+labels = ["avg/mo, N mo"]
+short = "The tag's average month over the period."
+computed = """
+Its total ÷ the period's months, of averaged kinds. Not the [baseline](#baseline), which is a rolling average before the last month.
+"""
+related = ["trends_total", "baseline"]
+
+[term.last_month_amount]
+title = "The last month"
+section = "Trends"
+labels = ["<month>"]
+short = "The tag's amount in the period's last month, without one-offs unless included."
+computed = """
+Of averaged kinds. Click for its rows.
+"""
+related = ["baseline", "change_amount"]
+
+[term.change_amount]
+title = "Change ₪"
+section = "Trends"
+labels = ["Change ₪"]
+short = "The last month less its baseline, in ₪."
+computed = """
+Of averaged kinds. What [movers](#movers) are ranked by. Blank when it rounds to 0.
+"""
+related = ["movers", "baseline"]
+
+# Monthly
+
+[term.monthly_table]
+title = "Monthly table"
+section = "Monthly"
+labels = ["Expenses by month", "Incomes by month", "<month>"]
+short = "The tags' sums in the period's last months, side by side, one-offs included (◆)."
+computed = """
+Sums by tag and subtag, as in Breakdown's months. A cell's tint grows with its amount, "·" is 0. Click a tag for its subtags, and a cell for its rows.
+"""
+related = ["monthly_view_months", "monthly_arrows", "monthly_average"]
+
+[term.monthly_arrows]
+title = "Monthly arrows (▲▼)"
+section = "Monthly"
+labels = ["▲▼ change of 10% or more"]
+short = "Marks a tag's month at least 10% away from its baseline, without one-offs unless included."
+computed = """
+Tags only (not subtags), and not on empty cells. The month and the [baseline](#baseline) are of averaged kinds.
+"""
+related = ["baseline", "monthly_table"]
+
+[term.monthly_average]
+title = "Avg of N shown"
+section = "Monthly"
+labels = ["Avg of N shown"]
+short = "The average of the months shown, one-offs included, like the cells."
+computed = """
+The row's sum ÷ the number of months shown. It ignores the rolling window.
+"""
+related = ["monthly_table", "avg_per_month"]
+
+[term.monthly_total]
+title = "Monthly total"
+section = "Monthly"
+labels = ["Total"]
+short = "Each month's total, and its change from the baseline."
+computed = """
+The sum of the month's column, as Cash flow's. The percent compares the month's total of averaged kinds with its [baseline](#baseline).
+"""
+related = ["monthly_table", "baseline"]
+
+# Ledger
+
+[term.ledger]
+title = "Ledger"
+section = "Ledger"
+labels = ["Ledger", "N of N rows"]
+short = "Every row of the period (one per split part), of every group and kind, with running balances. Click a row to open it in Transactions."
+computed = """
+From the period's first day to the [as-of date](#as_of), in the chosen accounts. [Flows of](#flows_of), [only these tags](#only_these_tags) and one-offs in averages don't apply. Rows of a day are in the order balances accumulate (by account, source, then incomes first), latest first. Search (`/`) looks in raw descriptions, descriptions, tags, accounts and sources.
+"""
+related = ["ledger_sum", "ledger_balances", "split"]
+
+[term.ledger_sum]
+title = "Sum of the rows shown"
+section = "Ledger"
+labels = ["sum of the rows shown", "(the change in net worth)"]
+short = "The sum of the rows shown. Without a search, it's the net worth's change over the period."
+computed = """
+Every row of every group in the span, so without a search it equals the [net worth's change](#balance_change).
+"""
+related = ["ledger", "balance_change"]
+
+[term.ledger_balances]
+title = "Running balances"
+section = "Ledger"
+labels = ["Balance (net worth)", "Balance (role)", "Balance (group)", "Balance (account)", "Balance (source)"]
+short = "The running balance after the row: of every account, of the row's role, group, account, or account and source."
+computed = """
+Running sums over all the data (in the chosen accounts), in the order balances accumulate: by date, account, source, then incomes first.
+"""
+related = ["ledger", "net_worth"]
+
+[term.ledger_kind_group_role]
+title = "Kind, group and role"
+section = "Ledger"
+labels = ["Kind", "Group", "Role"]
+short = "The row's effective tag kind, its account's group, and that group's role."
+computed = """
+Kind is the one [set on the transaction](#kind_set), else the subtag's [own](#own), else the tag's, else regular. ◆ marks a kind set on the transaction.
+"""
+related = ["kind", "kind_set", "group", "role_spending"]
+
+# Annotate
+
+[term.queue]
+title = "Queues"
+section = "Annotate"
+labels = ["Untagged", "Needs review", "Custom"]
+short = "The Annotate page's queues: transactions without tags, those flagged for review, or a custom filter."
+computed = """
+- Untagged: every transaction tagged neither by a rule nor by an annotation.
+- Needs review: transactions whose annotation is [flagged for review](#needs_review).
+- Custom: any filter of transactions (at most 500 shown).
+
+Every queue has the [filters](#filter_groups), to narrow it down: each keeps its own, and its own selection, while the app is open. The queue and its filters are in the page's URL, e.g. `#/annotate?review&tags=food`.
+
+`m` switches the queue. Each queue keeps its own selection.
+"""
+related = ["untagged", "needs_review", "guess", "filter_groups"]
+
+[term.filter_groups]
+title = "Filters"
+section = "Annotate"
+labels = ["Dates & amounts", "Tags & kinds", "Accounts & sources", "Status & review"]
+short = "The filters of Transactions and every Annotate queue: the search, then a group for each thing they filter on. Every filter given must match."
+computed = """
+- The search: the written and raw descriptions (`/` focuses it).
+- Dates & amounts: from a day (inclusive) until another (exclusive), and amounts between a min and a max (signed: expenses are negative).
+- Tags & kinds: any of these tags, any of these subtags, and any of these [kinds](#kind) (the effective kind of any part; untagged rows are regular).
+- Accounts & sources: any of the chosen accounts, and any of these sources (e.g. card).
+- Status & review: untagged, tagged (by a rule or an annotation), annotated or rule-tagged; [flagged for review](#needs_review) or not; annotations by any of these authors. A queue leaves out what makes it (no status in Untagged, no review in Needs review).
+
+Lists are comma-separated. A group's name is highlighted (with a dot) when it has filters set, and **Clear** clears them all. Every filter is always shown, and `Tab` goes through them in order. They are in the page's URL, e.g. `#/transactions?tags=food&kinds=one-off`.
+"""
+related = ["queue", "kind", "needs_review"]
+
+[term.annotation]
+title = "Annotation"
+section = "Annotate"
+labels = ["annotation", "annotated"]
+short = "Tags (and descriptions) stored for a transaction, by its ID. They survive re-ingesting, unless the transaction vanishes."
+computed = """
+An annotation has parts (each a tag, subtag, amount and [description](#description), summing to the transaction), a description of the whole transaction, its [authors](#authors) and a review flag. Without parts it's only a description, and the transaction stays untagged. A matching [rule](#rule) overrides its tags.
+"""
+related = ["description", "split", "rule", "orphan", "overridden", "authors"]
+
+[term.authors]
+title = "Authors"
+section = "Annotate"
+labels = ["Authors", "by", "authors"]
+short = "Everyone who wrote an annotation (you, or an agent by its name), in the order they first did."
+computed = """
+Every write that changes an [annotation](#annotation)'s content adds its author, once: its tags, descriptions or kinds. Changing only its [review flag](#needs_review) doesn't, so marking an agent's annotation reviewed leaves it theirs. A badge shows the authors of annotations that aren't only yours. The Authors filter finds annotations with any of the given authors among theirs.
+"""
+related = ["annotation", "needs_review"]
+
+[term.description]
+title = "Description and raw description"
+section = "Annotate"
+labels = ["Description", "Raw description", "Transaction description", "Part description", "description", "raw description"]
+short = "A transaction's description, written by you or an agent, says what it really was and is what shows. Its raw description, its often vague text in the raw files, is on hover, or in italics in its place."
+computed = """
+The description is part of the [annotation](#annotation): one for the whole transaction, and one for each part of a [split](#split). It may have several lines: Shift+Enter adds one in the editor, and Enter is done with it. Tables show its first line and `+2 lines` (for example), the whole description on hover and in the editor.
+
+The raw description comes from the bank's (or card company's) export, or a hand-written file, and only changes when it changes there. It is part of the transaction's ID, and what [rules](#rule_filters) and [guesses](#guess) match.
+
+Wherever a transaction shows, one description shows: its description, with the raw description on hover (and, in Annotate and Transactions, under it while the row is being edited). Without a description, the raw description stands in for it, in italics, so a missing description shows. The Ledger can show the raw description in a column of its own (Columns). Which description:
+
+- **A transaction** (one row, e.g. Annotate, Transactions, previews): its own, else its parts' (joined by `·`), though not those of an annotation a rule [overrides](#overridden). Where its parts show too (a split's rows, the orphans' tags), only its own.
+- **A row of the dashboard** (one per split part, e.g. the Ledger, the rows of a number, the balance chart's tooltip): its part's, else its transaction's.
+
+Search looks in the descriptions and the raw description. Sorting by description sorts by what shows for each transaction, case-insensitively.
+"""
+related = ["annotation", "split", "guess", "rule_filters"]
+
+[term.guess]
+title = "Guess"
+section = "Annotate"
+labels = ["guess", "N guesses"]
+short = "A suggested tag for an untagged transaction: that of the nearest-dated annotated transaction with the same raw description. Never applied automatically."
+computed = """
+Among the other annotated transactions with exactly the same [raw description](#description), before or after, the nearest in date (the later one among equals). No guess without one. `a` accepts it.
+"""
+related = ["queue", "annotation"]
+
+[term.needs_review]
+title = "Needs review"
+section = "Annotate"
+labels = ["Needs review", "to review", "review flag"]
+short = "Flagged for the owner to review, e.g. by an unsure agent."
+computed = """
+A flag on an annotation, set or cleared with `r`. The header's "to review" counts them and opens the queue.
+"""
+related = ["queue", "annotation"]
+
+[term.kind_set]
+title = "Kind set on a transaction"
+section = "Annotate"
+labels = ["Kind", "one-off set", "kinds set", "◆ one-off"]
+short = "A kind set on one transaction, over its tag's: e.g. one big purchase marked one-off without a subtag of its own."
+computed = """
+Stored on each part of the transaction's annotation, and empty by default (the tag's kind applies). The effective kind is the one set on the transaction, else the subtag's [own](#own) kind, else the tag's, and every figure uses it: cash flows, averages and [one-offs](#one_off), set aside, transfers, breakdowns, trends, the [bridge](#bridge) and the data checks. A subtag with transactions of two kinds has a line of each in breakdowns.
+
+Set it in the Kind column of Annotate and Transactions (◆ marks it), toggle a row (or the selected rows, or a part) as a one-off with `O` or the ◆ button, or set it (alone) on many in a [batch edit](#batch_edit). A rule only gives tags, so a rule's transactions can't have a kind of their own: change the rule, or the tag's kind.
+"""
+related = ["kind", "one_off", "own", "annotation", "batch_edit"]
+
+[term.overridden]
+title = "Overridden annotation"
+section = "Annotate"
+labels = ["overridden", "Overridden annotations", "Overridden"]
+short = "An annotation whose tags a rule overrides: it stays stored but its tags are unused (its description still is)."
+computed = """
+Rules win over annotations. A transaction that matches a [rule](#rule) and has an annotation with parts is tagged by the rule. Listed on the Orphans page, and previewed for a new or edited rule.
+"""
+related = ["rule", "annotation"]
+
+[term.draft]
+title = "Draft (edited)"
+section = "Annotate"
+labels = ["edited"]
+short = "An edit not submitted yet. Drafts are submitted together."
+computed = """
+A draft starts from the stored annotation, or from the [guess](#guess) of an untagged transaction. Nothing is written until the drafts are submitted, and only those that differ from where they started are.
+"""
+related = ["annotation"]
+
+[term.batch_edit]
+title = "Batch edit and batch apply"
+section = "Annotate"
+labels = ["Batch edit", "Batch apply", "Only checked fields change"]
+short = "Set the tags, kind, description or review flag of the selected rows at once. Each field is optional: only checked fields change."
+computed = """
+Annotate's batch edit sets the rows' [drafts](#draft), submitted later. Transactions' batch apply writes on commit, after a preview, to the selected rows (or, chosen explicitly, all those matching the filters). Both preview each row's changes, and need at least one checked field. Rows already as asked are left alone (unchanged). Unchecked fields keep each row's, including the [review flag](#needs_review): unlike editing a row, a batch edit doesn't count as reviewing it.
+
+- **Tags** replace the row's tags, and a split, with one full-amount part. A [kind set](#kind_set) on all the old parts is kept, unless the kind is checked too.
+- **Kind** is set on every part (of a split too), or cleared with "inherit from the tag".
+- **Description** replaces the transaction's description, and empty clears it.
+- **Review** flags the rows, or marks them reviewed.
+
+Some rows are skipped, and the preview says why. A rule's transactions are, for every field, as with `O`: a rule only gives tags. Untagged rows are skipped for a kind (unless the tags are checked too, as a kind needs a tag) and for the review flag alone, without a description. In Annotate, as with `O`, a kind accepts a row's [guess](#guess) (the preview says so). Batch apply writes stored annotations, so a guess doesn't count there.
+"""
+related = ["kind_set", "draft", "needs_review", "rule"]
+
+[term.orphan]
+title = "Orphan"
+section = "Annotate"
+labels = ["orphan", "orphans", "Annotations that would be orphaned"]
+short = "An annotation whose transaction is no longer in the ingested data, e.g. after a raw file was removed. Kept until deleted."
+computed = """
+Annotations are matched to transactions by ID. When the transaction vanishes on ingesting (or changes in the raw files, which changes its ID), its annotation is an orphan. The header's count opens the Orphans page. It gets its transaction back if a later ingest brings it back.
+"""
+related = ["annotation", "ingest_preview"]
+
+# Tags
+
+[term.tag]
+title = "Tag and subtag"
+section = "Tags"
+labels = ["Tag", "Subtag", "tag", "subtag"]
+short = "A tag classifies transactions (e.g. food), and a subtag refines it (e.g. food/groceries). The tag's kind says where they count."
+computed = """
+A transaction (or each [part](#split) of it) has a tag and a subtag (possibly empty). Colors and kinds are set on the Tags page, and subtags [inherit](#inherited) them.
+"""
+related = ["kind", "inherited", "own"]
+
+[term.inherited]
+title = "Inherited"
+section = "Tags"
+labels = ["(inherited)", "inherit from the tag"]
+short = "The subtag has no kind (or color) of its own: it uses its tag's."
+computed = """
+Changing the tag's kind or color changes those of its inheriting subtags.
+"""
+related = ["tag", "own"]
+
+[term.own]
+title = "Own kind or color"
+section = "Tags"
+labels = ["(own)"]
+short = "The subtag has a kind (or color) of its own, rather than its tag's (e.g. a one-off subtag of a regular tag)."
+computed = """
+The subtag's own kind and color win for its rows, and don't follow changes of its tag's. Choosing "inherit" on the Tags page drops them. A [kind set on a transaction](#kind_set) wins over both.
+"""
+related = ["kind", "inherited", "kind_set"]
+
+# Accounts
+
+[term.account_groups]
+title = "Groups of accounts"
+section = "Accounts"
+labels = ["Group", "Role", "New group"]
+short = "Accounts in their groups. A group's role says what its accounts hold: spending or holding."
+computed = """
+The [role](#group) decides where the accounts count: [spending](#role_spending) groups in cash flows and the available balance, [holding](#role_holding) groups only in the net worth. `x` moves an account to the next group, or switches a group's role.
+"""
+related = ["group", "role_spending", "role_holding"]
+
+[term.balance_on_date]
+title = "Balance on a date"
+section = "Accounts"
+labels = ["Balance on", "Balance on a date"]
+short = "The balance of an account, a source, a group or the net worth at the end of a day, e.g. to work out a reconciliation."
+computed = """
+The sum of every row of the account (or source, or group) up to the end of the day, of every kind and every tag, as the dashboard's balances. With the number of rows and the last date among them. Default date: the latest data's.
+
+To re-anchor a balance (e.g. a counted wallet), tag a row of the counted amount less this balance as a [reconciliation](#reconciliation).
+"""
+related = ["account", "reconciliation", "balances_table"]
+
+# Ingest
+
+[term.ingest]
+title = "Ingest"
+section = "Ingest"
+labels = ["Ingest", "Ingested", "ingested", "never ingested"]
+short = "Reads every account's raw files and replaces the ingested data with them. Annotations are kept, by transaction ID."
+computed = """
+Checking (the dry run and the preview) only reads the raw files. Ingesting writes the ingested data. `I` ingests without the preview.
+
+The header's "ingested ... ago" is when an ingest last changed the ingested data: new, vanished or changed transactions, as the [preview](#ingest_preview) tells. An ingest that changes nothing leaves it as it was, and only counts as a check: its hover text tells when an ingest last ran, changed or not. Raw files modified since are marked new.
+"""
+related = ["ingest_problems", "ingest_preview"]
+
+[term.ingest_problems]
+title = "Likely problems"
+section = "Ingest"
+labels = ["Likely problems", "no files", "unparseable", "empty", "filtered out", "duplicates", "no folder", "stray file"]
+short = "What may be wrong with the raw files, from a dry run of each."
+computed = """
+- no files: the account's folder has no files.
+- unparseable: no parser could read the file.
+- empty: the file has no rows.
+- filtered out: the ingestion filters drop all its rows.
+- duplicates: two files of the account share rows of a source in overlapping dates (e.g. a period exported twice). Overlaps without shared rows, like those of two cards, aren't flagged.
+- no folder: an ingestion rule transfers to an account that has no folder, so ingesting fails. Make the folder: it may stay empty.
+- stray file: a file in the raw folder itself, outside every account's folder. It isn't ingested.
+"""
+related = ["ingest", "ingest_preview", "raw_folder"]
+
+[term.raw_folder]
+title = "Raw folder"
+section = "Ingest"
+labels = ["Raw folder", "Raw files"]
+short = "Where the raw files are: a folder per account, named after it, holding the account's bank exports."
+computed = """
+Each folder of the raw folder is an account, and its files are the account's raw files (not those in its subfolders, nor hidden ones, whose names start with a dot). Accounts appear by making folders, or by [uploading](#raw_upload) files for a new one. An account that only ingestion rules transfer rows to has an empty folder.
+
+The raw folder is set in the host file (see [where the data is](#host_settings)): by default, `raw` in the data directory. The Ingest page shows its path, to copy.
+"""
+related = ["raw_upload", "account", "ingest_problems", "host_settings"]
+
+[term.raw_upload]
+title = "Upload raw files"
+section = "Ingest"
+labels = ["Upload files", "Upload", "Replace"]
+short = "Adds bank exports to an account from wherever the browser is, after a parser reads each one. Nothing is ingested until you ingest."
+computed = """
+Pick files and an account (or name a new one, whose folder is made). Each file is checked first, as the dry run does: a file no parser reads isn't uploaded. A file with the name of one already there replaces it only once you confirm, comparing both files' dates and rows (e.g. a yearly export, exported again later in the year).
+
+Files are saved under their own names in the account's folder of the [raw folder](#raw_folder): all of them, or none if saving one fails. The ingest preview then shows their effect. At most 50 MB per file.
+"""
+related = ["raw_folder", "ingest_preview"]
+
+[term.ingest_preview]
+title = "Effect of ingesting"
+section = "Ingest"
+labels = ["Effect of ingesting", "new", "vanished", "changed", "unchanged", "Now", "After", "Change"]
+short = "What ingesting would change: the transactions that would appear, vanish or change, and the annotations that would be orphaned."
+computed = """
+Compares the transactions of the raw files with the ingested data, by ID, then by content. A transaction's ID comes from its account, source, date, raw description and amount (unless the bank gives one), so a changed transaction is usually new and vanished. Changed ones keep their ID: listed only when there are any. Vanishing transactions with annotations would make them [orphans](#orphan), and orphans whose transaction would be back are counted too.
+
+If nothing is new, vanished or changed, ingesting would change nothing, and the header's "ingested ... ago" would stay as it is (see [Ingest](#ingest)).
+"""
+related = ["ingest", "orphan"]
+
+# Rules
+
+[term.rule]
+title = "Rule"
+section = "Rules"
+labels = ["rule", "rule N", "#", "Position"]
+short = "A filter of transactions and the tags it gives them. The first matching rule (in order) tags a transaction, and rules win over annotations."
+computed = """
+Rules are tried in their order: the first whose [filters](#rule_filters) match gives its tag and subtag to the whole transaction. A matching rule [overrides](#overridden) any annotation's tags (its description is kept).
+"""
+related = ["rule_filters", "rule_preview", "overridden"]
+
+[term.rule_filters]
+title = "Rule filters"
+section = "Rules"
+labels = ["Filters", "raw description", "account", "source", "dates"]
+short = "What a rule matches: a regular expression on the raw description, a source, an account, and a date range."
+computed = """
+Every filter given must match. The [raw description](#description) is a regular expression, the source and account are exact, and dates run from a first day (inclusive) to a last (exclusive). Filters the simple form can't show (tags, and/or combinations, inverted) are edited as JSON.
+"""
+related = ["rule"]
+
+[term.rule_preview]
+title = "Rule preview"
+section = "Rules"
+labels = ["Newly tagged", "Overridden", "Tagged by it", "Matched"]
+short = "What the rule would change, before saving it."
+computed = """
+- Newly tagged: untagged now, tagged by this rule.
+- Overridden: annotations this rule would [override](#overridden).
+- Tagged by it: everything this rule would tag.
+- Matched: every match, including those an earlier rule takes.
+"""
+related = ["rule", "overridden"]
+
+# Settings
+
+[term.date_format]
+title = "Date format"
+section = "Settings"
+labels = ["Date format"]
+short = "How full dates are shown and typed in the web app: dd/mm/yyyy (the default), yyyy-mm-dd (ISO) or mm/dd/yyyy. Month names (Sep 2026) stay as they are."
+computed = """
+Every full date follows it: tables, the ledger and drill-downs, tooltips (e.g. the balance chart's end of day), "as of" stamps, ingest times and rule summaries. Date fields read it too, leniently: `/`, `.`, `-` or spaces between the parts, single-digit days and months, two-digit years (20yy), and a year first (`2025-6-14`) whatever the format. Up and Down step a day, and a text that isn't a date says why once the field is left (the filter keeps the last date).
+
+Only the display: URLs and the API keep ISO dates (`2025-06-14`). Saved in the store when changed, also with `GET` and `PUT /api/settings/display`.
+"""
+
+[term.keymap]
+title = "Keyboard shortcuts"
+section = "Settings"
+labels = ["Keyboard shortcuts", "changed", "fixed", "none"]
+short = "Every shortcut is a named action (e.g. `tags.rename`) with default keys. The Settings page changes them, and `?` on a page lists the ones active there."
+computed = """
+Each action has an ID, the page (scope) where it is active, and default keys. The keymap kept in the store is the keys of the four [directions](#directions) and the keys of single actions over their defaults (`changed`), which can also be cleared (`none`). On the Settings page, `change` waits for the new key to be pressed, and `add` adds one beside the others.
+
+- A page's key is its letter after the go key (`g` by default): changing the letter of Tags to `q` makes it `g` then `q`, and the nav shows the new letter.
+- Fixed keys keep their meaning and can't be bound: Enter, Escape, Tab, Space, Backspace, Delete, the arrows, Home, End, Page Up and Page Down (alone or with Shift). Ctrl and Alt combinations can be bound.
+- Keys are named by their character (`J` is Shift and `j`). In another script's layout (e.g. Hebrew), letters and punctuation work by their position on a US keyboard, also the keys that type ASCII there (Hebrew's Q and W type `/` and `'`, and are `q` and `w`): the layout is known by the last letter typed. Latin layouts (e.g. Dvorak) go by the character typed.
+- Keys named elsewhere in this glossary are the defaults.
+
+Saved as they change, unless keys [clash](#key_clash). Also `GET` and `PUT /api/settings/keymap`. The actions and their defaults are in `finalyze/keymap.json`, which the web app and the server share.
+"""
+related = ["directions", "key_clash"]
+
+[term.directions]
+title = "Directions"
+section = "Settings"
+labels = ["Directions", "Left", "Down", "Up", "Right", "vim (h j k l)", "j k l ;"]
+short = "The keys of left, down, up and right: vim's h j k l by default. Each can be changed, and two buttons set all four to h j k l or j k l ; (one key to the right)."
+computed = """
+Down and up move between rows of every list, left and right move the breakdown's month, and with Shift, down and up reorder rules and account groups (`J` and `K` with vim's keys, `K` and `L` with j k l ;, where Shift and `;` is `:`). The arrows always work too, whatever the keys (with Shift, up and down reorder), and can't be bound. A direction's key is one key without Shift, and two directions can't share one. An action given its own keys keeps them whatever the directions.
+"""
+related = ["keymap", "key_clash"]
+
+[term.key_clash]
+title = "Clashing keys"
+section = "Settings"
+labels = ["Not saved", "is both"]
+short = "One key for two actions active at once: on the same page, or one of them everywhere. Clashing keys aren't saved."
+computed = """
+Actions are active together on a page with its parts (e.g. Annotate's rows and filters, the dashboard's view), plus the keys of every page (`?`, the go key and the pages' letters) and of lists. A key that starts the go sequences clashes with an action of its own, and so does a page's letter used by two pages. Fixed keys shared by design (e.g. Escape) don't clash.
+
+The Settings page shows a clash on both actions (or on the direction) and saves nothing until one of them gets another key. The server refuses them too: `PUT /api/settings/keymap` answers 422 with the `problems`, in the same words.
+"""
+related = ["keymap", "directions"]
+
+[term.host_settings]
+title = "Where the data is"
+section = "Settings"
+labels = ["Where the data is", "Host file", "Data directory", "Raw folder"]
+short = "Where things are on this machine: the data directory and the raw folder, from the host file next to the config. Never exported."
+computed = """
+The host file (`host.toml`, next to `config.toml`) holds `data_dir` (the store, the ingested data and the backups folder), `raw_dir` (the [raw folder](#raw_folder), by default `raw` in the data directory), and optionally the `host` and `port` to serve on (the command's `--host` and `--port` win). Without it, the defaults apply.
+
+Settings shows them read-only: they are edited in the file, and apply when the server starts. They belong to the machine, unlike the config and the store, so [exports](#export_import) and [backups](#backups) never hold them, and an import or a restore keeps them.
+"""
+related = ["raw_folder", "export_import", "backups"]
+
+[term.export_import]
+title = "Export and import"
+section = "Settings"
+labels = ["Export and import", "Download an export", "Import…"]
+short = "An export is one zip of everything but the host's paths, downloaded. Importing one uploads it, and replaces all the data, the raw folder included."
+computed = """
+An export holds the store (annotations, tags, rules, accounts and settings), the ingested transactions, the raw folder and the config file, but never the host file (see [where the data is](#host_settings)). It holds all the data: keep it private.
+
+An import checks the zip, then asks to confirm, listing the raw files it would replace or remove. It [backs up](#backups) the current data first (unless unchecked), then makes the [raw folder](#raw_folder) hold exactly the export's raw files, and replaces the config, the store and the ingested data. Raw files the export doesn't have are removed: only the backup keeps them. If anything fails, everything is put back as it was.
+"""
+related = ["backups", "host_settings", "raw_folder"]
+
+[term.backups]
+title = "Backups"
+section = "Settings"
+labels = ["Backups", "Back up now", "Restore", "Back up the current data first"]
+short = "Named copies of all the data, kept on this machine: made on request and before every import or restore. At most 10, never deleted automatically."
+computed = """
+A backup holds what an [export](#export_import) does, kept in the backups folder of the data directory rather than downloaded, under a name. Names are required and unique (whatever their case), and the file is named after it.
+
+Before an import or a restore, the current data is backed up as `before import on <date>` (or `before restore on <date>`), unless you uncheck it or name it otherwise. Restoring a backup is importing it: it is checked first, the raw files it would replace or remove are listed, and the raw folder ends up holding exactly its raw files.
+
+At most 10 backups are kept, and none is ever deleted automatically. At 10, a new backup is refused, and so is an import or a restore that asks for one: delete a backup first (download it if in doubt), or uncheck the backup. The list warns ahead, when there is one place left, and at the limit.
+"""
+related = ["export_import", "host_settings"]

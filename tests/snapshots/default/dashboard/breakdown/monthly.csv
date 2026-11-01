@@ -1,0 +1,727 @@
+direction,month,tag,subtag,kind,amount
+expenses,2023-06,car,fuel,regular,584.740000
+expenses,2023-06,car,parking,regular,101.730000
+expenses,2023-06,fees,bank,regular,25.800000
+expenses,2023-06,food,coffee,regular,158.630000
+expenses,2023-06,food,delivery,regular,426.300000
+expenses,2023-06,food,dining out,regular,323.300000
+expenses,2023-06,food,groceries,regular,3201.450000
+expenses,2023-06,gifts,birthdays,regular,100.000000
+expenses,2023-06,health,doctor,regular,48.630000
+expenses,2023-06,health,fitness,regular,219.000000
+expenses,2023-06,health,grooming,regular,70.000000
+expenses,2023-06,health,insurance,regular,186.000000
+expenses,2023-06,health,pharmacy,regular,115.930000
+expenses,2023-06,home,household,regular,456.500000
+expenses,2023-06,housing,rent,regular,6400.000000
+expenses,2023-06,kids,activities,regular,180.000000
+expenses,2023-06,kids,babysitting,regular,150.000000
+expenses,2023-06,kids,daycare,regular,3150.000000
+expenses,2023-06,kids,toys,regular,131.260000
+expenses,2023-06,leisure,culture,regular,96.000000
+expenses,2023-06,pets,food,regular,195.470000
+expenses,2023-06,shopping,online,regular,42.720000
+expenses,2023-06,subscriptions,streaming,regular,61.800000
+expenses,2023-06,utilities,electricity,regular,1031.080000
+expenses,2023-06,utilities,internet,regular,99.900000
+expenses,2023-06,utilities,mobile,regular,118.000000
+expenses,2023-07,car,fuel,regular,573.740000
+expenses,2023-07,car,parking,regular,8.150000
+expenses,2023-07,fees,bank,regular,25.800000
+expenses,2023-07,food,coffee,regular,158.690000
+expenses,2023-07,food,delivery,regular,423.420000
+expenses,2023-07,food,dining out,regular,595.790000
+expenses,2023-07,food,groceries,regular,3788.550000
+expenses,2023-07,gifts,birthdays,regular,350.000000
+expenses,2023-07,health,fitness,regular,219.000000
+expenses,2023-07,health,insurance,regular,186.000000
+expenses,2023-07,health,pharmacy,regular,295.750000
+expenses,2023-07,housing,municipal tax,regular,1184.000000
+expenses,2023-07,housing,rent,regular,6400.000000
+expenses,2023-07,kids,babysitting,regular,150.000000
+expenses,2023-07,kids,clothes,regular,103.680000
+expenses,2023-07,kids,daycare,regular,3150.000000
+expenses,2023-07,leisure,culture,regular,96.000000
+expenses,2023-07,pets,food,regular,256.420000
+expenses,2023-07,shopping,online,regular,104.520000
+expenses,2023-07,subscriptions,streaming,regular,61.800000
+expenses,2023-07,utilities,internet,regular,99.900000
+expenses,2023-07,utilities,mobile,regular,118.000000
+expenses,2023-07,utilities,water,regular,365.770000
+expenses,2023-08,car,fuel,regular,597.110000
+expenses,2023-08,car,parking,regular,10.730000
+expenses,2023-08,car,service,regular,981.970000
+expenses,2023-08,fees,bank,regular,25.800000
+expenses,2023-08,food,coffee,regular,168.890000
+expenses,2023-08,food,delivery,regular,455.550000
+expenses,2023-08,food,dining out,regular,832.070000
+expenses,2023-08,food,groceries,regular,3503.040000
+expenses,2023-08,gifts,birthdays,regular,250.000000
+expenses,2023-08,health,dental,regular,380.000000
+expenses,2023-08,health,doctor,regular,35.990000
+expenses,2023-08,health,fitness,regular,219.000000
+expenses,2023-08,health,grooming,regular,70.000000
+expenses,2023-08,health,insurance,regular,186.000000
+expenses,2023-08,health,pharmacy,regular,78.200000
+expenses,2023-08,home,household,regular,464.400000
+expenses,2023-08,housing,rent,regular,6400.000000
+expenses,2023-08,kids,babysitting,regular,150.000000
+expenses,2023-08,kids,toys,regular,194.590000
+expenses,2023-08,pets,food,regular,228.550000
+expenses,2023-08,shopping,online,regular,105.520000
+expenses,2023-08,subscriptions,streaming,regular,61.800000
+expenses,2023-08,utilities,electricity,regular,1011.630000
+expenses,2023-08,utilities,internet,regular,99.900000
+expenses,2023-08,utilities,mobile,regular,118.000000
+expenses,2023-09,car,fuel,regular,808.670000
+expenses,2023-09,car,parking,regular,45.790000
+expenses,2023-09,fees,bank,regular,25.800000
+expenses,2023-09,food,coffee,regular,133.010000
+expenses,2023-09,food,delivery,regular,324.580000
+expenses,2023-09,food,dining out,regular,533.330000
+expenses,2023-09,food,groceries,regular,3793.140000
+expenses,2023-09,gifts,birthdays,regular,200.000000
+expenses,2023-09,health,fitness,regular,219.000000
+expenses,2023-09,health,insurance,regular,186.000000
+expenses,2023-09,health,pharmacy,regular,177.630000
+expenses,2023-09,housing,municipal tax,regular,1184.000000
+expenses,2023-09,housing,rent,regular,6400.000000
+expenses,2023-09,kids,activities,regular,180.000000
+expenses,2023-09,kids,babysitting,regular,150.000000
+expenses,2023-09,kids,daycare,regular,3276.000000
+expenses,2023-09,pets,food,regular,240.380000
+expenses,2023-09,subscriptions,streaming,regular,61.800000
+expenses,2023-09,utilities,internet,regular,99.900000
+expenses,2023-09,utilities,mobile,regular,118.000000
+expenses,2023-09,utilities,water,regular,321.390000
+expenses,2023-10,car,fuel,regular,598.100000
+expenses,2023-10,car,parking,regular,83.330000
+expenses,2023-10,fees,bank,regular,25.800000
+expenses,2023-10,food,coffee,regular,185.720000
+expenses,2023-10,food,delivery,regular,234.580000
+expenses,2023-10,food,dining out,regular,139.880000
+expenses,2023-10,food,groceries,regular,3477.500000
+expenses,2023-10,gifts,birthdays,regular,250.000000
+expenses,2023-10,health,fitness,regular,219.000000
+expenses,2023-10,health,grooming,regular,70.000000
+expenses,2023-10,health,insurance,regular,186.000000
+expenses,2023-10,health,pharmacy,regular,209.710000
+expenses,2023-10,home,household,regular,154.900000
+expenses,2023-10,housing,rent,regular,6400.000000
+expenses,2023-10,kids,activities,regular,180.000000
+expenses,2023-10,kids,babysitting,regular,200.000000
+expenses,2023-10,kids,clothes,regular,151.430000
+expenses,2023-10,kids,daycare,regular,3276.000000
+expenses,2023-10,pets,food,regular,260.470000
+expenses,2023-10,shopping,clothes,regular,331.060000
+expenses,2023-10,shopping,online,regular,116.680000
+expenses,2023-10,subscriptions,streaming,regular,61.800000
+expenses,2023-10,utilities,electricity,regular,826.800000
+expenses,2023-10,utilities,internet,regular,99.900000
+expenses,2023-10,utilities,mobile,regular,118.000000
+expenses,2023-11,car,fuel,regular,837.900000
+expenses,2023-11,car,parking,regular,91.890000
+expenses,2023-11,fees,bank,regular,25.800000
+expenses,2023-11,food,coffee,regular,135.890000
+expenses,2023-11,food,delivery,regular,474.360000
+expenses,2023-11,food,dining out,regular,532.290000
+expenses,2023-11,food,groceries,regular,2653.030000
+expenses,2023-11,gifts,birthdays,regular,150.000000
+expenses,2023-11,health,fitness,regular,219.000000
+expenses,2023-11,health,insurance,regular,186.000000
+expenses,2023-11,health,pharmacy,regular,209.080000
+expenses,2023-11,housing,municipal tax,regular,1184.000000
+expenses,2023-11,housing,rent,regular,6400.000000
+expenses,2023-11,kids,activities,regular,180.000000
+expenses,2023-11,kids,babysitting,regular,150.000000
+expenses,2023-11,kids,clothes,regular,140.870000
+expenses,2023-11,kids,daycare,regular,3276.000000
+expenses,2023-11,leisure,culture,regular,320.000000
+expenses,2023-11,pets,food,regular,191.270000
+expenses,2023-11,pets,vet,regular,351.610000
+expenses,2023-11,shopping,clothes,regular,382.770000
+expenses,2023-11,subscriptions,streaming,regular,61.800000
+expenses,2023-11,utilities,internet,regular,99.900000
+expenses,2023-11,utilities,mobile,regular,118.000000
+expenses,2023-11,utilities,water,regular,272.070000
+expenses,2023-12,car,fuel,regular,902.700000
+expenses,2023-12,car,parking,regular,30.910000
+expenses,2023-12,fees,bank,regular,25.800000
+expenses,2023-12,food,coffee,regular,132.200000
+expenses,2023-12,food,delivery,regular,357.050000
+expenses,2023-12,food,dining out,regular,458.630000
+expenses,2023-12,food,groceries,regular,3180.400000
+expenses,2023-12,gifts,birthdays,regular,250.000000
+expenses,2023-12,health,fitness,regular,219.000000
+expenses,2023-12,health,grooming,regular,70.000000
+expenses,2023-12,health,insurance,regular,186.000000
+expenses,2023-12,health,pharmacy,regular,240.200000
+expenses,2023-12,housing,rent,regular,6400.000000
+expenses,2023-12,kids,activities,regular,180.000000
+expenses,2023-12,kids,babysitting,regular,240.000000
+expenses,2023-12,kids,daycare,regular,3276.000000
+expenses,2023-12,leisure,weekend away,regular,1480.000000
+expenses,2023-12,pets,food,regular,198.510000
+expenses,2023-12,shopping,clothes,regular,162.780000
+expenses,2023-12,shopping,online,regular,101.740000
+expenses,2023-12,subscriptions,streaming,regular,61.800000
+expenses,2023-12,utilities,electricity,regular,764.270000
+expenses,2023-12,utilities,internet,regular,99.900000
+expenses,2023-12,utilities,mobile,regular,118.000000
+expenses,2024-01,car,fuel,regular,657.320000
+expenses,2024-01,car,parking,regular,47.330000
+expenses,2024-01,fees,bank,regular,25.800000
+expenses,2024-01,food,coffee,regular,181.030000
+expenses,2024-01,food,delivery,regular,278.650000
+expenses,2024-01,food,dining out,regular,381.400000
+expenses,2024-01,food,groceries,regular,3543.670000
+expenses,2024-01,gifts,birthdays,regular,200.000000
+expenses,2024-01,health,fitness,regular,219.000000
+expenses,2024-01,health,insurance,regular,186.000000
+expenses,2024-01,health,pharmacy,regular,150.500000
+expenses,2024-01,home,household,regular,348.230000
+expenses,2024-01,housing,building committee,regular,250.000000
+expenses,2024-01,housing,municipal tax,regular,1184.000000
+expenses,2024-01,housing,rent,regular,6400.000000
+expenses,2024-01,kids,activities,regular,180.000000
+expenses,2024-01,kids,babysitting,regular,240.000000
+expenses,2024-01,kids,clothes,regular,58.000000
+expenses,2024-01,kids,daycare,regular,3276.000000
+expenses,2024-01,leisure,culture,regular,320.000000
+expenses,2024-01,pets,food,regular,202.170000
+expenses,2024-01,shopping,clothes,regular,151.280000
+expenses,2024-01,shopping,online,regular,129.560000
+expenses,2024-01,subscriptions,streaming,regular,61.800000
+expenses,2024-01,utilities,internet,regular,99.900000
+expenses,2024-01,utilities,mobile,regular,118.000000
+expenses,2024-01,utilities,water,regular,228.810000
+expenses,2024-02,car,fuel,regular,790.310000
+expenses,2024-02,car,parking,regular,20.570000
+expenses,2024-02,car,service,regular,1205.860000
+expenses,2024-02,fees,bank,regular,25.800000
+expenses,2024-02,food,coffee,regular,145.900000
+expenses,2024-02,food,delivery,regular,393.500000
+expenses,2024-02,food,dining out,regular,271.680000
+expenses,2024-02,food,groceries,regular,3119.800000
+expenses,2024-02,gifts,birthdays,regular,150.000000
+expenses,2024-02,health,dental,regular,380.000000
+expenses,2024-02,health,doctor,regular,44.130000
+expenses,2024-02,health,fitness,regular,219.000000
+expenses,2024-02,health,grooming,regular,70.000000
+expenses,2024-02,health,insurance,regular,186.000000
+expenses,2024-02,health,pharmacy,regular,46.380000
+expenses,2024-02,housing,building committee,regular,250.000000
+expenses,2024-02,housing,rent,regular,6400.000000
+expenses,2024-02,kids,activities,regular,180.000000
+expenses,2024-02,kids,babysitting,regular,240.000000
+expenses,2024-02,kids,daycare,regular,3276.000000
+expenses,2024-02,pets,food,regular,232.060000
+expenses,2024-02,shopping,clothes,regular,269.270000
+expenses,2024-02,subscriptions,streaming,regular,61.800000
+expenses,2024-02,utilities,electricity,regular,696.830000
+expenses,2024-02,utilities,internet,regular,99.900000
+expenses,2024-02,utilities,mobile,regular,118.000000
+expenses,2024-03,car,fuel,regular,859.470000
+expenses,2024-03,car,insurance,regular,4120.000000
+expenses,2024-03,car,parking,regular,80.510000
+expenses,2024-03,fees,bank,regular,25.800000
+expenses,2024-03,food,coffee,regular,148.640000
+expenses,2024-03,food,delivery,regular,434.410000
+expenses,2024-03,food,dining out,regular,545.670000
+expenses,2024-03,food,groceries,regular,2803.750000
+expenses,2024-03,gifts,birthdays,regular,400.000000
+expenses,2024-03,health,fitness,regular,219.000000
+expenses,2024-03,health,insurance,regular,186.000000
+expenses,2024-03,health,pharmacy,regular,165.370000
+expenses,2024-03,housing,building committee,regular,250.000000
+expenses,2024-03,housing,municipal tax,regular,1184.000000
+expenses,2024-03,housing,rent,regular,6400.000000
+expenses,2024-03,kids,activities,regular,180.000000
+expenses,2024-03,kids,babysitting,regular,150.000000
+expenses,2024-03,kids,daycare,regular,3276.000000
+expenses,2024-03,pets,food,regular,237.630000
+expenses,2024-03,shopping,online,regular,93.840000
+expenses,2024-03,subscriptions,cloud,regular,9.900000
+expenses,2024-03,subscriptions,streaming,regular,61.800000
+expenses,2024-03,utilities,internet,regular,99.900000
+expenses,2024-03,utilities,mobile,regular,118.000000
+expenses,2024-03,utilities,water,regular,234.450000
+expenses,2024-03,vacation,flights,one-off,7840.000000
+expenses,2024-04,car,fuel,regular,540.140000
+expenses,2024-04,car,license,regular,1148.000000
+expenses,2024-04,car,parking,regular,27.580000
+expenses,2024-04,car,service,regular,3420.000000
+expenses,2024-04,fees,bank,regular,25.800000
+expenses,2024-04,food,coffee,regular,118.010000
+expenses,2024-04,food,delivery,regular,355.410000
+expenses,2024-04,food,dining out,regular,367.670000
+expenses,2024-04,food,groceries,regular,3690.890000
+expenses,2024-04,gifts,birthdays,regular,349.900000
+expenses,2024-04,health,fitness,regular,219.000000
+expenses,2024-04,health,grooming,regular,70.000000
+expenses,2024-04,health,insurance,regular,186.000000
+expenses,2024-04,health,pharmacy,regular,50.610000
+expenses,2024-04,housing,building committee,regular,250.000000
+expenses,2024-04,housing,rent,regular,6400.000000
+expenses,2024-04,kids,activities,regular,180.000000
+expenses,2024-04,kids,babysitting,regular,240.000000
+expenses,2024-04,kids,daycare,regular,3276.000000
+expenses,2024-04,kids,toys,regular,121.970000
+expenses,2024-04,pets,food,regular,222.830000
+expenses,2024-04,shopping,clothes,regular,564.710000
+expenses,2024-04,subscriptions,cloud,regular,9.900000
+expenses,2024-04,subscriptions,streaming,regular,61.800000
+expenses,2024-04,utilities,electricity,regular,725.400000
+expenses,2024-04,utilities,internet,regular,99.900000
+expenses,2024-04,utilities,mobile,regular,118.000000
+expenses,2024-05,car,fuel,regular,597.890000
+expenses,2024-05,car,parking,regular,38.210000
+expenses,2024-05,fees,bank,regular,25.800000
+expenses,2024-05,food,coffee,regular,115.920000
+expenses,2024-05,food,delivery,regular,194.530000
+expenses,2024-05,food,dining out,regular,276.000000
+expenses,2024-05,food,groceries,regular,2606.910000
+expenses,2024-05,gifts,birthdays,regular,150.000000
+expenses,2024-05,health,fitness,regular,219.000000
+expenses,2024-05,health,insurance,regular,186.000000
+expenses,2024-05,health,pharmacy,regular,256.510000
+expenses,2024-05,home,household,regular,204.820000
+expenses,2024-05,housing,building committee,regular,250.000000
+expenses,2024-05,housing,municipal tax,regular,1184.000000
+expenses,2024-05,housing,rent,regular,6650.000000
+expenses,2024-05,kids,activities,regular,180.000000
+expenses,2024-05,kids,babysitting,regular,240.000000
+expenses,2024-05,kids,daycare,regular,3276.000000
+expenses,2024-05,leisure,culture,regular,144.000000
+expenses,2024-05,pets,food,regular,227.660000
+expenses,2024-05,shopping,online,regular,93.840000
+expenses,2024-05,subscriptions,cloud,regular,9.900000
+expenses,2024-05,subscriptions,streaming,regular,61.800000
+expenses,2024-05,utilities,internet,regular,99.900000
+expenses,2024-05,utilities,mobile,regular,118.000000
+expenses,2024-05,utilities,water,regular,327.620000
+expenses,2024-06,car,fuel,regular,850.230000
+expenses,2024-06,car,parking,regular,67.070000
+expenses,2024-06,fees,bank,regular,25.800000
+expenses,2024-06,food,coffee,regular,186.470000
+expenses,2024-06,food,delivery,regular,428.940000
+expenses,2024-06,food,dining out,regular,511.790000
+expenses,2024-06,food,groceries,regular,3406.920000
+expenses,2024-06,gifts,birthdays,regular,300.000000
+expenses,2024-06,gifts,weddings,regular,700.000000
+expenses,2024-06,health,fitness,regular,219.000000
+expenses,2024-06,health,grooming,regular,70.000000
+expenses,2024-06,health,insurance,regular,186.000000
+expenses,2024-06,health,pharmacy,regular,305.520000
+expenses,2024-06,housing,building committee,regular,250.000000
+expenses,2024-06,housing,rent,regular,6650.000000
+expenses,2024-06,kids,activities,regular,180.000000
+expenses,2024-06,kids,babysitting,regular,200.000000
+expenses,2024-06,kids,daycare,regular,3276.000000
+expenses,2024-06,pets,food,regular,222.930000
+expenses,2024-06,shopping,clothes,regular,426.720000
+expenses,2024-06,shopping,online,regular,61.430000
+expenses,2024-06,subscriptions,cloud,regular,9.900000
+expenses,2024-06,subscriptions,streaming,regular,61.800000
+expenses,2024-06,utilities,electricity,regular,1050.530000
+expenses,2024-06,utilities,internet,regular,99.900000
+expenses,2024-06,utilities,mobile,regular,118.000000
+expenses,2024-07,car,fuel,regular,531.950000
+expenses,2024-07,car,parking,regular,61.810000
+expenses,2024-07,fees,bank,regular,25.800000
+expenses,2024-07,food,coffee,regular,171.180000
+expenses,2024-07,food,delivery,regular,403.570000
+expenses,2024-07,food,dining out,regular,556.890000
+expenses,2024-07,food,groceries,regular,3047.020000
+expenses,2024-07,gifts,birthdays,regular,100.000000
+expenses,2024-07,gifts,weddings,regular,800.000000
+expenses,2024-07,health,fitness,regular,219.000000
+expenses,2024-07,health,insurance,regular,186.000000
+expenses,2024-07,health,pharmacy,regular,201.210000
+expenses,2024-07,housing,building committee,regular,250.000000
+expenses,2024-07,housing,municipal tax,regular,1184.000000
+expenses,2024-07,housing,rent,regular,6650.000000
+expenses,2024-07,kids,babysitting,regular,150.000000
+expenses,2024-07,kids,clothes,regular,138.520000
+expenses,2024-07,kids,daycare,regular,3276.000000
+expenses,2024-07,pets,food,regular,247.470000
+expenses,2024-07,pets,vet,regular,440.820000
+expenses,2024-07,subscriptions,cloud,regular,9.900000
+expenses,2024-07,subscriptions,streaming,regular,61.800000
+expenses,2024-07,utilities,internet,regular,99.900000
+expenses,2024-07,utilities,mobile,regular,118.000000
+expenses,2024-07,utilities,water,regular,331.520000
+expenses,2024-07,vacation,activities,one-off,260.000000
+expenses,2024-07,vacation,car,one-off,1780.000000
+expenses,2024-07,vacation,food,one-off,2470.070000
+expenses,2024-07,vacation,lodging,one-off,4960.000000
+expenses,2024-08,car,fuel,regular,752.970000
+expenses,2024-08,car,parking,regular,43.550000
+expenses,2024-08,car,service,regular,864.060000
+expenses,2024-08,fees,bank,regular,25.800000
+expenses,2024-08,food,coffee,regular,138.610000
+expenses,2024-08,food,delivery,regular,263.350000
+expenses,2024-08,food,dining out,regular,832.050000
+expenses,2024-08,food,groceries,regular,2362.880000
+expenses,2024-08,gifts,birthdays,regular,400.000000
+expenses,2024-08,health,dental,regular,380.000000
+expenses,2024-08,health,doctor,regular,60.020000
+expenses,2024-08,health,fitness,regular,219.000000
+expenses,2024-08,health,grooming,regular,70.000000
+expenses,2024-08,health,insurance,regular,186.000000
+expenses,2024-08,health,pharmacy,regular,129.260000
+expenses,2024-08,home,appliances,one-off,7190.000000
+expenses,2024-08,home,household,regular,116.000000
+expenses,2024-08,housing,building committee,regular,250.000000
+expenses,2024-08,housing,rent,regular,6650.000000
+expenses,2024-08,kids,babysitting,regular,150.000000
+expenses,2024-08,kids,clothes,regular,192.060000
+expenses,2024-08,pets,food,regular,260.120000
+expenses,2024-08,pets,vet,regular,499.230000
+expenses,2024-08,shopping,clothes,regular,237.470000
+expenses,2024-08,subscriptions,cloud,regular,9.900000
+expenses,2024-08,subscriptions,streaming,regular,61.800000
+expenses,2024-08,utilities,electricity,regular,962.990000
+expenses,2024-08,utilities,internet,regular,99.900000
+expenses,2024-08,utilities,mobile,regular,118.000000
+expenses,2024-09,car,fuel,regular,551.420000
+expenses,2024-09,car,insurance,regular,4600.000000
+expenses,2024-09,car,parking,regular,29.610000
+expenses,2024-09,car,purchase,one-off,133400.000000
+expenses,2024-09,fees,bank,regular,25.800000
+expenses,2024-09,food,coffee,regular,147.760000
+expenses,2024-09,food,delivery,regular,384.160000
+expenses,2024-09,food,dining out,regular,95.200000
+expenses,2024-09,food,groceries,regular,3433.980000
+expenses,2024-09,gifts,birthdays,regular,500.000000
+expenses,2024-09,gifts,teachers,regular,150.000000
+expenses,2024-09,health,fitness,regular,219.000000
+expenses,2024-09,health,insurance,regular,186.000000
+expenses,2024-09,health,pharmacy,regular,53.730000
+expenses,2024-09,home,household,regular,96.100000
+expenses,2024-09,housing,building committee,regular,250.000000
+expenses,2024-09,housing,municipal tax,regular,1184.000000
+expenses,2024-09,housing,rent,regular,6650.000000
+expenses,2024-09,kids,activities,regular,390.000000
+expenses,2024-09,kids,babysitting,regular,200.000000
+expenses,2024-09,kids,daycare,regular,3407.040000
+expenses,2024-09,pets,food,regular,171.510000
+expenses,2024-09,shopping,clothes,regular,251.690000
+expenses,2024-09,shopping,online,regular,100.620000
+expenses,2024-09,subscriptions,cloud,regular,9.900000
+expenses,2024-09,subscriptions,streaming,regular,61.800000
+expenses,2024-09,utilities,internet,regular,99.900000
+expenses,2024-09,utilities,mobile,regular,118.000000
+expenses,2024-09,utilities,water,regular,303.850000
+expenses,2024-10,car,fuel,regular,364.110000
+expenses,2024-10,car,parking,regular,42.190000
+expenses,2024-10,fees,bank,regular,25.800000
+expenses,2024-10,food,coffee,regular,172.090000
+expenses,2024-10,food,delivery,regular,456.210000
+expenses,2024-10,food,dining out,regular,884.470000
+expenses,2024-10,food,groceries,regular,3738.530000
+expenses,2024-10,gifts,birthdays,regular,150.000000
+expenses,2024-10,gifts,weddings,regular,700.000000
+expenses,2024-10,health,fitness,regular,219.000000
+expenses,2024-10,health,grooming,regular,70.000000
+expenses,2024-10,health,insurance,regular,186.000000
+expenses,2024-10,health,pharmacy,regular,128.070000
+expenses,2024-10,housing,building committee,regular,250.000000
+expenses,2024-10,housing,rent,regular,6650.000000
+expenses,2024-10,kids,activities,regular,180.000000
+expenses,2024-10,kids,babysitting,regular,150.000000
+expenses,2024-10,kids,daycare,regular,3407.040000
+expenses,2024-10,leisure,culture,regular,96.000000
+expenses,2024-10,pets,food,regular,192.450000
+expenses,2024-10,shopping,clothes,regular,340.030000
+expenses,2024-10,shopping,online,regular,90.950000
+expenses,2024-10,subscriptions,cloud,regular,9.900000
+expenses,2024-10,subscriptions,streaming,regular,66.800000
+expenses,2024-10,utilities,electricity,regular,780.000000
+expenses,2024-10,utilities,internet,regular,99.900000
+expenses,2024-10,utilities,mobile,regular,118.000000
+expenses,2024-11,car,fuel,regular,358.760000
+expenses,2024-11,car,parking,regular,80.320000
+expenses,2024-11,fees,bank,regular,25.800000
+expenses,2024-11,food,coffee,regular,127.290000
+expenses,2024-11,food,delivery,regular,371.020000
+expenses,2024-11,food,dining out,regular,402.310000
+expenses,2024-11,food,groceries,regular,3039.290000
+expenses,2024-11,gifts,birthdays,regular,200.000000
+expenses,2024-11,health,fitness,regular,219.000000
+expenses,2024-11,health,insurance,regular,186.000000
+expenses,2024-11,health,pharmacy,regular,124.140000
+expenses,2024-11,home,household,regular,421.230000
+expenses,2024-11,housing,building committee,regular,250.000000
+expenses,2024-11,housing,municipal tax,regular,1184.000000
+expenses,2024-11,housing,rent,regular,6650.000000
+expenses,2024-11,kids,activities,regular,180.000000
+expenses,2024-11,kids,babysitting,regular,150.000000
+expenses,2024-11,kids,clothes,regular,247.400000
+expenses,2024-11,kids,daycare,regular,3407.040000
+expenses,2024-11,leisure,culture,regular,320.000000
+expenses,2024-11,pets,food,regular,183.130000
+expenses,2024-11,shopping,clothes,regular,296.860000
+expenses,2024-11,subscriptions,cloud,regular,9.900000
+expenses,2024-11,subscriptions,streaming,regular,66.800000
+expenses,2024-11,utilities,internet,regular,99.900000
+expenses,2024-11,utilities,mobile,regular,118.000000
+expenses,2024-11,utilities,water,regular,243.470000
+expenses,2024-12,car,fuel,regular,320.830000
+expenses,2024-12,car,parking,regular,93.230000
+expenses,2024-12,fees,bank,regular,25.800000
+expenses,2024-12,food,coffee,regular,196.600000
+expenses,2024-12,food,delivery,regular,442.370000
+expenses,2024-12,food,dining out,regular,691.350000
+expenses,2024-12,food,groceries,regular,2692.050000
+expenses,2024-12,gifts,birthdays,regular,250.000000
+expenses,2024-12,health,fitness,regular,219.000000
+expenses,2024-12,health,grooming,regular,70.000000
+expenses,2024-12,health,insurance,regular,186.000000
+expenses,2024-12,health,pharmacy,regular,72.750000
+expenses,2024-12,home,household,regular,293.870000
+expenses,2024-12,housing,building committee,regular,250.000000
+expenses,2024-12,housing,rent,regular,6650.000000
+expenses,2024-12,kids,activities,regular,180.000000
+expenses,2024-12,kids,babysitting,regular,240.000000
+expenses,2024-12,kids,clothes,regular,226.640000
+expenses,2024-12,kids,daycare,regular,3407.040000
+expenses,2024-12,leisure,culture,regular,144.000000
+expenses,2024-12,leisure,weekend away,regular,1480.000000
+expenses,2024-12,pets,food,regular,195.480000
+expenses,2024-12,shopping,clothes,regular,384.380000
+expenses,2024-12,subscriptions,cloud,regular,9.900000
+expenses,2024-12,subscriptions,streaming,regular,66.800000
+expenses,2024-12,utilities,electricity,regular,756.780000
+expenses,2024-12,utilities,internet,regular,99.900000
+expenses,2024-12,utilities,mobile,regular,118.000000
+expenses,2025-01,car,fuel,regular,381.840000
+expenses,2025-01,car,parking,regular,56.630000
+expenses,2025-01,fees,bank,regular,25.800000
+expenses,2025-01,food,coffee,regular,182.710000
+expenses,2025-01,food,delivery,regular,253.680000
+expenses,2025-01,food,dining out,regular,625.990000
+expenses,2025-01,food,groceries,regular,2299.170000
+expenses,2025-01,gifts,birthdays,regular,250.000000
+expenses,2025-01,health,fitness,regular,219.000000
+expenses,2025-01,health,insurance,regular,186.000000
+expenses,2025-01,health,pharmacy,regular,61.180000
+expenses,2025-01,housing,building committee,regular,250.000000
+expenses,2025-01,housing,municipal tax,regular,1184.000000
+expenses,2025-01,housing,rent,regular,6650.000000
+expenses,2025-01,kids,activities,regular,180.000000
+expenses,2025-01,kids,babysitting,regular,240.000000
+expenses,2025-01,kids,daycare,regular,3407.040000
+expenses,2025-01,leisure,culture,regular,320.000000
+expenses,2025-01,pets,food,regular,185.970000
+expenses,2025-01,shopping,clothes,regular,436.470000
+expenses,2025-01,subscriptions,cloud,regular,9.900000
+expenses,2025-01,subscriptions,streaming,regular,66.800000
+expenses,2025-01,utilities,internet,regular,99.900000
+expenses,2025-01,utilities,mobile,regular,118.000000
+expenses,2025-01,utilities,water,regular,213.750000
+expenses,2025-01,vacation,flights,one-off,2640.000000
+expenses,2025-01,vacation,food,one-off,789.140000
+expenses,2025-01,vacation,lodging,one-off,1920.000000
+expenses,2025-02,car,fuel,regular,332.860000
+expenses,2025-02,car,parking,regular,98.390000
+expenses,2025-02,car,service,regular,929.580000
+expenses,2025-02,fees,bank,regular,25.800000
+expenses,2025-02,food,coffee,regular,115.500000
+expenses,2025-02,food,delivery,regular,413.680000
+expenses,2025-02,food,dining out,regular,1033.400000
+expenses,2025-02,food,groceries,regular,3460.430000
+expenses,2025-02,gifts,birthdays,regular,200.000000
+expenses,2025-02,health,dental,one-off,6800.000000
+expenses,2025-02,health,dental,regular,380.000000
+expenses,2025-02,health,fitness,regular,219.000000
+expenses,2025-02,health,grooming,regular,70.000000
+expenses,2025-02,health,insurance,regular,186.000000
+expenses,2025-02,health,pharmacy,regular,134.030000
+expenses,2025-02,home,household,regular,196.910000
+expenses,2025-02,housing,building committee,regular,250.000000
+expenses,2025-02,housing,rent,regular,6650.000000
+expenses,2025-02,kids,activities,regular,180.000000
+expenses,2025-02,kids,babysitting,regular,200.000000
+expenses,2025-02,kids,clothes,regular,124.440000
+expenses,2025-02,kids,daycare,regular,3407.040000
+expenses,2025-02,pets,food,regular,238.060000
+expenses,2025-02,shopping,clothes,regular,172.040000
+expenses,2025-02,shopping,online,regular,118.230000
+expenses,2025-02,subscriptions,cloud,regular,9.900000
+expenses,2025-02,subscriptions,streaming,regular,66.800000
+expenses,2025-02,utilities,electricity,regular,809.230000
+expenses,2025-02,utilities,internet,regular,99.900000
+expenses,2025-02,utilities,mobile,regular,118.000000
+expenses,2025-03,car,fuel,regular,410.500000
+expenses,2025-03,car,insurance,regular,5380.000000
+expenses,2025-03,car,parking,regular,21.070000
+expenses,2025-03,fees,bank,regular,25.800000
+expenses,2025-03,food,coffee,regular,159.180000
+expenses,2025-03,food,delivery,regular,266.640000
+expenses,2025-03,food,dining out,regular,180.500000
+expenses,2025-03,food,groceries,regular,3094.730000
+expenses,2025-03,gifts,birthdays,regular,100.000000
+expenses,2025-03,health,fitness,regular,219.000000
+expenses,2025-03,health,insurance,regular,186.000000
+expenses,2025-03,health,pharmacy,regular,125.030000
+expenses,2025-03,housing,building committee,regular,250.000000
+expenses,2025-03,housing,municipal tax,regular,1184.000000
+expenses,2025-03,housing,rent,regular,6650.000000
+expenses,2025-03,kids,activities,regular,180.000000
+expenses,2025-03,kids,babysitting,regular,240.000000
+expenses,2025-03,kids,clothes,regular,243.710000
+expenses,2025-03,kids,daycare,regular,3407.040000
+expenses,2025-03,kids,toys,regular,62.820000
+expenses,2025-03,pets,food,regular,205.730000
+expenses,2025-03,shopping,clothes,regular,315.150000
+expenses,2025-03,shopping,electronics,one-off,5420.000000
+expenses,2025-03,subscriptions,cloud,regular,9.900000
+expenses,2025-03,subscriptions,streaming,regular,66.800000
+expenses,2025-03,utilities,internet,regular,99.900000
+expenses,2025-03,utilities,mobile,regular,118.000000
+expenses,2025-03,utilities,water,regular,238.810000
+expenses,2025-04,car,fuel,regular,380.700000
+expenses,2025-04,car,license,regular,1148.000000
+expenses,2025-04,car,parking,regular,10.750000
+expenses,2025-04,fees,bank,regular,25.800000
+expenses,2025-04,food,coffee,regular,99.360000
+expenses,2025-04,food,delivery,regular,273.970000
+expenses,2025-04,food,dining out,regular,259.550000
+expenses,2025-04,food,groceries,regular,3732.940000
+expenses,2025-04,gifts,birthdays,regular,150.000000
+expenses,2025-04,health,doctor,regular,45.370000
+expenses,2025-04,health,fitness,regular,219.000000
+expenses,2025-04,health,grooming,regular,70.000000
+expenses,2025-04,health,insurance,regular,186.000000
+expenses,2025-04,health,pharmacy,regular,532.300000
+expenses,2025-04,home,household,regular,415.150000
+expenses,2025-04,housing,building committee,regular,250.000000
+expenses,2025-04,housing,rent,regular,6650.000000
+expenses,2025-04,kids,activities,regular,180.000000
+expenses,2025-04,kids,babysitting,regular,200.000000
+expenses,2025-04,kids,clothes,regular,88.090000
+expenses,2025-04,kids,daycare,regular,3407.040000
+expenses,2025-04,leisure,culture,regular,96.000000
+expenses,2025-04,pets,food,regular,208.220000
+expenses,2025-04,shopping,clothes,regular,159.100000
+expenses,2025-04,subscriptions,cloud,regular,9.900000
+expenses,2025-04,subscriptions,streaming,regular,66.800000
+expenses,2025-04,utilities,electricity,regular,764.400000
+expenses,2025-04,utilities,internet,regular,99.900000
+expenses,2025-04,utilities,mobile,regular,118.000000
+expenses,2025-05,car,fuel,regular,393.550000
+expenses,2025-05,car,parking,regular,76.830000
+expenses,2025-05,fees,bank,regular,25.800000
+expenses,2025-05,food,coffee,regular,182.830000
+expenses,2025-05,food,delivery,regular,659.160000
+expenses,2025-05,food,dining out,regular,969.410000
+expenses,2025-05,food,groceries,regular,3068.100000
+expenses,2025-05,gifts,birthdays,regular,250.000000
+expenses,2025-05,health,fitness,regular,219.000000
+expenses,2025-05,health,insurance,regular,186.000000
+expenses,2025-05,health,pharmacy,regular,237.900000
+expenses,2025-05,home,household,regular,1280.000000
+expenses,2025-05,housing,building committee,regular,250.000000
+expenses,2025-05,housing,municipal tax,regular,1184.000000
+expenses,2025-05,housing,rent,regular,6650.000000
+expenses,2025-05,kids,activities,regular,180.000000
+expenses,2025-05,kids,babysitting,regular,200.000000
+expenses,2025-05,kids,clothes,regular,89.160000
+expenses,2025-05,kids,daycare,regular,3407.040000
+expenses,2025-05,kids,toys,regular,138.700000
+expenses,2025-05,leisure,culture,regular,300.000000
+expenses,2025-05,pets,food,regular,250.230000
+expenses,2025-05,shopping,clothes,regular,166.860000
+expenses,2025-05,shopping,online,regular,50.780000
+expenses,2025-05,subscriptions,cloud,regular,9.900000
+expenses,2025-05,subscriptions,streaming,regular,66.800000
+expenses,2025-05,utilities,internet,regular,99.900000
+expenses,2025-05,utilities,mobile,regular,118.000000
+expenses,2025-05,utilities,water,regular,329.910000
+expenses,2025-06,health,fitness,regular,219.000000
+expenses,2025-06,health,insurance,regular,186.000000
+expenses,2025-06,health,pharmacy,regular,254.560000
+expenses,2025-06,housing,building committee,regular,250.000000
+expenses,2025-06,housing,rent,regular,6650.000000
+expenses,2025-06,kids,babysitting,regular,150.000000
+expenses,2025-06,kids,clothes,regular,188.220000
+expenses,2025-06,kids,daycare,regular,3407.040000
+expenses,2025-06,shopping,clothes,regular,148.910000
+expenses,2025-06,subscriptions,cloud,regular,9.900000
+expenses,2025-06,subscriptions,streaming,regular,66.800000
+expenses,2025-06,utilities,internet,regular,99.900000
+expenses,2025-06,utilities,mobile,regular,118.000000
+expenses,2025-06,,,regular,1821.960000
+incomes,2023-06,income,child allowance,regular,173.000000
+incomes,2023-06,income,salary,regular,26648.550000
+incomes,2023-07,income,child allowance,regular,173.000000
+incomes,2023-07,income,salary,regular,25738.720000
+incomes,2023-08,income,child allowance,regular,173.000000
+incomes,2023-08,income,salary,regular,25990.850000
+incomes,2023-09,income,child allowance,regular,173.000000
+incomes,2023-09,income,salary,regular,25866.420000
+incomes,2023-10,income,child allowance,regular,173.000000
+incomes,2023-10,income,salary,regular,25928.930000
+incomes,2023-11,income,child allowance,regular,173.000000
+incomes,2023-11,income,salary,regular,26332.210000
+incomes,2023-12,income,child allowance,regular,173.000000
+incomes,2023-12,income,salary,regular,26636.910000
+incomes,2024-01,income,child allowance,regular,173.000000
+incomes,2024-01,income,salary,regular,25915.450000
+incomes,2024-02,income,child allowance,regular,173.000000
+incomes,2024-02,income,salary,regular,25673.790000
+incomes,2024-03,food,dining out,regular,120.000000
+incomes,2024-03,income,bonus,regular,9500.000000
+incomes,2024-03,income,child allowance,regular,173.000000
+incomes,2024-03,income,gifts,regular,500.000000
+incomes,2024-03,income,salary,regular,25781.470000
+incomes,2024-04,food,dining out,regular,60.000000
+incomes,2024-04,income,child allowance,regular,173.000000
+incomes,2024-04,income,salary,regular,25774.210000
+incomes,2024-05,income,child allowance,regular,173.000000
+incomes,2024-05,income,salary,regular,26574.660000
+incomes,2024-06,food,dining out,regular,60.000000
+incomes,2024-06,income,child allowance,regular,173.000000
+incomes,2024-06,income,salary,regular,26303.500000
+incomes,2024-06,income,second-hand,regular,450.000000
+incomes,2024-07,income,child allowance,regular,173.000000
+incomes,2024-07,income,salary,regular,25839.210000
+incomes,2024-08,food,dining out,regular,120.000000
+incomes,2024-08,income,child allowance,regular,173.000000
+incomes,2024-08,income,salary,regular,26948.140000
+incomes,2024-09,food,dining out,regular,160.000000
+incomes,2024-09,income,car sale,one-off,38000.000000
+incomes,2024-09,income,child allowance,regular,173.000000
+incomes,2024-09,income,salary,regular,27219.060000
+incomes,2024-10,food,dining out,regular,120.000000
+incomes,2024-10,income,child allowance,regular,173.000000
+incomes,2024-10,income,salary,regular,26992.100000
+incomes,2024-11,food,dining out,regular,60.000000
+incomes,2024-11,income,child allowance,regular,173.000000
+incomes,2024-11,income,salary,regular,27870.980000
+incomes,2024-11,shopping,clothes,regular,129.900000
+incomes,2024-12,income,child allowance,regular,173.000000
+incomes,2024-12,income,salary,regular,27670.170000
+incomes,2025-01,food,dining out,regular,120.000000
+incomes,2025-01,income,child allowance,regular,173.000000
+incomes,2025-01,income,salary,regular,26862.280000
+incomes,2025-02,food,dining out,regular,120.000000
+incomes,2025-02,income,child allowance,regular,173.000000
+incomes,2025-02,income,salary,regular,27000.650000
+incomes,2025-03,food,dining out,regular,120.000000
+incomes,2025-03,health,reimbursement,one-off,2720.000000
+incomes,2025-03,income,bonus,regular,9500.000000
+incomes,2025-03,income,child allowance,regular,173.000000
+incomes,2025-03,income,gifts,regular,500.000000
+incomes,2025-03,income,salary,regular,27191.780000
+incomes,2025-04,food,dining out,regular,160.000000
+incomes,2025-04,income,child allowance,regular,173.000000
+incomes,2025-04,income,salary,regular,27141.200000
+incomes,2025-04,income,second-hand,regular,380.000000
+incomes,2025-05,food,dining out,regular,60.000000
+incomes,2025-05,income,child allowance,regular,173.000000
+incomes,2025-05,income,freelance,regular,2465.430000
+incomes,2025-05,income,salary,regular,27721.660000
+incomes,2025-05,income,tax refund,regular,2840.000000
+incomes,2025-06,income,salary,regular,27662.160000

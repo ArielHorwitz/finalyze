@@ -18,5 +18,10 @@ try_command() {
     fi
 }
 
-try_command "Lint" uvx ruff check
+try_command "Lint" uv run ruff check
 try_command "Format" "$FORMAT_SCRIPT" --check
+
+WEB_DIR=$(dirname "$0")/../web
+if [[ -d "$WEB_DIR/node_modules" ]]; then
+    try_command "Web check" npm --prefix "$WEB_DIR" run --silent check
+fi

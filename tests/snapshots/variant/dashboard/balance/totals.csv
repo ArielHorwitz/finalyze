@@ -1,0 +1,6 @@
+key,label,kind,group,balance,change,one_offs
+available,available,available,,111759.640000,111759.640000,-134749.210000
+group:debt,debt,group,debt,-44520.000000,-44520.000000,0.000000
+group:savings,savings,group,savings,82839.170000,82839.170000,0.000000
+group:spending,spending,group,spending,111759.640000,111759.640000,-134749.210000
+net_worth,net worth,net_worth,,150078.810000,150078.810000,-134749.210000

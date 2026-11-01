@@ -1,288 +1,171 @@
-import collections
-from typing import NamedTuple, Optional
+import sys
 
 import polars as pl
-import readchar
 
-from finalyze.config import TagPresetRule, config
-from finalyze.display import flip_rtl_str, print_table
-from finalyze.source.raw import derive_hash, load_source_data
-from finalyze.source.schema import TAGGED_SCHEMA, validate_schema
+from finalyze.money import (
+    CURRENCY_DECIMALS,
+    MINOR_UNITS_PER_UNIT,
+    minor_units_expr,
+    to_minor_units,
+)
+from finalyze.source.schema import RAW_SCHEMA, TAGGED_SCHEMA, validate_schema
+from finalyze.store import (
+    Annotation,
+    Rule,
+    Store,
+    TransactionSnapshot,
+)
 
-LINE_SEPARATOR = "===================="
-TAG_SCHEMA = {
+PARTS_SCHEMA = {
+    "id": pl.String,
+    "part_amount": pl.Int64,
     "tag": pl.String,
     "subtag": pl.String,
-    "hash": pl.UInt64,
+    "description": pl.String,
+    "transaction_description": pl.String,
+    "part_kind": pl.String,
 }
 
 
-class Tags(NamedTuple):
-    tag: str
-    subtag: Optional[str] = None
+def annotate(data: pl.DataFrame, store: Store) -> pl.DataFrame:
+    """Tag transactions by rules and stored annotations.
 
-    def __str__(self):
-        if self.subtag:
-            return f"{self.tag} [{self.subtag}]"
-        return self.tag
+    The first matching rule wins, and rules override annotations. Otherwise,
+    each part of a transaction's annotation replaces it as a row with the part's
+    amount (and the kind set on the part, if any). Transactions with neither
+    remain as they are, with null tags (also with an annotation that has no
+    parts, which is only a description).
+    """
+    validate_schema(data, RAW_SCHEMA)
+    data = data.with_columns(rule_index_expr(store.list_rules()))
+    rules = pl.DataFrame(
+        [
+            (index, rule.tag, rule.subtag)
+            for index, rule in enumerate(store.list_rules())
+        ],
+        schema={"rule_index": pl.UInt32, "tag": pl.String, "subtag": pl.String},
+        orient="row",
+    )
+    annotations = store.list_annotations()
+    parts = _parts_frame(annotations)
+    transaction_descriptions = pl.DataFrame(
+        [
+            (annotation.transaction_id, annotation.description)
+            for annotation in annotations
+        ],
+        schema={"id": pl.String, "transaction_description": pl.String},
+        orient="row",
+    )
 
-
-def run():
-    if config().tag.delete_filters.has_effect:
-        delete_filtered_tags()
-    if config().tag.delete_unused:
-        delete_unused_tags()
-    tag_interactively()
-
-
-def tag_interactively():
-    source_data = load_source_data()
-    source_data = derive_hash(source_data)
-    preset_hashes = get_tag_preset_hashes(source_data)
-    source_data = source_data.filter(~pl.col("hash").is_in(preset_hashes)).drop("hash")
-    if config().tag.default_tag:
-        default_tags = Tags(config().tag.default_tag, config().tag.default_subtag)
-    else:
-        default_tags = None
-    tagger = Tagger(source_data=source_data, default_tags=default_tags)
-    performed_tagging = tagger.tag_interactively()
-    if not performed_tagging:
-        print(f"Tags saved at: {config().general.tags_file}")
-    if config().tag.print_result:
-        print(LINE_SEPARATOR)
-        print(tagger.describe_all_tags())
-
-
-def apply_tags(
-    data,
-    *,
-    preset_rules: Optional[list[TagPresetRule]] = None,
-):
-    tags = read_tags_file()
-    cleaned_data = data.drop(*TAG_SCHEMA, strict=False)
-    hashed_data = derive_hash(cleaned_data)
-    tagged = hashed_data.join(tags, on="hash", how="left")
-    if preset_rules is not None:
-        tagged = apply_tag_presets(tagged, preset_rules)
+    ruled = (
+        data.filter(pl.col("rule_index").is_not_null())
+        .join(rules, on="rule_index", how="left")
+        .join(transaction_descriptions, on="id", how="left")
+        .with_columns(
+            description=pl.lit(None, dtype=pl.String),
+            part_kind=pl.lit(None, dtype=pl.String),
+        )
+    )
+    unruled = data.filter(pl.col("rule_index").is_null())
+    parts = parts.with_columns(
+        parts_total=pl.col("part_amount").sum().over("id"),
+        parts_count=pl.len().over("id"),
+    )
+    mismatched_ids = (
+        unruled.join(parts, on="id", how="inner")
+        .filter(pl.col("parts_total") != minor_units_expr("amount"))["id"]
+        .unique()
+    )
+    if len(mismatched_ids):
+        print(
+            "Ignoring annotations whose parts don't sum to the transaction amount: "
+            + ", ".join(mismatched_ids),
+            file=sys.stderr,
+        )
+    valid_parts = parts.filter(~pl.col("id").is_in(mismatched_ids))
+    # A single part has the full amount: keep the original value as is
+    # Rounded, because polars divides by multiplying with the reciprocal
+    part_amount = (
+        pl.col("part_amount").truediv(MINOR_UNITS_PER_UNIT).round(CURRENCY_DECIMALS)
+    )
+    annotated = unruled.join(valid_parts, on="id", how="inner").with_columns(
+        amount=pl.when(pl.col("parts_count") == 1)
+        .then(pl.col("amount"))
+        .otherwise(part_amount)
+    )
+    untagged = (
+        unruled.join(valid_parts, on="id", how="anti")
+        .join(transaction_descriptions, on="id", how="left")
+        .with_columns(
+            **{
+                column: pl.lit(None, dtype=pl.String)
+                for column in ("tag", "subtag", "description", "part_kind")
+            }
+        )
+    )
+    columns = list(TAGGED_SCHEMA)
+    tagged = pl.concat(
+        [frame.select(columns) for frame in (ruled, annotated, untagged)]
+    )
     validate_schema(tagged, TAGGED_SCHEMA)
     return tagged
 
 
-def get_tag_preset_hashes(source_data):
-    all_hashes = set()
-    for preset in config().tag.preset_rules:
-        filters = preset.filters
-        filters.tags = None
-        filters.subtags = None
-        if not filters.has_effect:
-            continue
-        all_hashes.update(filters.apply(source_data)["hash"])
-    return pl.Series(list(all_hashes), dtype=pl.UInt64)
+def rule_index_expr(rules: list[Rule]) -> pl.Expr:
+    """The index of the first matching rule, null if none match."""
+    if not rules:
+        return pl.lit(None, dtype=pl.UInt32).alias("rule_index")
+    chain = pl
+    for index, rule in enumerate(rules):
+        chain = chain.when(rule.filters.predicate).then(pl.lit(index, dtype=pl.UInt32))
+    return chain.otherwise(None).alias("rule_index")
 
 
-def apply_tag_presets(data, preset_rules):
-    for preset in reversed(preset_rules):
-        filters = preset.filters
-        filters.tags = None
-        filters.subtags = None
-        if not filters.has_effect:
-            continue
-        filtered = filters.apply(data).with_columns(
-            pl.lit(preset.tag).alias("tag"),
-            pl.lit(preset.subtag).alias("subtag"),
+def _parts_frame(annotations: list[Annotation]) -> pl.DataFrame:
+    rows = [
+        (
+            annotation.transaction_id,
+            part.amount,
+            part.tag,
+            part.subtag,
+            part.description,
+            annotation.description,
+            part.kind,
         )
-        data = data.filter(~pl.col("hash").is_in(filtered.select("hash")))
-        data = pl.concat((data, filtered))
-    return data
+        for annotation in annotations
+        for part in annotation.parts
+    ]
+    return pl.DataFrame(rows, schema=PARTS_SCHEMA, orient="row")
 
 
-def read_tags_file():
-    tags_file = config().general.tags_file
-    if not tags_file.is_file():
-        tags_file.write_text(",".join(TAG_SCHEMA.keys()))
-    return pl.read_csv(tags_file, schema=TAG_SCHEMA)
+def find_orphans(store: Store, source_data: pl.DataFrame) -> list[Annotation]:
+    """Annotations whose transaction no longer exists."""
+    current_ids = set(source_data["id"])
+    return [
+        annotation
+        for annotation in store.list_annotations()
+        if annotation.transaction_id not in current_ids
+    ]
 
 
-def write_tags_file(data):
-    validate_schema(data, TAG_SCHEMA)
-    tags_file = config().general.tags_file
-    data.sort(*TAG_SCHEMA.keys()).write_csv(tags_file)
-
-
-def delete_unused_tags():
-    tags_data = read_tags_file()
-    source_data = load_source_data()
-    tagged_data = apply_tags(source_data)
-
-    delete_data = tags_data.filter(~pl.col("hash").is_in(tagged_data.select("hash")))
-    delete_summary = (
-        delete_data.group_by("tag", "subtag").len("entries").sort("tag", "subtag")
+def find_overridden(store: Store, source_data: pl.DataFrame) -> list[Annotation]:
+    """Annotations whose transaction matches a rule, which overrides their
+    parts. Annotations without parts (only a description) are not overridden."""
+    ruled_ids = set(
+        source_data.filter(rule_index_expr(store.list_rules()).is_not_null())["id"]
     )
-    tag_hashes = delete_data["hash"]
-    if len(tag_hashes) == 0:
-        return
-    print_table(delete_data, "Unused tags to delete")
-    print_table(delete_summary, "Unused tags to delete")
-    _delete_tags(tag_hashes)
+    return [
+        annotation
+        for annotation in store.list_annotations()
+        if annotation.transaction_id in ruled_ids and annotation.parts
+    ]
 
 
-def delete_filtered_tags():
-    source_data = load_source_data()
-    tagged_data = apply_tags(source_data)
-
-    delete_data = config().tag.delete_filters.apply(tagged_data)
-    delete_summary = (
-        delete_data.group_by("tag", "subtag").len("entries").sort("tag", "subtag")
+def snapshot_of(row: dict) -> TransactionSnapshot:
+    return TransactionSnapshot(
+        account=row["account"],
+        source=row["source"],
+        date=row["date"],
+        amount=to_minor_units(row["amount"]),
+        raw_description=row["raw_description"],
     )
-    tag_hashes = delete_data["hash"]
-    if len(tag_hashes) == 0:
-        return
-    print_table(delete_data, "Entries of tags to delete")
-    print_table(delete_summary, "Tags to delete")
-    _delete_tags(tag_hashes)
-
-
-def _delete_tags(tag_hashes):
-    if len(tag_hashes) == 0:
-        return
-
-    tags_data = read_tags_file()
-    remaining_tags = tags_data.filter(~pl.col("hash").is_in(tag_hashes))
-
-    if input("Delete tags? [y/N] ").lower() not in ("y", "yes"):
-        print("Aborted deleting tags.")
-        return
-    write_tags_file(remaining_tags)
-    print("Deleted tags.")
-
-
-class Tagger:
-    def __init__(self, *, source_data, default_tags):
-        self.default_tags = default_tags
-        self.source = apply_tags(source_data).sort("date")
-        self.tags = read_tags_file()
-
-    def apply_tags(self, index, tags):
-        row_hash = self.get_row(index)["hash"]
-        new_tag_data = {"tag": tags.tag, "subtag": tags.subtag, "hash": row_hash}
-        new_tags_row = pl.DataFrame(new_tag_data, schema=TAG_SCHEMA)
-        self.tags = (
-            pl.concat([self.tags, new_tags_row])
-            .unique(subset="hash", keep="last")
-            .sort(*TAG_SCHEMA)
-        )
-        write_tags_file(self.tags)
-        self.source = apply_tags(self.source)
-
-    def describe_row(self, index):
-        row = self.get_row(index)
-        if config().display.flip_rtl:
-            for key, value in row.items():
-                if isinstance(value, str):
-                    row[key] = flip_rtl_str(value)
-        lines = [
-            f"    Hash: {row['hash']}",
-            f" Account: {row['account']}",
-            f"  Source: {row['source']}",
-            f"    Date: {row['date']}",
-            f"  Amount: {row['amount']}",
-            f"    Desc: {row['description']}",
-        ]
-        return "\n".join(lines)
-
-    def describe_all_tags(self):
-        tag_counts = self.source.group_by("tag", "subtag").len().sort("tag", "subtag")
-        all_tags = {
-            Tags(row["tag"], row["subtag"]): row["len"]
-            for row in tag_counts.iter_rows(named=True)
-        }
-        nulls = all_tags.pop(Tags(None, None), 0)
-        lines = ["All existing tags:"] + [
-            f"  [ {count:>5} ]  {tags.tag:>20} :: {tags.subtag}"
-            for tags, count in all_tags.items()
-        ]
-        lines.extend(["", f"  [[ {nulls:>3} Untagged entries   ]]"])
-        return "\n".join(lines)
-
-    def guess_tags(self, index: int) -> Tags:
-        tag_descriptions = collections.defaultdict(set)
-        row = self.get_row(index)
-        target_description = row["description"]
-        for row in self.source.sort("date", descending=True).iter_rows(named=True):
-            if row["tag"] is None:
-                continue
-            tags = Tags(row["tag"], row["subtag"])
-            row_description = row["description"]
-            tag_descriptions[tags].add(row_description)
-            if row_description == target_description:
-                print(f"Guess from: {row}")
-                return tags
-        if self.default_tags is not None:
-            return self.default_tags
-        if not tag_descriptions:
-            return Tags("unknown", "")
-        description_counts = {
-            len(descriptions): tags for tags, descriptions in tag_descriptions.items()
-        }
-        greatest_count = max(description_counts.keys())
-        return description_counts[greatest_count]
-
-    def get_row(self, index):
-        return self.source.row(index, named=True)
-
-    def get_untagged_index(self, ignore_indices=None):
-        ignores = set(ignore_indices or [])
-        untagged_indices = set(self.source["tag"].is_null().arg_true())
-        indices = sorted(untagged_indices - ignores)
-        if indices:
-            return indices[0]
-        return None
-
-    def tag_interactively(self):
-        skipped_indices = set()
-        if self.get_untagged_index(skipped_indices) is None:
-            return False
-        while True:
-            index = self.get_untagged_index(skipped_indices)
-            if index is None:
-                return
-            print(f"\n\n{LINE_SEPARATOR}")
-            guess = self.guess_tags(index)
-            print()
-            prompt_text_lines = [
-                "Currently tagging:",
-                self.describe_row(index),
-                f"   Guess: {guess}",
-                "",
-                "(i/enter/space)   Input tags manually",
-                "(g/tab)           Use guess",
-                "(s)               Skip entry",
-                "(t)               Show existing tags",
-                "(q)               Quit",
-            ]
-            print("\n".join(prompt_text_lines))
-            print("> ", end="", flush=True)
-            key = readchar.readkey()
-            print(f"{key}\n")
-            if key in ("q"):
-                break
-            elif key in ("t"):
-                print(LINE_SEPARATOR)
-                print(self.describe_all_tags())
-            elif key in ("s"):
-                skipped_indices.add(index)
-                print("Skipped...")
-            elif key in ("i", readchar.key.LF, readchar.key.SPACE):
-                if (tag := input("Tag (or 'cancel'): ")) == "cancel":
-                    continue
-                if (subtag := input("Subtag (or 'cancel'): ")) == "cancel":
-                    continue
-                new_tags = Tags(tag, subtag)
-                self.apply_tags(index, new_tags)
-                print(f"Applied: {new_tags}")
-            elif key in ("g", readchar.key.TAB):
-                self.apply_tags(index, guess)
-                print(f"Applied: {guess}")
-            else:
-                print("No action selected.")
-        return True

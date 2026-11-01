@@ -1,0 +1,37 @@
+{
+  "flags": {
+    "kinds": [
+      "one-off",
+      "regular"
+    ],
+    "incomes": true,
+    "net_by_subtag": true
+  },
+  "data": "incomes_by_subtag.csv",
+  "height": 84,
+  "schema": {
+    "id": "String",
+    "account": "String",
+    "source": "String",
+    "date": "Date",
+    "amount": "Float64",
+    "raw_description": "String",
+    "tag": "String",
+    "subtag": "String",
+    "description": "String",
+    "transaction_description": "String",
+    "is_sentinel_tick": "Boolean",
+    "kind": "String",
+    "kind_set": "Boolean",
+    "group": "String",
+    "group_role": "String",
+    "balance_total": "Float64",
+    "balance_role": "Float64",
+    "balance_group": "Float64",
+    "balance_account": "Float64",
+    "balance_source": "Float64",
+    "month": "String",
+    "tags": "String",
+    "account_source": "String"
+  }
+}

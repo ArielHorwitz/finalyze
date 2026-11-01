@@ -1,0 +1,9 @@
+account_source,account,source,last_date,days_behind,active_months,behind
+cash/wallet,cash,wallet,2025-06-11,4,25,false
+eitan/card,eitan,card,2025-06-11,4,25,false
+eitan/checking,eitan,checking,2025-06-15,0,25,false
+loan/car,loan,car,2025-06-15,0,10,false
+maya/bit,maya,bit,2025-06-14,1,18,false
+maya/card,maya,card,2025-06-14,1,25,false
+maya/checking,maya,checking,2025-06-11,4,25,false
+savings/savings,savings,savings,2025-06-10,5,25,false

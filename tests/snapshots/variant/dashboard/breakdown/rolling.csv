@@ -1,0 +1,166 @@
+window,direction,month,tag,subtag,kind,amount,rolling,percent
+1,expenses,2025-05,car,fuel,regular,393.550000,393.550000,1.880000
+1,expenses,2025-05,car,parking,regular,76.830000,76.830000,0.370000
+1,expenses,2025-05,fees,bank,regular,25.800000,25.800000,0.120000
+1,expenses,2025-05,food,coffee,regular,182.830000,182.830000,0.870000
+1,expenses,2025-05,food,delivery,regular,659.160000,659.160000,3.140000
+1,expenses,2025-05,food,dining out,regular,909.410000,909.410000,4.330000
+1,expenses,2025-05,food,groceries,regular,3068.100000,3068.100000,14.620000
+1,expenses,2025-05,gifts,birthdays,regular,250.000000,250.000000,1.190000
+1,expenses,2025-05,health,fitness,regular,219.000000,219.000000,1.040000
+1,expenses,2025-05,health,insurance,regular,186.000000,186.000000,0.890000
+1,expenses,2025-05,health,pharmacy,regular,237.900000,237.900000,1.130000
+1,expenses,2025-05,home,household,regular,1280.000000,1280.000000,6.100000
+1,expenses,2025-05,housing,building committee,regular,250.000000,250.000000,1.190000
+1,expenses,2025-05,housing,municipal tax,regular,1184.000000,1184.000000,5.640000
+1,expenses,2025-05,housing,rent,regular,6650.000000,6650.000000,31.700000
+1,expenses,2025-05,kids,activities,regular,180.000000,180.000000,0.860000
+1,expenses,2025-05,kids,babysitting,regular,200.000000,200.000000,0.950000
+1,expenses,2025-05,kids,clothes,regular,89.160000,89.160000,0.420000
+1,expenses,2025-05,kids,daycare,regular,3407.040000,3407.040000,16.240000
+1,expenses,2025-05,kids,toys,regular,138.700000,138.700000,0.660000
+1,expenses,2025-05,leisure,culture,regular,300.000000,300.000000,1.430000
+1,expenses,2025-05,pets,food,regular,250.230000,250.230000,1.190000
+1,expenses,2025-05,shopping,clothes,regular,166.860000,166.860000,0.800000
+1,expenses,2025-05,shopping,online,regular,50.780000,50.780000,0.240000
+1,expenses,2025-05,subscriptions,cloud,regular,9.900000,9.900000,0.050000
+1,expenses,2025-05,subscriptions,streaming,regular,66.800000,66.800000,0.320000
+1,expenses,2025-05,utilities,internet,regular,99.900000,99.900000,0.480000
+1,expenses,2025-05,utilities,mobile,regular,118.000000,118.000000,0.560000
+1,expenses,2025-05,utilities,water,regular,329.910000,329.910000,1.570000
+1,incomes,2025-05,income,child allowance,regular,173.000000,173.000000,0.520000
+1,incomes,2025-05,income,freelance,regular,2465.430000,2465.430000,7.430000
+1,incomes,2025-05,income,salary,regular,27721.660000,27721.660000,83.500000
+1,incomes,2025-05,income,tax refund,regular,2840.000000,2840.000000,8.550000
+12,expenses,2025-05,car,fuel,regular,393.550000,469.140000,2.360000
+12,expenses,2025-05,car,insurance,regular,0.000000,831.670000,4.180000
+12,expenses,2025-05,car,license,regular,0.000000,95.670000,0.480000
+12,expenses,2025-05,car,parking,regular,76.830000,56.790000,0.290000
+12,expenses,2025-05,car,service,regular,0.000000,149.470000,0.750000
+12,expenses,2025-05,fees,bank,regular,25.800000,25.800000,0.130000
+12,expenses,2025-05,food,coffee,regular,182.830000,156.630000,0.790000
+12,expenses,2025-05,food,delivery,regular,659.160000,384.730000,1.930000
+12,expenses,2025-05,food,dining out,regular,909.410000,495.240000,2.490000
+12,expenses,2025-05,food,groceries,regular,3068.100000,3114.670000,15.660000
+12,expenses,2025-05,gifts,birthdays,regular,250.000000,237.500000,1.190000
+12,expenses,2025-05,gifts,teachers,regular,0.000000,12.500000,0.060000
+12,expenses,2025-05,gifts,weddings,regular,0.000000,183.330000,0.920000
+12,expenses,2025-05,health,dental,regular,0.000000,63.330000,0.320000
+12,expenses,2025-05,health,doctor,regular,0.000000,8.780000,0.040000
+12,expenses,2025-05,health,fitness,regular,219.000000,219.000000,1.100000
+12,expenses,2025-05,health,grooming,regular,0.000000,35.000000,0.180000
+12,expenses,2025-05,health,insurance,regular,186.000000,186.000000,0.940000
+12,expenses,2025-05,health,pharmacy,regular,237.900000,175.430000,0.880000
+12,expenses,2025-05,home,household,regular,1280.000000,234.940000,1.180000
+12,expenses,2025-05,housing,building committee,regular,250.000000,250.000000,1.260000
+12,expenses,2025-05,housing,municipal tax,regular,1184.000000,592.000000,2.980000
+12,expenses,2025-05,housing,rent,regular,6650.000000,6650.000000,33.440000
+12,expenses,2025-05,kids,activities,regular,180.000000,167.500000,0.840000
+12,expenses,2025-05,kids,babysitting,regular,200.000000,193.330000,0.970000
+12,expenses,2025-05,kids,clothes,regular,89.160000,112.500000,0.570000
+12,expenses,2025-05,kids,daycare,regular,3407.040000,3101.280000,15.590000
+12,expenses,2025-05,kids,toys,regular,138.700000,16.790000,0.080000
+12,expenses,2025-05,leisure,culture,regular,300.000000,106.330000,0.530000
+12,expenses,2025-05,leisure,weekend away,regular,0.000000,123.330000,0.620000
+12,expenses,2025-05,pets,food,regular,250.230000,213.440000,1.070000
+12,expenses,2025-05,pets,vet,regular,0.000000,78.340000,0.390000
+12,expenses,2025-05,shopping,clothes,regular,166.860000,254.740000,1.280000
+12,expenses,2025-05,shopping,online,regular,50.780000,35.170000,0.180000
+12,expenses,2025-05,subscriptions,cloud,regular,9.900000,9.900000,0.050000
+12,expenses,2025-05,subscriptions,streaming,regular,66.800000,65.130000,0.330000
+12,expenses,2025-05,utilities,electricity,regular,0.000000,426.990000,2.150000
+12,expenses,2025-05,utilities,internet,regular,99.900000,99.900000,0.500000
+12,expenses,2025-05,utilities,mobile,regular,118.000000,118.000000,0.590000
+12,expenses,2025-05,utilities,water,regular,329.910000,138.440000,0.700000
+12,incomes,2025-05,income,bonus,regular,0.000000,791.670000,2.770000
+12,incomes,2025-05,income,child allowance,regular,173.000000,173.000000,0.610000
+12,incomes,2025-05,income,freelance,regular,2465.430000,205.450000,0.720000
+12,incomes,2025-05,income,gifts,regular,0.000000,41.670000,0.150000
+12,incomes,2025-05,income,salary,regular,27721.660000,27063.390000,94.690000
+12,incomes,2025-05,income,second-hand,regular,0.000000,69.170000,0.240000
+12,incomes,2025-05,income,tax refund,regular,2840.000000,236.670000,0.830000
+3,expenses,2025-05,car,fuel,regular,393.550000,394.920000,1.850000
+3,expenses,2025-05,car,insurance,regular,0.000000,1793.330000,8.410000
+3,expenses,2025-05,car,license,regular,0.000000,382.670000,1.790000
+3,expenses,2025-05,car,parking,regular,76.830000,36.220000,0.170000
+3,expenses,2025-05,fees,bank,regular,25.800000,25.800000,0.120000
+3,expenses,2025-05,food,coffee,regular,182.830000,147.120000,0.690000
+3,expenses,2025-05,food,delivery,regular,659.160000,399.920000,1.880000
+3,expenses,2025-05,food,dining out,regular,909.410000,356.490000,1.670000
+3,expenses,2025-05,food,groceries,regular,3068.100000,3298.590000,15.470000
+3,expenses,2025-05,gifts,birthdays,regular,250.000000,166.670000,0.780000
+3,expenses,2025-05,health,doctor,regular,0.000000,15.120000,0.070000
+3,expenses,2025-05,health,fitness,regular,219.000000,219.000000,1.030000
+3,expenses,2025-05,health,grooming,regular,0.000000,23.330000,0.110000
+3,expenses,2025-05,health,insurance,regular,186.000000,186.000000,0.870000
+3,expenses,2025-05,health,pharmacy,regular,237.900000,298.410000,1.400000
+3,expenses,2025-05,home,household,regular,1280.000000,565.050000,2.650000
+3,expenses,2025-05,housing,building committee,regular,250.000000,250.000000,1.170000
+3,expenses,2025-05,housing,municipal tax,regular,1184.000000,789.330000,3.700000
+3,expenses,2025-05,housing,rent,regular,6650.000000,6650.000000,31.180000
+3,expenses,2025-05,kids,activities,regular,180.000000,180.000000,0.840000
+3,expenses,2025-05,kids,babysitting,regular,200.000000,213.330000,1.000000
+3,expenses,2025-05,kids,clothes,regular,89.160000,140.320000,0.660000
+3,expenses,2025-05,kids,daycare,regular,3407.040000,3407.040000,15.970000
+3,expenses,2025-05,kids,toys,regular,138.700000,67.170000,0.310000
+3,expenses,2025-05,leisure,culture,regular,300.000000,132.000000,0.620000
+3,expenses,2025-05,pets,food,regular,250.230000,221.390000,1.040000
+3,expenses,2025-05,shopping,clothes,regular,166.860000,213.700000,1.000000
+3,expenses,2025-05,shopping,online,regular,50.780000,16.930000,0.080000
+3,expenses,2025-05,subscriptions,cloud,regular,9.900000,9.900000,0.050000
+3,expenses,2025-05,subscriptions,streaming,regular,66.800000,66.800000,0.310000
+3,expenses,2025-05,utilities,electricity,regular,0.000000,254.800000,1.190000
+3,expenses,2025-05,utilities,internet,regular,99.900000,99.900000,0.470000
+3,expenses,2025-05,utilities,mobile,regular,118.000000,118.000000,0.550000
+3,expenses,2025-05,utilities,water,regular,329.910000,189.570000,0.890000
+3,incomes,2025-05,income,bonus,regular,0.000000,3166.670000,9.670000
+3,incomes,2025-05,income,child allowance,regular,173.000000,173.000000,0.530000
+3,incomes,2025-05,income,freelance,regular,2465.430000,821.810000,2.510000
+3,incomes,2025-05,income,gifts,regular,0.000000,166.670000,0.510000
+3,incomes,2025-05,income,salary,regular,27721.660000,27351.550000,83.510000
+3,incomes,2025-05,income,second-hand,regular,0.000000,126.670000,0.390000
+3,incomes,2025-05,income,tax refund,regular,2840.000000,946.670000,2.890000
+6,expenses,2025-05,car,fuel,regular,393.550000,370.050000,1.830000
+6,expenses,2025-05,car,insurance,regular,0.000000,896.670000,4.420000
+6,expenses,2025-05,car,license,regular,0.000000,191.330000,0.940000
+6,expenses,2025-05,car,parking,regular,76.830000,59.480000,0.290000
+6,expenses,2025-05,car,service,regular,0.000000,154.930000,0.760000
+6,expenses,2025-05,fees,bank,regular,25.800000,25.800000,0.130000
+6,expenses,2025-05,food,coffee,regular,182.830000,156.030000,0.770000
+6,expenses,2025-05,food,delivery,regular,659.160000,384.920000,1.900000
+6,expenses,2025-05,food,dining out,regular,909.410000,530.030000,2.610000
+6,expenses,2025-05,food,groceries,regular,3068.100000,3057.900000,15.080000
+6,expenses,2025-05,gifts,birthdays,regular,250.000000,200.000000,0.990000
+6,expenses,2025-05,health,dental,regular,0.000000,63.330000,0.310000
+6,expenses,2025-05,health,doctor,regular,0.000000,7.560000,0.040000
+6,expenses,2025-05,health,fitness,regular,219.000000,219.000000,1.080000
+6,expenses,2025-05,health,grooming,regular,0.000000,35.000000,0.170000
+6,expenses,2025-05,health,insurance,regular,186.000000,186.000000,0.920000
+6,expenses,2025-05,health,pharmacy,regular,237.900000,193.870000,0.960000
+6,expenses,2025-05,home,household,regular,1280.000000,364.320000,1.800000
+6,expenses,2025-05,housing,building committee,regular,250.000000,250.000000,1.230000
+6,expenses,2025-05,housing,municipal tax,regular,1184.000000,592.000000,2.920000
+6,expenses,2025-05,housing,rent,regular,6650.000000,6650.000000,32.800000
+6,expenses,2025-05,kids,activities,regular,180.000000,180.000000,0.890000
+6,expenses,2025-05,kids,babysitting,regular,200.000000,220.000000,1.090000
+6,expenses,2025-05,kids,clothes,regular,89.160000,128.670000,0.630000
+6,expenses,2025-05,kids,daycare,regular,3407.040000,3407.040000,16.800000
+6,expenses,2025-05,kids,toys,regular,138.700000,33.590000,0.170000
+6,expenses,2025-05,leisure,culture,regular,300.000000,143.330000,0.710000
+6,expenses,2025-05,leisure,weekend away,regular,0.000000,246.670000,1.220000
+6,expenses,2025-05,pets,food,regular,250.230000,213.950000,1.060000
+6,expenses,2025-05,shopping,clothes,regular,166.860000,272.330000,1.340000
+6,expenses,2025-05,shopping,online,regular,50.780000,28.170000,0.140000
+6,expenses,2025-05,subscriptions,cloud,regular,9.900000,9.900000,0.050000
+6,expenses,2025-05,subscriptions,streaming,regular,66.800000,66.800000,0.330000
+6,expenses,2025-05,utilities,electricity,regular,0.000000,388.400000,1.920000
+6,expenses,2025-05,utilities,internet,regular,99.900000,99.900000,0.490000
+6,expenses,2025-05,utilities,mobile,regular,118.000000,118.000000,0.580000
+6,expenses,2025-05,utilities,water,regular,329.910000,130.410000,0.640000
+6,incomes,2025-05,income,bonus,regular,0.000000,1583.330000,5.270000
+6,incomes,2025-05,income,child allowance,regular,173.000000,173.000000,0.580000
+6,incomes,2025-05,income,freelance,regular,2465.430000,410.910000,1.370000
+6,incomes,2025-05,income,gifts,regular,0.000000,83.330000,0.280000
+6,incomes,2025-05,income,salary,regular,27721.660000,27264.620000,90.730000
+6,incomes,2025-05,income,second-hand,regular,0.000000,63.330000,0.210000
+6,incomes,2025-05,income,tax refund,regular,2840.000000,473.330000,1.580000

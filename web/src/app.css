@@ -1,0 +1,389 @@
+/* Global styles: a calm, dense dark theme. Components add their own scoped styles. */
+
+:root {
+  --bg: #111317;
+  --surface: #171a1f;
+  /* Control panels, a shade off the page */
+  --panel: #14171b;
+  --surface-2: #1d2128;
+  --surface-3: #252a33;
+  --border: #2a2f38;
+  --border-strong: #3a414d;
+  /* Table column separators and alternate rows */
+  --grid-line: #23272f;
+  --zebra: rgba(255, 255, 255, 0.022);
+  --text: #d9dce2;
+  --muted: #8f96a2;
+  --faint: #5f6672;
+  --accent: #7aa7f0;
+  --accent-soft: rgba(122, 167, 240, 0.14);
+  --income: #5cc596;
+  --expense: #e48a8a;
+  --warning: #e3b45c;
+  --warning-soft: rgba(227, 180, 92, 0.13);
+  --danger: #ef6f6f;
+  --danger-soft: rgba(239, 111, 111, 0.13);
+  --guess: #9a8fd8;
+  --radius: 5px;
+  --font: system-ui, -apple-system, "Segoe UI", "Noto Sans", "Noto Sans Hebrew", sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.4 var(--font);
+}
+
+#app {
+  height: 100%;
+}
+
+a {
+  color: var(--accent);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+input,
+select,
+textarea {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3px 6px;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  background: var(--surface-3);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--faint);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
+}
+
+button {
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: var(--surface-3);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0d1420;
+  font-weight: 600;
+}
+
+button.primary:hover:not(:disabled) {
+  background: #8fb6f5;
+}
+
+button.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* Quiet but clearly a control, e.g. the header's Agent API and help */
+button.outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 26px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+button.outline:hover:not(:disabled),
+button.outline.on {
+  background: var(--surface-3);
+  border-color: var(--faint);
+  color: var(--text);
+}
+
+button.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0 4px;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  font: 11px/1.5 var(--mono);
+  text-align: center;
+  color: var(--text);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.faint {
+  color: var(--faint);
+}
+
+.amount {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.income {
+  color: var(--income);
+}
+
+.expense {
+  color: var(--expense);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 9px;
+  font-size: 11px;
+  line-height: 17px;
+  white-space: nowrap;
+  background: var(--surface-3);
+  color: var(--muted);
+}
+
+.badge.warning {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.badge.danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.badge.accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.badge.guess {
+  background: rgba(154, 143, 216, 0.14);
+  color: var(--guess);
+}
+
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  vertical-align: -1px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* A row of exclusive choices, e.g. periods or views */
+.segmented {
+  display: flex;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.segmented button {
+  border: none;
+  border-radius: 0;
+  padding: 3px 10px;
+  color: var(--muted);
+  background: var(--surface-2);
+}
+
+.segmented button + button {
+  border-left: 1px solid var(--border);
+}
+
+.segmented button.on {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* A labeled group of controls (the filters, the dashboard's options): a light
+   legend beside them, lit while any of them is set */
+fieldset.control-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+  /* Controls that wrap stay clear of the legend */
+  padding: 0 0 0 var(--legend-width, 128px);
+  border: none;
+  min-width: 0;
+}
+
+fieldset.control-group > legend {
+  /* Beside the group's controls rather than above them */
+  float: left;
+  width: var(--legend-width, 128px);
+  margin-left: calc(-1 * var(--legend-width, 128px));
+  padding: 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--faint);
+}
+
+fieldset.control-group > legend.active {
+  color: var(--accent);
+}
+
+/* A panel of controls (the dashboard's, the filter bar), set apart from what
+   they control */
+.control-panel {
+  padding: 8px 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+/* Page layout */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px;
+  min-height: 0;
+  height: 100%;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.page-header h1 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.scroll {
+  overflow: auto;
+  min-height: 0;
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+/* Dense data tables */
+table.grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+table.grid th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+table.grid td {
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+/* Faint lines between columns, so every header reads with its column */
+table.grid th + th,
+table.grid td + td {
+  border-left: 1px solid var(--grid-line);
+}
+
+/* Numbers, and their headers, align right */
+table.grid :is(th, td):is(.amount, .num, .right) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+table.grid tr:nth-child(even) > td {
+  background: var(--zebra);
+}
+
+table.grid tr.active > td {
+  background: var(--surface-2);
+}
+
+table.grid tr.active > td:first-child {
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+table.grid tr:hover > td {
+  background: var(--surface-2);
+}
+
+.empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--muted);
+}

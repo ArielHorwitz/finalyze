@@ -1,36 +1,39 @@
-import math
-
 import pandas as pd
 import polars as pl
 
-from finalyze.config import config
-from finalyze.display import print_table
 from finalyze.source.parsing import ParsingError, register_parser
 
-RAW_PRINT_FLAGS = {}
 
-
-def _print_raw(input_file):
-    if RAW_PRINT_FLAGS.get(input_file):
-        return
-    if config().ingestion.verbose_parsing:
+def _read_html_tables(input_file):
+    if input_file.suffix != ".xls":
+        raise ParsingError("Not a .xls file")
+    try:
         raw_tables = pd.read_html(input_file, encoding="utf-8")
-        for i, table in enumerate(raw_tables):
-            print_table(table, f"Raw table {i} for file: {input_file}")
-    RAW_PRINT_FLAGS[input_file] = True
+    except Exception as exc:
+        raise ParsingError(f"Failed to read HTML tables: {exc}") from exc
+    return raw_tables
+
+
+def _require_dates(df):
+    if (missing := df["date"].null_count()) > 0:
+        raise ParsingError(f"Found {missing} rows without a date")
 
 
 class CheckingFormat:
     EXPECTED_HEADER = "תנועות בחשבון"
     EXPECTED_FIRST_COLUMN_NAME = "תאריך"
-    CARD_DESCRIPTION = "לאומי ויזה"
+    COLUMN_COUNT = 6
 
     @classmethod
     def check(cls, raw_df):
+        if raw_df.empty:
+            raise ParsingError("Expected header, got an empty table")
         if (header := raw_df.iloc[0, 0]) != cls.EXPECTED_HEADER:
             raise ParsingError(
                 f"Expected header {cls.EXPECTED_HEADER!r}, got: {header!r}"
             )
+        if raw_df.shape[0] < 2 or raw_df.shape[1] < cls.COLUMN_COUNT:
+            raise ParsingError(f"Unexpected table shape: {raw_df.shape}")
         if (first_column := raw_df.iloc[1, 0]) != cls.EXPECTED_FIRST_COLUMN_NAME:
             raise ParsingError(
                 f"Expected column name {cls.EXPECTED_FIRST_COLUMN_NAME!r}"
@@ -39,13 +42,13 @@ class CheckingFormat:
 
     @classmethod
     def parse(cls, input_file):
-        if input_file.suffix != ".xls":
-            raise ParsingError("Not a .xls file")
-        _print_raw(input_file)
-        raw_html = pd.read_html(input_file, encoding="utf-8")
-        raw_df = raw_html[2]
+        raw_tables = _read_html_tables(input_file)
+        if len(raw_tables) < 3:
+            raise ParsingError(f"Expected at least 3 tables, got: {len(raw_tables)}")
+        raw_df = raw_tables[2]
         cls.check(raw_df)
-        if raw_df.iloc[-1, 0].startswith("**"):
+        last_first_cell = raw_df.iloc[-1, 0]
+        if isinstance(last_first_cell, str) and last_first_cell.startswith("**"):
             # Data contains footnotes
             # Remove leading asterisks from otherwise valid data
             raw_df[0] = raw_df[0].str.replace("** ", "", regex=False)
@@ -53,39 +56,28 @@ class CheckingFormat:
             raw_df = raw_df.iloc[:-1]
         # Remove headers
         raw_df = raw_df.iloc[2:]
-        # Convert to polars
-        raw = pl.from_pandas(raw_df)
-        # Compile data
-        amount_expression = pl.col("5").cast(pl.Float64) - pl.col("4").cast(pl.Float64)
+        try:
+            checking = cls._compile(pl.from_pandas(raw_df))
+        except pl.exceptions.PolarsError as exc:
+            raise ParsingError(f"Failed to compile data: {exc}") from exc
+        _require_dates(checking)
+        return checking
+
+    @staticmethod
+    def _compile(raw):
+        # A blank debit or credit cell means zero
+        credit = pl.col("5").cast(pl.Float64).fill_null(0)
+        debit = pl.col("4").cast(pl.Float64).fill_null(0)
         try:
             date_data = raw.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%y"))
-        except Exception:
+        except pl.exceptions.PolarsError:
             date_data = raw.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%Y"))
         data = {
             "date": date_data,
-            "amount": raw.select(amount_expression),
-            "description": raw.select(pl.col("2").cast(pl.String)),
+            "amount": raw.select(credit - debit),
+            "raw_description": raw.select(pl.col("2").cast(pl.String)),
         }
-        checking = pl.DataFrame(data).with_columns(pl.lit("checking").alias("source"))
-        is_card_transaction = pl.col("description") == cls.CARD_DESCRIPTION
-        if config().ingestion.card_transactions == "remove":
-            checking = checking.filter(~is_card_transaction)
-        elif config().ingestion.card_transactions == "balance":
-            # Extract card transfers
-            card_transfers = checking.filter(is_card_transaction)
-            checking = checking.filter(~is_card_transaction)
-            # Add two-way transfers
-            card_transfers_to = card_transfers.with_columns(
-                source=pl.lit("checking"),
-                description=pl.lit("Transfer checking-card"),
-            )
-            card_transfers_from = card_transfers.with_columns(
-                source=pl.lit("card"),
-                description=pl.lit("Transfer checking-card"),
-                amount=pl.col("amount") * -1,
-            )
-            checking = pl.concat([checking, card_transfers_to, card_transfers_from])
-        return checking
+        return pl.DataFrame(data).with_columns(pl.lit("checking").alias("source"))
 
 
 class CardFormat:
@@ -106,17 +98,20 @@ class CardFormat:
 
     @classmethod
     def parse(cls, input_file):
-        if input_file.suffix != ".xls":
-            raise ParsingError("Not a .xls file")
-        _print_raw(input_file)
-        raw_tables = pd.read_html(input_file, encoding="utf-8")
+        raw_tables = _read_html_tables(input_file)
         parsed_tables = []
         for raw_table in raw_tables:
+            if raw_table.empty:
+                continue
             title = raw_table.iloc[0, 0]
             if title not in cls.TITLES:
                 continue
             cls.check(raw_table, title)
-            parsed_table = cls._table_parse(raw_table)
+            try:
+                parsed_table = cls._table_parse(raw_table)
+            except pl.exceptions.PolarsError as exc:
+                raise ParsingError(f"Failed to compile data: {exc}") from exc
+            _require_dates(parsed_table)
             parsed_tables.append(parsed_table)
         if not parsed_tables:
             raise ParsingError("No valid tables found")
@@ -124,6 +119,8 @@ class CardFormat:
 
     @classmethod
     def check(cls, raw_df, title):
+        if raw_df.shape[0] < 3 or raw_df.shape[1] < len(cls.HEADERS):
+            raise ParsingError(f"Unexpected table shape: {raw_df.shape}")
         # Check title row
         for column_index in range(raw_df.shape[1]):
             actual_title = raw_df.iloc[0, column_index]
@@ -144,7 +141,7 @@ class CardFormat:
             )
         for column_index in range(4):
             expected_nan = raw_df.iloc[-1, column_index]
-            if not math.isnan(expected_nan):
+            if not pd.isna(expected_nan):
                 raise ParsingError(f"Expected nan, got: {expected_nan!r}")
 
     @classmethod
@@ -155,7 +152,7 @@ class CardFormat:
         data = {
             "date": table.select(pl.col("0").str.strptime(pl.Date, format="%d/%m/%y")),
             "amount": table.select(pl.col("5").cast(pl.Float64).mul(-1)),
-            "description": table.select(pl.col("1").cast(pl.String)),
+            "raw_description": table.select(pl.col("1").cast(pl.String)),
         }
         return pl.DataFrame(data).with_columns(pl.lit("card").alias("source"))
 

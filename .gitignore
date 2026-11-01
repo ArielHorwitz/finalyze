@@ -1,3 +1,6 @@
 __pycache__
 data
 dev/
+.pytest_cache
+/finalyze/static/
+/docs/casebook/

@@ -1,30 +1,39 @@
 import polars as pl
 
-HASH_COLUMNS = ("account", "source", "date", "description", "amount")
 RAW_SCHEMA = {
+    "id": pl.String,
     "account": pl.String,
     "source": pl.String,
     "date": pl.Date,
     "amount": pl.Float64,
+    "raw_description": pl.String,
+}
+ANNOTATION_SCHEMA = {
+    "tag": pl.String,
+    "subtag": pl.String,
     "description": pl.String,
+    "transaction_description": pl.String,
 }
 TAGGED_SCHEMA = {
     **RAW_SCHEMA,
-    "tag": pl.String,
-    "subtag": pl.String,
-    "hash": pl.UInt64,
+    **ANNOTATION_SCHEMA,
+    "part_kind": pl.String,
 }
+"""`part_kind`: the kind set on the transaction (its annotation's part), if any."""
 ENRICHED_SCHEMA = {
-    **TAGGED_SCHEMA,
+    **RAW_SCHEMA,
+    **ANNOTATION_SCHEMA,
     "month": pl.String,
     "tags": pl.String,
-    "is_edge_tick": pl.Boolean,
     "is_sentinel_tick": pl.Boolean,
-    "is_breakdown": pl.Boolean,
-    "is_external": pl.Boolean,
+    "kind": pl.String,
+    "kind_set": pl.Boolean,
+    "group": pl.String,
+    "group_role": pl.String,
     "account_source": pl.String,
     "balance_total": pl.Float64,
-    "balance_inexternal": pl.Float64,
+    "balance_role": pl.Float64,
+    "balance_group": pl.Float64,
     "balance_account": pl.Float64,
     "balance_source": pl.Float64,
 }
@@ -36,7 +45,7 @@ class InvalidSchema(Exception):
 
 def validate_schema(df, expected_schema):
     collected_schema = df.collect_schema()
-    actual_schema = dict(zip(collected_schema.names(), collected_schema.dtypes()))
+    actual_schema = dict(collected_schema)
     errors = []
     if missing_columns := set(expected_schema.keys()) - set(actual_schema.keys()):
         errors.append(f"Missing columns: {missing_columns}")

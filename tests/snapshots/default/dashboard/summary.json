@@ -1,0 +1,270 @@
+{
+  "options": {
+    "period": "all",
+    "start_month": null,
+    "end_month": null,
+    "accounts": null,
+    "groups": null,
+    "tags": null,
+    "include_one_offs": false,
+    "net_by_tag": false,
+    "complete_months_only": false,
+    "rolling_months": 6,
+    "breakdown_months": 3,
+    "subtag_trends": true
+  },
+  "available_months": [
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12",
+    "2024-01",
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06"
+  ],
+  "period": {
+    "start": null,
+    "end": "2025-06",
+    "months": [
+      "2023-06",
+      "2023-07",
+      "2023-08",
+      "2023-09",
+      "2023-10",
+      "2023-11",
+      "2023-12",
+      "2024-01",
+      "2024-02",
+      "2024-03",
+      "2024-04",
+      "2024-05",
+      "2024-06",
+      "2024-07",
+      "2024-08",
+      "2024-09",
+      "2024-10",
+      "2024-11",
+      "2024-12",
+      "2025-01",
+      "2025-02",
+      "2025-03",
+      "2025-04",
+      "2025-05",
+      "2025-06"
+    ]
+  },
+  "rolling_windows": [
+    1,
+    3,
+    6,
+    12
+  ],
+  "breakdown_monthly_months": [
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12",
+    "2024-01",
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06"
+  ],
+  "tag_order": [
+    "income",
+    "housing",
+    "car",
+    "food",
+    "kids",
+    "vacation",
+    "health",
+    "utilities",
+    "shopping",
+    "home",
+    "gifts",
+    "pets",
+    "leisure",
+    null,
+    "subscriptions",
+    "fees"
+  ],
+  "headline": {
+    "as_of": "2025-06-15",
+    "month": "2025-06",
+    "previous_month": "2025-05",
+    "net_worth": 150078.81,
+    "available": 111759.64,
+    "runway": {
+      "1": {
+        "expenses": 13570.29,
+        "months": 8.24
+      },
+      "3": {
+        "expenses": 18152.16,
+        "months": 6.16
+      },
+      "6": {
+        "expenses": 19339.98,
+        "months": 5.78
+      },
+      "12": {
+        "expenses": 19466.69,
+        "months": 5.74
+      }
+    },
+    "last": {
+      "net": 14091.87,
+      "incomes": 27662.16,
+      "expenses": 13570.29,
+      "saved": 3000.0,
+      "kept_rate": 0.5094,
+      "saved_rate": 0.1085,
+      "one_off_incomes": 0.0,
+      "one_off_expenses": 0.0
+    },
+    "previous": {
+      "net": 12220.23,
+      "incomes": 33260.09,
+      "expenses": 21039.86,
+      "saved": 3000.0,
+      "kept_rate": 0.3674,
+      "saved_rate": 0.0902,
+      "one_off_incomes": 0.0,
+      "one_off_expenses": 0.0
+    },
+    "totals": {
+      "net": 80766.29,
+      "incomes": 737702.39,
+      "expenses": 656936.1,
+      "saved": 68000.0,
+      "kept_rate": 0.1095,
+      "saved_rate": 0.0922,
+      "one_off_incomes": 40720.0,
+      "one_off_expenses": 175469.21
+    },
+    "averages": {
+      "net": 8620.62,
+      "incomes": 27879.3,
+      "expenses": 19258.68,
+      "saved": 2720.0,
+      "kept_rate": 0.3092,
+      "saved_rate": 0.0976,
+      "one_off_incomes": 0.0,
+      "one_off_expenses": 0.0
+    },
+    "top_expenses": [
+      {
+        "tag": "housing",
+        "amount": 6900.0,
+        "one_off": 0.0,
+        "previous": 8084.0,
+        "average": 7288.32,
+        "averaged": 6900.0,
+        "baseline": {
+          "1": 8084.0,
+          "3": 7689.33,
+          "6": 7492.0,
+          "12": 7492.0
+        }
+      },
+      {
+        "tag": "kids",
+        "amount": 3745.26,
+        "one_off": 0.0,
+        "previous": 4014.9,
+        "average": 3505.12,
+        "averaged": 3745.26,
+        "baseline": {
+          "1": 4014.9,
+          "3": 4007.87,
+          "6": 3969.3,
+          "12": 3591.41
+        }
+      },
+      {
+        "tag": null,
+        "amount": 1821.96,
+        "one_off": 0.0,
+        "previous": 0.0,
+        "average": 72.88,
+        "averaged": 1821.96,
+        "baseline": {
+          "1": 0.0,
+          "3": 0.0,
+          "6": 0.0,
+          "12": 0.0
+        }
+      },
+      {
+        "tag": "health",
+        "amount": 659.56,
+        "one_off": 0.0,
+        "previous": 642.9,
+        "average": 682.99,
+        "averaged": 659.56,
+        "baseline": {
+          "1": 642.9,
+          "3": 741.87,
+          "6": 704.76,
+          "12": 687.54
+        }
+      },
+      {
+        "tag": "utilities",
+        "amount": 217.9,
+        "one_off": 0.0,
+        "previous": 547.81,
+        "average": 761.55,
+        "averaged": 217.9,
+        "baseline": {
+          "1": 547.81,
+          "3": 662.27,
+          "6": 736.71,
+          "12": 783.34
+        }
+      }
+    ]
+  },
+  "health": {
+    "latest": "2025-06-15",
+    "saving_rows": 25,
+    "sign_flips": [],
+    "transfer_residual": 0.0,
+    "transfer_rows": 338,
+    "income_months": []
+  }
+}

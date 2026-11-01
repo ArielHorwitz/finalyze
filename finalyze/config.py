@@ -3,56 +3,38 @@ import datetime
 import functools
 import json
 import operator
-import shutil
+import sys
 from pathlib import Path
-from typing import Any, Literal, Optional
+from typing import Literal, Optional
 
 import polars as pl
 import toml
-from pydantic import BaseModel, Field, field_validator
-from pydantic.color import Color
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationInfo,
+    model_validator,
+)
 from pydantic_extra_types.pendulum_dt import Date
 
 from finalyze import APP_NAME
 
 CONFIG_DIR = Path.home() / ".config" / APP_NAME.lower()
 CONFIG_FILE = CONFIG_DIR / "config.toml"
+HOST_FILE_NAME = "host.toml"
+"""Next to the config: where things are on this machine (see `Host`)."""
 
-DEFAULT_DATA_DIR = Path.home() / ".local" / "share" / APP_NAME
-DEFAULT_COLORS = {
-    "total balance": "#fff",
-    "expense": "#f00",
-    "income": "#0f0",
-    "bills": "#c26",
-    "other": "#000",
-}
-DEFAULT_SOURCE_DIRECTORIES = {
-    "default": [Path.home() / "Downloads" / "finalyze" / "sources"],
-}
-CardTransactionStrategies = Literal["remove", "balance", "untouched"]
-"""Strategies for handling credit card transactions in the checking account.
-
-*untouched*:
-Leave them as is.
-
-*remove*:
-Remove them entirely.
-
-*balance*:
-Replace them with equal and opposite "Transfer" transactions. This is used to
-maintain the balances of all accounts correctly when using data from both
-checking account and credit cards.
-
-E.g. if there is a transaction found in the checking account that is identified
-as a charge of 100 USD from the credit card: replace it with a transaction for
--100 described as a transfer under the "checking" account, and add a
-transaction for +100 described as a transfer under the "card" account. This
-assumes the same -100 USD is found in the "card" account.
-"""
-BACKUP_PREFIX = f"{APP_NAME}-backup_"
+DEFAULT_DATA_DIR = Path("~/.local/share").joinpath(APP_NAME)
 
 
-class Filters(BaseModel):
+class ConfigModel(BaseModel):
+    """Base for config sections: unknown keys are errors, not silently ignored."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class Filters(ConfigModel):
     start_date: Optional[Date] = None
     """Minimum date (inclusive)."""
     end_date: Optional[Date] = None
@@ -61,12 +43,12 @@ class Filters(BaseModel):
     """Tags."""
     subtags: Optional[list[str]] = None
     """Subtags."""
-    description: Optional[str] = None
-    """Description."""
+    raw_description: Optional[str] = None
+    """Regular expression on the raw description (the text in the raw files)."""
     account: Optional[str] = None
-    """Account."""
+    """Account (exact)."""
     source: Optional[str] = None
-    """Source."""
+    """Source (exact)."""
     and_filters: Optional[list["Filters"]] = None
     """Logically AND filters (does not work with other predicates)."""
     or_filters: Optional[list["Filters"]] = None
@@ -87,12 +69,14 @@ class Filters(BaseModel):
         if self.subtags is not None:
             predicates.append(pl.col("subtag").is_in(pl.Series(self.subtags)))
         # patterns
-        if self.description is not None:
-            predicates.append(pl.col("description").str.contains(self.description))
+        if self.raw_description is not None:
+            predicates.append(
+                pl.col("raw_description").str.contains(self.raw_description)
+            )
         if self.account is not None:
             predicates.append(pl.col("account") == self.account)
         if self.source is not None:
-            predicates.append(pl.col("source").str.contains(self.source))
+            predicates.append(pl.col("source") == self.source)
         return predicates
 
     @property
@@ -125,8 +109,8 @@ class Filters(BaseModel):
         else:
             predicates = self._get_predicates()
             predicate = functools.reduce(operator.and_, predicates, pl.lit(True))
-            if self.invert:
-                predicate = ~predicate
+        if self.invert:
+            predicate = ~predicate
         return predicate
 
     def apply(self, df, /, *, invert: bool = False):
@@ -141,320 +125,249 @@ class Filters(BaseModel):
         return new
 
 
-class Ingestion(BaseModel):
-    directories: dict[str, list[Path]] = Field(
-        default=DEFAULT_SOURCE_DIRECTORIES,
-        validate_default=True,
-    )
-    """A list of directories to ingest for each account."""
-    card_transactions: CardTransactionStrategies = Field(
-        default="untouched",
-        validate_default=True,
-    )
-    """How to handle credit card transaction in the checking account.
-
-    See: `CardTransactionStrategies`."""
-    clear_previous: bool = True
-    """Clear previously ingested data in the dataset."""
-    verbose_parsing: bool = False
-    """Print more data while parsing sources."""
-    print_directories: bool = False
-    """Print the directories used for ingestion."""
-    print_result: bool = False
-    """Print the resulting data from ingestion."""
-    filters: Filters = Filters()
-    """Filter data for ingestion."""
-
-    @field_validator("directories", mode="after")
-    @classmethod
-    def resolve_directories(cls, directories):
-        return {
-            key: [p.expanduser().resolve() for p in dirlist]
-            for key, dirlist in directories.items()
+def check_raw_filters(filters: Filters, what: str):
+    """Raise ValueError for filters that can't apply to parsed rows (before they
+    are tagged): tags, and/or combined with other fields (also nested), or an
+    invalid regular expression."""
+    pending = [filters]
+    while pending:
+        nested = pending.pop()
+        if nested.tags is not None or nested.subtags is not None:
+            raise ValueError(f"{what} can't match tags or subtags")
+        pending.extend((nested.and_filters or []) + (nested.or_filters or []))
+    sample = pl.DataFrame(
+        {
+            "account": ["account"],
+            "source": ["source"],
+            "date": [datetime.date(2000, 1, 1)],
+            "raw_description": ["raw description"],
         }
-
-
-class TagPresetRule(BaseModel):
-    tag: str = "Untagged"
-    """Tag preset to assign."""
-    subtag: str = "Untagged"
-    """Subtag preset to assign."""
-    filters: Filters = Filters()
-    """Filters for entries to assign preset."""
-
-
-class Tag(BaseModel):
-    print_result: bool = False
-    """Print a summary of the tags."""
-    default_tag: Optional[str] = None
-    """Set a default tag for untagged rows."""
-    default_subtag: Optional[str] = None
-    """Set a default subtag for untagged rows."""
-    delete_filters: Filters = Filters()
-    """Prompt to delete tags based on filters."""
-    delete_unused: bool = False
-    """Prompt to delete tags that aren't found in the dataset."""
-    preset_rules: list[TagPresetRule] = Field(
-        default_factory=list,
-        validate_default=True,
     )
-    """List of preset rules for tagging."""
+    try:
+        sample.filter(filters.predicate)
+    except pl.exceptions.PolarsError as exc:
+        raise ValueError(f"{what} have an invalid filter: {exc}") from exc
 
 
-class AnalysisGraphs(BaseModel):
-    title: str = "plots"
-    """Title and name of the output file."""
-    open: bool = False
-    """Open the output file."""
-    plotly_template: str = "plotly_dark"
-    """Plotly template for the graphs."""
-    colors: dict[str, Color] = Field(default=DEFAULT_COLORS, validate_default=True)
-    """Colors for labels in the graphs."""
-    lightweight_html: bool = False
-    """Do not include scripts in the output HTML file to keep it small in size."""
-    plotly_arguments: dict[str, Any] = Field(default_factory=dict)
-    """Arbitrary extra arguments for plotly graphs."""
+IngestionAction = Literal["drop", "transfer", "rewrite"]
 
 
-class AnalysisAnonymization(BaseModel):
-    enable: bool = False
-    """Enable (weak) anonymization."""
-    scale: tuple[float, float] = (1_000_000, 1_000_000_000_000)
-    """Minimum and maximum amount to scale amounts."""
-    anonymize_accounts: bool = True
-    """Also anonymize accounts."""
-    anonymize_sources: bool = True
-    """Also anonymize sources."""
-    anonymize_descriptions: bool = True
-    """Also anonymize descriptions."""
-    anonymize_tags: bool = True
-    """Also anonymize tags."""
+class IngestionRule(ConfigModel):
+    """What to do with the parsed rows that match, before they are ingested.
+
+    Rules only reshape rows: what they mean (tags, kinds, descriptions) is for
+    annotations and tagging rules. A row keeps its ID (derived from the parsed
+    row, see `finalyze.source.identity`) whatever a rule changes.
+    """
+
+    match: Filters
+    """The rows the rule applies to (tags and subtags don't exist yet)."""
+    action: IngestionAction
+    """*drop*: leave the rows out.
+
+    *transfer*: the row is money moving to another source (e.g. the monthly card
+    charge in checking, to the card): it stays as this source's leg, and a row
+    of the opposite amount is added in `to_source` (of `to_account`, by default
+    the row's account).
+
+    *rewrite*: only change the raw description or date."""
+    to_source: Optional[str] = None
+    """The source a transfer goes to."""
+    to_account: Optional[str] = None
+    """The account a transfer goes to (default: the row's own)."""
+    raw_description: Optional[str] = None
+    """A new raw description (of both legs of a transfer)."""
+    shift_days: int = 0
+    """Move the date by days (of both legs of a transfer)."""
+
+    @model_validator(mode="after")
+    def consistent_action(self):
+        check_raw_filters(self.match, "Ingestion rules")
+        transfer_fields = self.to_source is not None or self.to_account is not None
+        if self.action == "transfer" and self.to_source is None:
+            raise ValueError("A transfer rule needs a 'to_source'")
+        if self.action != "transfer" and transfer_fields:
+            raise ValueError(f"A {self.action} rule can't have a transfer target")
+        changes = self.raw_description is not None or self.shift_days != 0
+        if self.action == "drop" and changes:
+            raise ValueError("A drop rule can't change the raw description or date")
+        if self.action == "rewrite" and not changes:
+            raise ValueError("A rewrite rule needs a 'raw_description' or 'shift_days'")
+        return self
 
 
-class EdgeTick(BaseModel):
-    enable: bool = False
-    """Enable edge ticks."""
-    pad_days: int = 31
-    """Add edge ticks a number of days past the data."""
-    cap_same_month: bool = True
-    """Don't allow edge tick to overflow past the edge of the month."""
-
-
-class AnalysisEdgeTicks(BaseModel):
-    min: EdgeTick = EdgeTick()
-    """Add edge ticks before the minimum date."""
-    max: EdgeTick = EdgeTick()
-    """Add edge ticks after the maximum date."""
-    auto_tag: bool = True
-    """Automatically tag the transactions with a tag preset rule."""
-
-
-class Analysis(BaseModel):
+class Ingestion(ConfigModel):
+    rules: list[IngestionRule] = []
+    """Reshape the parsed rows before they are ingested: the first matching rule
+    of each row applies (see `IngestionRule`)."""
     filters: Filters = Filters()
-    """Filters for analysis data."""
-    graphs: AnalysisGraphs = AnalysisGraphs()
-    """Configuration for graphs."""
-    anonymization: AnalysisAnonymization = AnalysisAnonymization()
-    """Configuration for (weak) anonymization of output data."""
-    external_filters: Filters = Filters(invert=True)
-    """Filters for external accounts."""
-    breakdown_filters: Filters = Filters()
-    """Filters for transactions not to be shown in breakdowns and cash flows."""
-    breakdown_months: int = 3
-    """Number of months back to breakdown in detail."""
-    net_by_tag: bool = False
-    """Break down incomes/expenses by tags rather than transactions."""
-    rolling_average_weights: dict[str, list[float]] = Field(
-        default_factory=lambda *_: {
-            "quarter": [4, 5, 6],
-            "semi": [7, 8, 9, 10, 11, 12],
-        },
-        validate_default=True,
-    )
-    """List of weights for each of the rolling averages."""
-    edge_ticks: AnalysisEdgeTicks = AnalysisEdgeTicks()
-    """Add empty transactions for every account and source.
-    May make some graphs more readable.
-    Does not work well with analysis date filters."""
-    truncate_month_clock: bool = False
-    """Truncate data to the end of the last month."""
-    truncate_month_data: bool = False
-    """Truncate data to the end of the penultimate month in the data."""
-    allow_untagged: bool = False
-    """Bypass restriction requiring every entry to be tagged."""
-    print_source: bool = False
-    """Print all the source data for making the analysis."""
-    print_tables: bool = False
-    """Print the tables used for each graph."""
-    print_table_names: list[str] = Field(default_factory=list, validate_default=True)
-    """List of table names to print. Leave blank to print all tables."""
-    source_table_columns: list[str] = [
-        "account",
-        "source",
-        "date",
-        "amount",
-        "tag",
-        "subtag",
-        "description",
-        "is_external",
-        "balance_total",
-    ]
-    """List of columns to display for the full source table. Leave blank to show all."""
-    rounding_decimals: int = 2
-    """Round numbers to decimal places. Set to negative to disable."""
+    """Filter data for ingestion (after the rules)."""
 
 
-class Display(BaseModel):
-    flip_rtl: bool = False
-    """Flip text of non-English letters when printing tables."""
-    max_rows: int = 1_000_000
-    """Maximum rows to print when printing tables."""
-    max_cols: int = 1_000
-    """Maximum columns to print when printing tables."""
-    max_width: int = 1_000
-    """Maximum width in characters when printing tables."""
-    show_shape: bool = False
-    """Show the shape (dimension sizes) of tables when printing them."""
+MOVED_TO_HOST_FILE = {"general": "data_dir", "ingestion": "directories"}
+"""Settings the config had, which are this machine's: the data directory is in
+the host file, and the accounts are the raw folder's folders."""
 
 
-class General(BaseModel):
-    data_dir: Path = Field(default=DEFAULT_DATA_DIR, validate_default=True)
-    """Default directory for storing app data."""
-    backup_dir: Optional[Path] = None
-    """Directory for backing up all config and data."""
-    maximum_backups: Optional[int] = None
-    """Start deleting oldest backups once above maximum."""
-    dataset: str = "default"
-    """Dataset name to use"""
-    tag_set: str = "default"
-    """Name of tags file."""
-    print_config: bool = False
-    """Print the loaded configuration."""
-    multi_column_delimiter: str = " - "
-    """Delimiter for combined column names."""
+class Config(ConfigModel):
+    """The preferences: portable (exported with the data), without any path."""
+
+    ingestion: Ingestion = Field(default_factory=dict, validate_default=True)
+    """Configuration for ingestion."""
+
+    @model_validator(mode="before")
+    @classmethod
+    def no_moved_settings(cls, data):
+        if not isinstance(data, dict):
+            return data
+        moved = [
+            f"{section}.{name}"
+            for section, name in MOVED_TO_HOST_FILE.items()
+            if isinstance(data.get(section), dict) and name in data[section]
+        ]
+        if moved:
+            raise ValueError(
+                f"{' and '.join(moved)} {'are' if len(moved) > 1 else 'is'} no "
+                f"longer in the config: remove {'them' if len(moved) > 1 else 'it'}. "
+                "The data directory and the raw "
+                f"folder are in {HOST_FILE_NAME} (next to the config), and each "
+                "folder of the raw folder is an account"
+            )
+        return data
+
+
+class Host(ConfigModel):
+    """Where things are on this machine, from the host file (`host.toml`, next
+    to the config): never exported, and never in the config or the store."""
+
+    data_dir: Path = DEFAULT_DATA_DIR
+    """The store, the ingested data and the backups."""
+    raw_dir: Optional[Path] = None
+    """The raw files, a folder per account (default: `raw` in the data
+    directory)."""
+    host: Optional[str] = None
+    """The address to serve on, unless `--host` is given (default: 127.0.0.1)."""
+    port: Optional[int] = None
+    """The port to serve on, unless `--port` is given (default: 8765)."""
+
+    @model_validator(mode="after")
+    def resolve_paths(self, info: ValidationInfo):
+        """Absolute: relative paths are of `relative_to` in the validation
+        context (the host file's directory), if given."""
+        base = Path((info.context or {}).get("relative_to", ".")).expanduser()
+        self.data_dir = base.joinpath(self.data_dir.expanduser()).resolve()
+        raw_dir = self.raw_dir or self.data_dir.joinpath("raw")
+        self.raw_dir = base.joinpath(raw_dir.expanduser()).resolve()
+        # An import replaces the raw folder's contents
+        if self.raw_dir == self.data_dir or self.raw_dir in self.data_dir.parents:
+            raise ValueError(
+                f"raw_dir ({self.raw_dir}) can't be the data directory or hold it: "
+                "an import replaces everything in it"
+            )
+        return self
 
     @property
-    def source_dir(self):
-        return self.data_dir / "sources" / self.dataset
+    def ingested_dir(self) -> Path:
+        """The ingested data."""
+        return self.data_dir.joinpath("ingested")
 
     @property
-    def tags_dir(self):
-        return self.data_dir / "tags"
+    def ingest_times_file(self) -> Path:
+        """When the ingested data last changed, and when an ingest last ran."""
+        return self.ingested_dir.joinpath("ingest-times.json")
 
     @property
-    def output_dir(self):
-        return self.data_dir / "output"
+    def db_file(self) -> Path:
+        return self.data_dir.joinpath("finalyze.db")
 
     @property
-    def tags_file(self):
-        return self.tags_dir / f"{self.tag_set}.csv"
+    def backups_dir(self) -> Path:
+        """Backups: exports kept on this machine (see `service.backups`)."""
+        return self.data_dir.joinpath("backups")
 
     def create_directories(self):
-        for directory in (self.source_dir, self.tags_dir, self.output_dir):
-            directory.mkdir(parents=True, exist_ok=True)
-
-    @field_validator("data_dir", "backup_dir", mode="after")
-    @classmethod
-    def resolve_directory(cls, directory):
-        return directory.expanduser().resolve()
-
-
-class Config(BaseModel):
-    general: General = General()
-    """General configuration."""
-    display: Display = Display()
-    """Configuration for display."""
-    ingestion: Ingestion = Ingestion()
-    """Configuration for ingestion."""
-    tag: Tag = Tag()
-    """Configuration for tagging."""
-    analysis: Analysis = Analysis()
-    """Configuration for analysis."""
+        self.ingested_dir.mkdir(parents=True, exist_ok=True)
 
 
 LOADED_CONFIG = None
+LOADED_HOST = None
+LOADED_CONFIG_DIR = CONFIG_DIR
+"""The directory of `LOADED_CONFIG` (and of the host file), to reload it after
+editing the config file."""
 
 
-def load_config(
-    *,
-    config_dir: Path = CONFIG_DIR,
-    additional_configs: tuple[str, ...] = tuple(),
-    override: str = "",
-    use_preloaded: bool = True,
-):
-    global LOADED_CONFIG
+def load_config(*, config_dir: Path = CONFIG_DIR, use_preloaded: bool = True):
+    """The config of `config_dir`, and its host file (see `host`)."""
+    global LOADED_CONFIG, LOADED_HOST, LOADED_CONFIG_DIR
     if LOADED_CONFIG is not None and use_preloaded:
         return LOADED_CONFIG
 
-    default_config_file = config_dir / "config.toml"
-    config_data = toml.loads(default_config_file.read_text())
-    for config_name in additional_configs:
-        config_file_path = Path(config_dir) / f"{config_name}.toml"
-        new_config_data = toml.loads(config_file_path.read_text())
-        config_data = _depth_first_merge(config_data, new_config_data)
-    config_data = _depth_first_merge(config_data, toml.loads(override))
-    LOADED_CONFIG = Config(**config_data)
+    config_dir = Path(config_dir)
+    config_data = toml.loads(config_file_of(config_dir).read_text())
+    host_file = host_file_of(config_dir)
+    host_data = toml.loads(host_file.read_text()) if host_file.is_file() else {}
+    LOADED_CONFIG = validate_config(config_data)
+    # Relative paths are of the config's directory, wherever the server starts
+    LOADED_HOST = Host.model_validate(host_data, context={"relative_to": config_dir})
+    LOADED_CONFIG_DIR = config_dir
     return LOADED_CONFIG
 
 
 config = load_config
 
 
-def get_config_file_names(*, config_dir: Path = CONFIG_DIR) -> tuple[str]:
-    return tuple(file.stem for file in config_dir.glob("*.toml"))
+def host() -> Host:
+    """Where things are on this machine (the defaults without a host file)."""
+    if LOADED_HOST is None:
+        load_config()
+    return LOADED_HOST
 
 
-def write_default_config(*, config_dir: Path = CONFIG_FILE):
+def config_file_of(config_dir: Path) -> Path:
+    return config_dir.joinpath("config.toml")
+
+
+def host_file_of(config_dir: Path) -> Path:
+    return config_dir.joinpath(HOST_FILE_NAME)
+
+
+def validate_config(config_data: dict) -> "Config":
+    return Config.model_validate(config_data)
+
+
+def reload_config(config_data: dict) -> "Config":
+    """Validate new data of the loaded config's file, then write it and use it.
+    Comments of the file are lost."""
+    return replace_config_text(toml.dumps(config_data))
+
+
+def replace_config_text(text: str) -> "Config":
+    """Validate a new text of the loaded config's file, then write it and use it
+    (the previous file is kept as `config.toml.bak`)."""
+    global LOADED_CONFIG
+    new_config = validate_config(toml.loads(text))
+    config_file = config_file_of(LOADED_CONFIG_DIR)
+    # Replaced whole, so an interrupted write leaves the file and its backup as
+    # they were
+    if config_file.is_file():
+        _write_atomically(
+            config_file.with_name(f"{config_file.name}.bak"), config_file.read_text()
+        )
+    _write_atomically(config_file, text)
+    LOADED_CONFIG = new_config
+    return new_config
+
+
+def _write_atomically(file: Path, text: str):
+    temporary = file.with_name(f".{file.name}.tmp")
+    temporary.write_text(text)
+    temporary.replace(file)
+
+
+def write_default_config(*, config_dir: Path = CONFIG_DIR):
     config_dir.mkdir(parents=True, exist_ok=True)
-    config_file = config_dir / "config.toml"
+    config_file = config_file_of(config_dir)
     if not config_file.is_file():
-        print(f"Creating default config at: {config_file}")
+        print(f"Creating default config at: {config_file}", file=sys.stderr)
         config_dump = json.loads(Config().model_dump_json())
         config_file.write_text(toml.dumps(config_dump))
-
-
-def do_backup(*, config_dir: Path = CONFIG_DIR):
-    config = load_config()
-    now_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    backup_dir_root = config.general.backup_dir
-    backup_dir_root.mkdir(parents=True, exist_ok=True)
-    backup_dir = config.general.backup_dir / f"{BACKUP_PREFIX}{now_str}"
-    print(f"Backing up to: {backup_dir}.tar.gz")
-    shutil.copytree(config_dir, backup_dir / "config")
-    shutil.copytree(config.general.data_dir, backup_dir / "data")
-    for account_name, account_dir in config.ingestion.directories.items():
-        backup_account_dir = backup_dir / "raw" / account_name
-        for index, subdir in enumerate(account_dir):
-            shutil.copytree(subdir, backup_account_dir / f"{index:0>3}")
-    shutil.make_archive(backup_dir, "gztar", backup_dir)
-    shutil.rmtree(backup_dir)
-    # Cap maximum backup
-    maximum_backups = config.general.maximum_backups
-    if maximum_backups is None or maximum_backups <= 0:
-        return
-    current_backups = sorted(backup_dir_root.glob(f"{BACKUP_PREFIX}*.tar.gz"))
-    while len(current_backups) > maximum_backups:
-        current_backups.pop(0).unlink()
-
-
-def _depth_first_merge(base: dict, other: dict):
-    assert isinstance(base, dict)
-    assert isinstance(other, dict)
-    base = copy.deepcopy(base)
-    for key, other_value in other.items():
-        base_value = base.get(key)
-        if isinstance(base_value, dict) and isinstance(other_value, dict):
-            base[key] = _depth_first_merge(base_value, other_value)
-        else:
-            base[key] = other_value
-    return base
-
-
-if __name__ == "__main__":
-    # Try default config
-    print("DEFAULT")
-    default_config = Config()
-    print(default_config)
-    print("USER")
-    user_config = load_config()
-    print(user_config)

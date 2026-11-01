@@ -1,0 +1,1740 @@
+id,date,amount,raw_description,description,transaction_description,tags,account_source
+00246fb08b470acf,2025-01-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+0027817c7244769c,2023-09-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+004d21a3e597aab9,2025-02-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+0062c3212c393067,2024-06-04,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+00b2a93878a151df,2023-09-17,-135.470000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+00dadc3806bff971,2024-05-03,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+00eb0e0f82f2f84e,2024-06-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+01049938d1f9d95f,2025-04-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+0122bdc3584f84c1,2023-07-28,-8.150000,PARKO* חניה,,Meeting in Tel Aviv,car/parking,maya/card
+012b774247a3fee1,2024-10-10,-2311.740000,Transfer checking-card,,,transfer/card,maya/checking
+0171095fe36acaaf,2025-04-27,-58.100000,Market stall vegetables,,,food/groceries,cash/wallet
+017167d7ea271906,2024-06-13,-93.790000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+017ea36c114dea99,2024-11-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+018f3780c1493946,2023-08-11,-194.590000,צעצועי הקסם,,,kids/toys,maya/card
+01b8a4617fbe1f20,2024-01-09,-119.610000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+01dcc0550775494e,2023-12-20,-92.110000,פארמה פלוס 33,,,health/pharmacy,maya/card
+020ba54a8e84272e,2024-12-08,-45.610000,LA PAUSE COFFEE,,,food/coffee,maya/card
+024d34093ba7a4a5,2024-02-02,-46.380000,פארמה פלוס 33,,,health/pharmacy,maya/card
+026f8d73667b182d,2024-08-05,120.000000,שירה גל: על הפיצה,,Paid back their share of dinner,food/dining out,maya/bit
+02a2b69e0dfb367c,2024-12-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+030c20ad189c764f,2023-08-10,12030.850000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+037ace2961973e31,2025-03-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+038238a15ac4fcdb,2024-07-27,-497.430000,סופר גפן סניף 17,,,food/groceries,eitan/card
+03a8a4df870d9253,2024-09-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+040a1bcf5c55856a,2024-02-28,-452.790000,סופר גפן - הדר,,,food/groceries,eitan/card
+0424e720ac6e64d7,2024-10-21,-18.400000,LA PAUSE COFFEE,,,food/coffee,maya/card
+0446fcaca32874bc,2025-01-16,-256.370000,מסעדת הגפן הירוקה,,Lunch with Ofir,food/dining out,maya/card
+04aa2db1b5804d2b,2023-12-22,-764.270000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+04c32e22f5e3bf85,2024-02-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+04d7a536d3021a9e,2024-08-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+04d96ef9101de3d0,2024-12-13,-384.380000,בגדי אורן,,Dress for the wedding,shopping/clothes,eitan/card
+04f7780d6b872eea,2024-02-12,-166.940000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+051fe40fd8192fb4,2024-08-25,-499.230000,"וטרינר ד""ר אורן שחר",,Pita's yearly vaccines,pets/vet,maya/card
+055e7ceb535e12a7,2025-02-10,-643.980000,סופר גפן סניף 17,,Hosting Eitan's parents,food/groceries,eitan/card
+057ab10277c0e8fa,2025-06-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+057e2c7cb2f04a24,2024-09-05,-19.310000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+05816cde87808ace,2025-05-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+058d922dad747f5e,2025-05-10,-2574.930000,Transfer checking-card,,,transfer/card,maya/checking
+05ff3ed4d7396fc2,2024-12-01,-154.080000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+0682a47275b2645a,2025-02-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+06e831b78b81d3e0,2024-11-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+0729eb1b0296f795,2023-10-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+0731aef67e2af1f3,2023-10-11,-764.500000,סופר גפן - הדר,,Stocking up before the holiday,food/groceries,eitan/card
+074bd6be22f965ed,2023-07-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+078d85084ccef13e,2024-03-15,500.000000,Bank account: סבתא רינה: ליום הולדת של יובל,,"From Grandma Rina, for Yuval's birthday",income/gifts,maya/bit
+0793feee5c40facb,2025-06-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+07b2cae64bbaf619,2023-07-28,-299.390000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+07c9e8f6529d54fe,2024-08-05,-260.120000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+07ce3db62b7254a3,2023-10-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+07fc2e1e33efe9ca,2024-03-16,-94.540000,Bakery on the corner,,,food/groceries,cash/wallet
+082304463967866a,2023-07-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+08294222a47151cc,2023-08-21,-270.640000,BURGERS & CO TLV,,Date night,food/dining out,eitan/card
+082c6c7cf8c3a25b,2023-11-19,-150.000000,BIT,,Birthday gift (Bit),gifts/birthdays,maya/card
+083c37b60f5d6e91,2023-08-12,-198.950000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+086f57c9b8a56682,2024-07-09,-109.060000,פירות וירקות האחים,,,food/groceries,maya/card
+087a5be791577329,2024-04-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+0890cc0e30e1c894,2024-06-22,-28.010000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+08ae5e10661e45ce,2025-01-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+08c57c05d16e5a5f,2024-07-08,-4960.000000,HOTEL MIRADOR LISBOA,Six nights,,vacation/lodging,maya/card
+08c57c05d16e5a5f,2024-07-08,-1000.000000,HOTEL MIRADOR LISBOA,Half board,,vacation/food,maya/card
+0926993687b04672,2024-11-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+093366925d5abfa2,2024-12-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+0953392871160d6b,2025-05-21,-680.240000,סופר גפן סניף 17,,,food/groceries,eitan/card
+096191fa9e5b1531,2024-04-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+0963e3dd2621a041,2023-11-17,-55.990000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+098f5de2acbd7173,2023-12-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+099061ead72343f7,2024-09-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+0a03e835f6f75921,2024-11-14,-282.310000,סושי-לי רמת השרון,,,food/dining out,eitan/card
+0a56e6eb5bd7f04a,2023-07-09,-26.860000,LA PAUSE COFFEE,,,food/coffee,maya/card
+0a6900877ec4c194,2024-10-05,-150.000000,יעל שגיא: מתנה ליום הולדת,,,gifts/birthdays,maya/bit
+0a7130d4dc8cb837,2024-09-23,-179.420000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+0a7ae6b378a3ef40,2025-04-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+0a9545b2cd959f0e,2024-11-02,129.900000,FASHION OUTLET 22,,Returned the jacket,shopping/clothes,maya/card
+0b2a8a82cf94378d,2023-10-19,-150.000000,BIT,,"Group gift, our share (Bit)",gifts/birthdays,maya/card
+0b6978d287a8642b,2023-12-14,-545.800000,סופר גפן אונליין,,,food/groceries,eitan/card
+0ba3f7411331ac03,2024-11-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+0bbee8897f9b06f7,2024-04-22,-725.400000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+0be557f43cf37da1,2023-11-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+0bfc8a1d25c56a64,2024-03-12,-4120.000000,מגן ביטוח - ביטוח רכב,,"Comprehensive + third party, for the year",car/insurance,eitan/checking
+0c01aba7318db12e,2024-09-06,-200.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+0c186c28c56f4a1d,2024-07-27,-102.910000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+0c87283f12e19513,2024-01-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+0c8da6588bad22d7,2024-03-25,-45.930000,LA PAUSE COFFEE,,,food/coffee,maya/card
+0cba46953003f351,2024-05-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+0ce109184d071e75,2024-10-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+0cfa1779fc58daf5,2024-08-22,-962.990000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+0d0dbe3aeb905b75,2024-09-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+0d0eff8724d61143,2024-08-21,-27.130000,PARKO* חניה,,,car/parking,maya/card
+0d15b9eae10ac5c7,2024-05-12,-67.410000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+0d3982ee7cf01404,2024-01-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+0d82ce43d517b1b7,2023-12-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+0d86cc5ef9212c9b,2025-04-13,-38.280000,קפה נחת,,,food/coffee,maya/card
+0d97897694b6aaad,2024-06-10,-29.320000,LA PAUSE COFFEE,,,food/coffee,maya/card
+0db678ff059237d7,2024-02-19,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+0db6812e21e5c143,2023-09-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+0ddc2ed400554b3a,2024-04-19,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+0e005ffa61acc77b,2023-12-17,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+0e0f22472fe571ed,2025-01-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+0e376f258e335e50,2025-05-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+0e95bfcca8804bcd,2024-02-18,-39.570000,LA PAUSE COFFEE,,,food/coffee,maya/card
+0eaa30d665559c6f,2023-09-22,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+0eafed3f7f7529fb,2024-05-12,-616.960000,סופר גפן סניף 17,,,food/groceries,eitan/card
+0ed2cdeaecaf2b40,2023-08-05,-25.490000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+0f0e52cce302bd72,2025-05-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+0f178b6197a7e531,2024-03-17,-440.960000,סופר גפן סניף 17,,Party supplies for Yuval's birthday,food/groceries,eitan/card
+0f4d62f0e6883070,2023-11-28,-176.630000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+0f728811da6b7487,2025-02-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+0fda183bd7965730,2024-12-15,-72.750000,פארמה פלוס 33,,,health/pharmacy,maya/card
+0fe968bcd19470c0,2024-04-21,-96.210000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+100025b980246bdf,2025-02-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+101742b400f36487,2025-01-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+1042f93f58397b9e,2024-07-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+104546ded8f1cc4a,2025-06-01,-126.880000,פארמה פלוס 33,,Allergy pills,health/pharmacy,maya/card
+10474026d1529a28,2023-12-09,-73.620000,פירות וירקות האחים,,,food/groceries,maya/card
+1094f30340ff0d85,2023-12-11,-592.590000,סופר גפן סניף 17,,,food/groceries,eitan/card
+109cd52835a85161,2024-07-26,-55.900000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+10b9b8b3ece69be7,2024-06-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+10cc2b790570d664,2024-09-02,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+10e786d7294d3b58,2024-05-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+10f3d8b37b681a1b,2023-11-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+110ab717ae632db9,2025-06-01,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+113470a1fe67d136,2024-10-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+11b29a1de9bec156,2024-04-10,9930.600000,Transfer checking-card,,,transfer/card,maya/card
+11e0edbf5eccb43b,2023-12-28,-129.060000,BURGERS & CO TLV,,Date night,food/dining out,eitan/card
+120b509449acc32f,2025-05-04,-17.210000,PARKO* חניה,,Meeting in Tel Aviv,car/parking,maya/card
+1230d17698cb1164,2023-06-17,-415.990000,סופר גפן - הדר,,Party supplies for Yuval's birthday,food/groceries,eitan/card
+125ebd9ea17ddd82,2025-02-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+125fbdd907b3d334,2024-06-21,-571.090000,סופר גפן סניף 17,,Shabbat dinner for 10,food/groceries,eitan/card
+12760f4e85ced12f,2025-03-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+1282950942590296,2025-03-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+128f57958ad3bfae,2025-05-11,-103.950000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+1343f8e8d2221eeb,2024-03-28,-85.000000,נועם ברק: על המסעדה,,,food/dining out,maya/bit
+134b5d3c2f63cf9d,2024-12-26,-194.230000,פירות וירקות האחים,,,food/groceries,maya/card
+136168ff4d51832b,2025-01-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+13c91bb8dd613ce1,2023-10-07,-35.080000,קפה נחת,,,food/coffee,maya/card
+13d3937cfac4171b,2024-08-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+13d9eb3c05deab40,2023-09-23,-176.450000,פירות וירקות האחים,,,food/groceries,maya/card
+13df01683f00554c,2024-08-17,-468.850000,סופר גפן סניף 17,,,food/groceries,eitan/card
+13e9a51ab163db3b,2025-04-18,-159.100000,בגדי אורן,,,shopping/clothes,eitan/card
+13fce41161fab0e2,2024-10-28,126.660000,Interest,,,savings/interest,savings/savings
+1462b1221b8dee74,2024-12-22,-756.780000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+147afac6a928582c,2024-09-09,-210.000000,דנה כץ: מתנה לגננת + טיול,The daycare's trip,Dana collected for the daycare,kids/activities,maya/bit
+147afac6a928582c,2024-09-09,-150.000000,דנה כץ: מתנה לגננת + טיול,The teacher's end of year gift,Dana collected for the daycare,gifts/teachers,maya/bit
+147b450d12193acc,2024-06-04,60.000000,רוני אלמוג: על המסעדה,,Paid back their share of dinner,food/dining out,maya/bit
+14968cf9d91aae1f,2023-11-14,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+14b5aa260e13ccd6,2024-05-15,-144.000000,קולנוע הכוכב,,,leisure/culture,maya/card
+14cb5a76fdf29656,2024-03-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+14d422b27ba3d589,2024-09-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+1512638aaa9930eb,2024-01-15,-601.670000,סופר גפן סניף 17,,,food/groceries,eitan/card
+152cb6379743daf4,2023-09-09,-846.380000,סופר גפן סניף 17,,,food/groceries,eitan/card
+152d24c6fc4f24f0,2024-08-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+159c082d66197917,2025-04-06,-208.220000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+159e021a9273c94f,2023-11-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+15af59590672c5a9,2024-11-17,-485.090000,סופר גפן - הדר,,,food/groceries,eitan/card
+15daf4bd04c1ef02,2023-09-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+160d4cf34518c758,2024-11-10,12660.980000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+1635a41cd9fa8179,2024-09-01,-75.140000,Bakery on the corner,,,food/groceries,cash/wallet
+16990d9451fc3dd7,2023-08-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+16a357cfa4d57bb5,2024-11-22,-40.560000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+16b513265dfcb63f,2024-11-21,-187.920000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+16c903a31f0c584b,2024-11-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+16e111a1d31ef899,2023-08-06,-89.830000,Bakery on the corner,,,food/groceries,cash/wallet
+17008e0582746573,2023-11-14,-78.500000,Bakery on the corner,,,food/groceries,cash/wallet
+17036a1ca46a48d4,2024-05-21,-510.940000,סופר גפן סניף 17,,,food/groceries,eitan/card
+1713cca25016f766,2024-03-15,500.000000,Transfer bit-checking,,,transfer/bit,maya/checking
+1716e3b50af8da99,2024-02-28,-240.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+171dc470581317ac,2024-05-17,-155.310000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+174161d89ed6b12b,2025-05-16,-16.240000,LA PAUSE COFFEE,,,food/coffee,maya/card
+177565e31cead148,2025-06-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+17b427d8b50cbd0d,2023-09-10,-2254.660000,Transfer checking-card,,,transfer/card,maya/checking
+17d6dc889d7ff594,2024-06-28,-180.450000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+17e71ceb34f070a8,2023-06-14,-28.390000,קפה נחת,,,food/coffee,maya/card
+17ee5c73255f5526,2024-09-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+1804126ce72898a6,2023-06-27,-131.260000,צעצועי הקסם,,,kids/toys,maya/card
+1829715e300964bc,2025-04-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+18452e07e5b097c8,2024-03-08,-237.630000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+186bfa3c0002c1ba,2024-06-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+18b312aaf169f456,2024-09-15,-16.820000,קפה נחת,,,food/coffee,maya/card
+18d0303fa52fa469,2025-02-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+18d16bed4c559775,2024-12-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+1939a560e3bc0a2b,2025-02-11,-151.100000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+1977f2ed3e9f737f,2024-10-01,-52.850000,Bakery on the corner,,,food/groceries,cash/wallet
+1993bbd0285c791b,2023-11-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+19abb4c06fd0c4f7,2023-07-24,-226.330000,סושי-לי רמת השרון,,Yuval's first restaurant without a meltdown,food/dining out,maya/card
+19c14d66b78494ec,2023-07-05,-31.650000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+19c94d4e05587ac8,2025-05-27,2465.430000,"העברה - סטודיו קו בע""מ",,Design work for Studio Kav,income/freelance,maya/checking
+19df4e3b8cdb920a,2025-05-04,-416.770000,סופר גפן סניף 17,,,food/groceries,eitan/card
+19e866093c8058d7,2025-05-15,-75.740000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+1a533afcb59edd25,2024-08-09,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+1a66c37ee783c572,2023-06-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+1b50441275c0d8a5,2023-11-28,130.950000,Interest,,,savings/interest,savings/savings
+1b99f122006b3401,2025-05-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+1ba8feec44aaa9ae,2024-01-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+1baa40a8430089d5,2024-05-28,125.870000,Interest,,,savings/interest,savings/savings
+1be705c2c4228170,2025-02-13,-6800.000000,"מרפאת שיניים ד""ר לוין",,Root canal and a crown,health/dental,eitan/card
+1bebb8af62fefdd9,2024-01-13,-82.830000,פירות וירקות האחים,,,food/groceries,maya/card
+1c519646a315c144,2024-11-10,-3431.640000,Transfer checking-card,,,transfer/card,maya/checking
+1c5f272df55d3bbb,2025-03-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+1c604692e0edc2df,2023-07-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+1c692341e92c2868,2025-02-19,-118.230000,SHOPGLOBE.COM,,Yoga mat,shopping/online,maya/card
+1c69272f76153bb4,2024-08-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+1c70fdbba5ac7702,2023-06-01,-640.420000,סופר גפן אונליין,,,food/groceries,eitan/card
+1c865d818eddeb56,2024-09-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+1c9b531a4623d52a,2024-02-14,-251.910000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+1ca317ba13dda774,2024-08-17,-28.300000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+1cf96fc56efeaa31,2024-06-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+1d18d30b55cc2e0b,2025-05-28,-120.000000,Transfer card-bit,,,transfer/bit,maya/card
+1d8170afd1bac9eb,2024-01-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+1da2ccf5e27e3049,2025-03-07,-689.750000,סופר גפן סניף 17,,,food/groceries,eitan/card
+1e0bdf037c80e586,2024-06-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+1e4e3a8286bf564f,2024-08-06,-405.470000,סופר גפן - הדר,,Hosting Eitan's parents,food/groceries,eitan/card
+1e6f75c1a082913b,2024-08-07,-129.260000,פארמה פלוס 33,,Allergy pills,health/pharmacy,maya/card
+1e793234fc82f10e,2025-03-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+1e7ac0c9d8aa083a,2024-03-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+1e9b06f525be3eaa,2024-07-09,-307.410000,TASCA DO BAIRRO,,,vacation/food,eitan/card
+1ed777bed708323a,2024-06-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+1ef66eb90bee06d4,2025-02-09,-200.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+1f0f85bf09b52114,2024-12-03,-195.480000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+1f207248f0558344,2024-02-02,-63.580000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+1f2a547e7cc439b3,2024-02-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+1f33d3559375a624,2024-03-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+1f414daed659a80e,2025-06-12,-40.140000,קפה נחת,,,,maya/card
+1f47c2d04dd3a546,2024-01-10,6779.350000,Transfer checking-card,,,transfer/card,eitan/card
+1f69f52e1e760985,2024-09-08,-79.790000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+1f7c5b55f4e6efef,2024-08-27,-560.000000,Transfer bit-checking,,,transfer/bit,maya/bit
+1f83c095ade81a07,2024-09-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+1fa165da96044c2b,2025-02-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+1fa494afec23ee13,2023-07-13,-41.960000,Market stall vegetables,,,food/groceries,cash/wallet
+1fe1ebe618cf51ad,2025-03-10,9500.000000,גלבוע הנדסה - מענק,,,income/bonus,eitan/checking
+20297e0468477cb0,2024-10-23,-21.820000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+204db4df633b2ee1,2024-04-19,-261.240000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+2068ba0f32e62ad9,2024-10-22,-780.000000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+2076c90a9227ccd0,2023-09-17,-778.170000,סופר גפן סניף 17,,,food/groceries,eitan/card
+2081180d32bc8472,2024-11-21,-15.200000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+2084b37a04ad0778,2023-08-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+20997a465a164ff9,2024-08-03,-102.050000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+20d33d989019ae5a,2024-11-15,-18.640000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+21689379f68a1ab6,2024-04-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+217082fb3222a57b,2024-01-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+21718c1012e22f06,2024-09-27,-46.970000,Market stall vegetables,,,food/groceries,cash/wallet
+2178a22ed819388d,2023-07-10,11778.720000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+21bbe9b281938979,2024-11-23,-388.680000,סופר גפן - הדר,,Shabbat dinner for 10,food/groceries,eitan/card
+21db4bb417c2f8c2,2024-02-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+21e21ac17da44e9e,2023-09-14,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+221da76bb9b5c2ca,2024-07-23,-171.080000,פירות וירקות האחים,,,food/groceries,maya/card
+22277f21ffda0bc8,2025-02-28,133.010000,Interest,,,savings/interest,savings/savings
+222e467b8933a405,2024-07-10,11879.210000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+223a237af5534c7a,2025-05-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+2249a2fd619b8dee,2024-08-12,-200.000000,דנה כץ: מתנה ליום הולדת,,Daycare friend's birthday party,gifts/birthdays,maya/bit
+224e9d07696fa746,2023-07-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+22b20d5016ddf13b,2025-04-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+22f18f005e1de753,2024-02-09,-133.070000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+231aa38f13f623d8,2025-03-07,-46.410000,Market stall vegetables,,,food/groceries,cash/wallet
+231ae35f7060e31b,2023-08-07,-29.970000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+2320d5bd010ef799,2024-06-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+2327145dde857b4f,2024-10-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+234a3be58d6c2846,2025-04-16,-1148.000000,משרד התחבורה אגרת רישוי,,,car/license,eitan/card
+2385786a08c15403,2023-09-11,-98.600000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+239e430e608ab449,2023-11-15,-28.540000,PARKO* חניה,,,car/parking,maya/card
+23b5cf43d79def1a,2024-07-24,-194.160000,מסעדת הגפן הירוקה,,,food/dining out,maya/card
+23bb5748f732d3c0,2023-09-10,-40.890000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+245c0f5efcfd5829,2024-04-07,-200.000000,עופר לוי: יום הולדת שמח!,,,gifts/birthdays,maya/bit
+2469f37ac2fe78a8,2024-11-13,-32.800000,קפה נחת,,,food/coffee,maya/card
+247c23923a66a7e5,2024-09-25,-593.180000,סופר גפן סניף 17,,,food/groceries,eitan/card
+2483772b6fad1b0c,2024-04-07,-31.550000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+248d016205167882,2025-05-03,-88.260000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+24a0144a6369828d,2024-03-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+24b17ddda282abc5,2025-04-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+24b907266a57ad6e,2024-05-04,-29.290000,קפה נחת,,,food/coffee,maya/card
+251b7696a416cf7b,2025-04-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+25653adb965e9eab,2025-05-17,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+257f410408ca8ae7,2024-12-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+2616f15e2ebea704,2025-04-17,-96.000000,קולנוע הכוכב,,,leisure/culture,maya/card
+264ba5a8649fcbb2,2025-05-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+264e0bc2238acc0a,2024-03-10,-203.890000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+26656282e5d8bafe,2024-10-24,-700.000000,דנה כץ: מזל טוב!,,,gifts/weddings,maya/bit
+2667b2bf1492aed1,2025-02-22,-809.230000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+2676164a28f81293,2024-02-10,-17.350000,קפה נחת,,,food/coffee,maya/card
+26ffb29eda9c857b,2025-05-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+27296bbae3506c9c,2025-03-05,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+2750a0ecada3ab93,2023-07-25,-166.830000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+275f64655a5e1278,2023-08-11,-25.290000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+2781665b646d6ece,2023-12-16,-641.850000,סופר גפן - הדר,,,food/groceries,eitan/card
+27a688dee0360f84,2024-01-16,-23.940000,קפה נחת,,,food/coffee,maya/card
+27b0a39250811e7b,2024-04-20,-153.770000,פיצה נאפולי שלנו,,,food/dining out,maya/card
+27c589f573b62ac4,2023-09-10,6382.190000,Transfer checking-card,,,transfer/card,eitan/card
+27ed47366a1f5ece,2023-06-01,5870.550000,Opening balance,,,reconciliation/opening balance,eitan/checking
+27f8e9e278c5661c,2023-06-18,-38.260000,PARKO* חניה,,,car/parking,maya/card
+27fab5266cdf39f7,2024-02-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+27fc5a755f5d8772,2024-01-25,-228.810000,מי נווה ארזים,,,utilities/water,eitan/checking
+280770f4d3ddc3f0,2024-06-17,-426.720000,FASHION OUTLET 22,,,shopping/clothes,maya/card
+2846b237e35999c7,2023-11-07,-30.240000,LA PAUSE COFFEE,,,food/coffee,maya/card
+2894b11b23176861,2024-04-08,-50.610000,פארמה פלוס 33,,,health/pharmacy,maya/card
+28c294341f20d34c,2024-04-09,60.000000,שירה גל: על הפיצה,,Paid back their share of dinner,food/dining out,maya/bit
+28c3e17bb735e37d,2024-05-10,12614.660000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+292866a3d441553b,2025-02-16,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+29329ce5ab04e0f6,2024-08-17,-250.610000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+29457f7cfeaf9418,2024-08-10,-11118.420000,Transfer checking-card,,,transfer/card,maya/checking
+296e072f6f802924,2025-03-13,-315.150000,FASHION OUTLET 22,,,shopping/clothes,eitan/card
+2972f26af13ec111,2025-02-10,-4569.420000,Transfer checking-card,,,transfer/card,eitan/checking
+29f50c113a13e6c2,2025-04-17,-412.600000,פארמה פלוס 33,,Much larger than the usual pharmacy charge (about 100). I tagged it health/pharmacy: was part of it for Yuval (kids)?,health/pharmacy,maya/card
+2a24a3b823e31af2,2023-08-16,-105.520000,SHOPGLOBE.COM,,,shopping/online,maya/card
+2a3b0918a1553269,2024-11-02,-608.710000,סופר גפן כפר יונה,,Hosting Eitan's parents,food/groceries,eitan/card
+2ad2c5da81510455,2023-08-12,-35.990000,"קופ""ח שלום - השתתפות",,Blood tests,health/doctor,maya/card
+2b32b5252cd6f75e,2025-05-19,-146.000000,FOODRUSH*THAI BOX,,"Two identical orders on the same evening: a double charge to dispute, or two orders?",food/delivery,eitan/card
+2b3c49450f97de9b,2024-09-15,-41.970000,LA PAUSE COFFEE,,,food/coffee,maya/card
+2b721e91c8e329c3,2025-03-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+2bdb9d2a11c8e331,2024-06-10,-200.000000,Transfer card-bit,,,transfer/bit,maya/card
+2bdc016a675a7c7a,2025-04-19,-95.610000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+2c33df01150de83a,2024-06-17,-21.510000,קפה נחת,,,food/coffee,maya/card
+2c8d3dfb89c23f37,2024-11-20,-157.280000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+2ccbfc4762a5398f,2024-12-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+2cd15cf5ebf0aa1a,2025-05-04,-68.010000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+2cfad03a1eb8879e,2024-03-20,-274.720000,FUELPOINT 117,,,car/fuel,eitan/card
+2d01505b94e46b07,2024-02-28,137.030000,Interest,,,savings/interest,savings/savings
+2d02c385890165f1,2024-07-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+2d2f600c154789de,2023-07-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+2d7f5b2bae0b8fd0,2025-05-01,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+2d9cf42978256940,2025-02-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+2ddd4c8016b8ab83,2024-09-26,-35.740000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+2de21d30441fee77,2025-06-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+2dff74981d176d8b,2024-12-20,-19.090000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+2e3fb2bf22aeb418,2024-04-07,-200.000000,Transfer card-bit,,,transfer/bit,maya/card
+2e42f742f930954d,2023-12-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+2e5403663bd553b0,2023-11-09,-290.970000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+2e67da1dea3df76e,2024-01-28,-129.960000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+2e727670c371322a,2024-09-01,-53.730000,פארמה פלוס 33,,,health/pharmacy,maya/card
+2e7aae1b6d62f78e,2024-07-18,-29.320000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+2ea3eac51f9a0a01,2025-04-23,-88.090000,KIDZONE KIDS,,Pyjamas,kids/clothes,maya/card
+2ec9866573e52a63,2025-06-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+2ed5fd7e502ee5ee,2025-02-02,-360.300000,BURGERS & CO TLV,,,food/dining out,maya/card
+2f1f17a846eff6cb,2025-04-28,-140.470000,פירות וירקות האחים,,,food/groceries,maya/card
+2f5a8aa2caa422c7,2024-09-14,-101.410000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+2f836320ad9c3df9,2025-01-23,-191.120000,TAVERNA TO STEKI,,,vacation/food,eitan/card
+2f8ca73cff78e1f9,2025-03-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+2fe046098ace3813,2025-04-23,-200.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+2fe9f00fe689623e,2025-03-05,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+2ff44b2a5e964bc4,2025-03-09,-125.030000,פארמה פלוס 33,,,health/pharmacy,maya/card
+3020d20f97a4181b,2024-04-23,-83.840000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+3036bc3558e7c4af,2024-08-25,-247.780000,FUELPOINT 117,,,car/fuel,eitan/card
+3042c4694b87c0e6,2023-07-10,4588.010000,Transfer checking-card,,,transfer/card,eitan/card
+304e4046203bef97,2023-08-23,-464.400000,בית ונוי - נתניה,,,home/household,maya/card
+30afef59d41042f7,2024-11-14,-296.860000,בגדי אורן,,,shopping/clothes,maya/card
+30c20fcd4cda35c8,2024-03-26,-166.530000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+30f240f56855b7c4,2024-02-05,-262.750000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+31297ef02a9392d4,2025-04-16,380.000000,אורית מ.: מיטת תינוק,,Sold the crib,income/second-hand,maya/bit
+31435fd9ac23a892,2024-10-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+316fe58c2a2cc28f,2023-06-27,-646.160000,סופר גפן סניף 17,,,food/groceries,eitan/card
+31743950c33a3376,2023-09-25,-120.790000,פיצה נאפולי שלנו,,Lunch with Ofir,food/dining out,maya/card
+3184387891127cbf,2025-03-23,-62.820000,צעצועי הקסם,,,kids/toys,maya/card
+319b8b2ea8163d98,2024-09-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+31a070028f8559c0,2024-01-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+31aa1d01eb6a93e1,2024-03-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+31e97dd1eea9acb7,2023-08-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+3211a98a640e649e,2024-04-10,11814.210000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+321c1edc129f7cb7,2025-03-13,120.000000,רוני אלמוג: על המסעדה,,Paid back their share of dinner,food/dining out,maya/bit
+3234d16ae42e70c2,2024-04-20,-114.000000,מסעדת הגפן הירוקה,,,food/dining out,maya/card
+324af2697b4eacff,2025-01-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+324fd8c5be5a1703,2024-11-15,-421.230000,בית ונוי - נתניה,,Bedding,home/household,maya/card
+32511d0d5fad8dc3,2023-11-19,-195.510000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+32805f302f780f76,2023-09-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+329f35352c0693c9,2024-08-04,-254.580000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+32a84e47f65b2df3,2023-07-17,-256.420000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+32c8e854fc688602,2024-06-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+32e013f7176e76fa,2024-03-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+32e0201ca60a4435,2025-05-16,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+3394bb13f941440f,2024-01-10,11955.450000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+33c2cd350a0123c3,2024-05-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+33c4382208ffa458,2024-03-19,-149.620000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+33e81b5d60564ff7,2024-07-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+33ef252e57dfa79c,2025-05-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+3463a28b95e7e9e2,2024-11-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+34778705d6d9b35f,2025-01-03,-2640.000000,SKYBLUE AIR,,"Athens, the two of us",vacation/flights,maya/card
+3487cd21c8eb04e1,2024-12-06,-40.490000,LA PAUSE COFFEE,,,food/coffee,maya/card
+3489407f0592b68d,2023-10-10,-5107.400000,Transfer checking-card,,,transfer/card,eitan/checking
+3492fde3bdaa7b24,2023-11-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+34bc9d203316e40e,2025-05-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+35065902018a628b,2024-07-02,-99.200000,פארמה פלוס 33,,,health/pharmacy,maya/card
+356b3d83a73292ea,2024-07-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+359f685daecedc08,2023-08-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+35b8504dbda15985,2025-05-12,-50.780000,SHOPGLOBE.COM,,Charger cables,shopping/online,maya/card
+360c6ae6c09d43ea,2024-07-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+364df84c71c1a043,2024-03-19,-79.230000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+3659f787873e88d9,2024-02-10,4557.680000,Transfer checking-card,,,transfer/card,eitan/card
+36646098157e353d,2025-05-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+3692e47c9fa1d868,2024-04-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+36e7d64647e4b788,2025-01-28,135.550000,Interest,,,savings/interest,savings/savings
+36f1bc18612cce38,2023-06-19,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+375d6ed4aea9424c,2024-11-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+377dd002fbbd82d9,2025-03-03,-100.000000,רוני אלמוג: יום הולדת שמח!,,Shira's birthday,gifts/birthdays,maya/bit
+3785e87df1770d6a,2024-05-04,-273.570000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+37b1b705899f43fc,2023-08-22,-1011.630000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+38089866a273d751,2023-12-10,-2837.630000,Transfer checking-card,,,transfer/card,maya/checking
+385a3afa2e0837a6,2024-03-17,150.000000,Transfer card-bit,,,transfer/bit,maya/bit
+387fcee34970c141,2025-05-19,-146.000000,FOODRUSH*THAI BOX,,"Two identical orders on the same evening: a double charge to dispute, or two orders?",food/delivery,eitan/card
+38819f92b82f6587,2025-04-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+38a5c9eb1fd53a3c,2023-11-10,2099.260000,Transfer checking-card,,,transfer/card,maya/card
+38a8b45ab7a0d251,2024-12-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+38ef6dd7350b90cb,2025-03-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+3920f1a24d841561,2024-05-10,-513.540000,סופר גפן אונליין,,,food/groceries,eitan/card
+3942a835b56bd8da,2025-01-22,-133.370000,פירות וירקות האחים,,,food/groceries,maya/card
+394ae3fdc9fa8c2a,2025-01-25,-570.620000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+39600a45a4d90b10,2024-05-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+397689eb2f458955,2024-10-25,-90.950000,SHOPGLOBE.COM,,,shopping/online,maya/card
+3980e9dee03b96b6,2025-01-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+39a5f8c57d47006a,2023-06-15,-100.000000,BIT,,"Group gift, our share (Bit)",gifts/birthdays,maya/card
+39b5dacb6e3a5a4d,2024-10-08,120.000000,יעל שגיא: חלק שלי,,Paid back their share of dinner,food/dining out,maya/bit
+39b8f20261588420,2025-05-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+39bed26f0e52d9df,2024-12-26,-150.000000,Transfer card-bit,,,transfer/bit,maya/card
+3a2aac0722b73002,2024-06-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+3a47649693c18882,2024-12-10,-293.870000,בית ונוי - נתניה,,,home/household,maya/card
+3a93d63648893c90,2024-05-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+3a963e09eeecbf40,2025-02-23,-124.440000,KIDZONE KIDS,,Rain boots,kids/clothes,maya/card
+3aae1c6914ce3434,2023-06-13,-456.500000,בית ונוי - נתניה,,,home/household,maya/card
+3ab6ca75eac37a0c,2024-09-27,-664.510000,סופר גפן סניף 17,,,food/groceries,eitan/card
+3b56f46f762fde2d,2025-03-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+3b7da52bceebaec7,2025-01-09,-173.910000,מסעדת הגפן הירוקה,,,food/dining out,eitan/card
+3ba23fbc38e62a26,2024-03-28,-85.000000,Transfer card-bit,,,transfer/bit,maya/card
+3baa36bd51b4cbd4,2025-05-26,-44.310000,LA PAUSE COFFEE,,,food/coffee,maya/card
+3bc3c596d5c84722,2023-07-18,-623.600000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+3bf40268d6e5bd3f,2024-05-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+3c54fbbd63caf5f6,2024-09-19,-251.690000,בגדי אורן,,Dress for the wedding,shopping/clothes,eitan/card
+3ca8610c948b05a3,2025-05-16,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+3cedcf82b3cdb002,2024-06-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+3cf4f201dee7fc58,2023-08-28,-193.030000,BURGERS & CO TLV,,Lunch with Ofir,food/dining out,maya/card
+3d072b7f58bb5d87,2025-06-14,-250.000000,נועם ברק: מתנה ליום הולדת,,,,maya/bit
+3d0fe79718f3c0cf,2025-01-02,-54.990000,Market stall vegetables,,,food/groceries,cash/wallet
+3d15c86842f4f1f5,2024-01-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+3d262419bd60efa6,2023-07-11,-152.720000,פארמה פלוס 33,,,health/pharmacy,maya/card
+3dea8be22751e899,2024-05-25,-327.620000,מי נווה ארזים,,,utilities/water,eitan/checking
+3e00d26f5fefde68,2024-08-12,-200.000000,Transfer card-bit,,,transfer/bit,maya/card
+3e151e594473e49b,2025-06-14,-38.380000,"קפה תמרה בע""מ",,,,maya/card
+3e31c76432b45836,2025-03-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+3e519e6bc475ffe5,2023-11-07,-33.850000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+3e67b9a5e15dab54,2024-02-10,2948.430000,Transfer checking-card,,,transfer/card,maya/card
+3e8352b54e1124fa,2024-09-12,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+3ecede08b830fa60,2025-01-18,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+3ed3f6d7835385d4,2024-08-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+3ef572406130cbcf,2023-11-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+3f2ae29e52004b4c,2025-03-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+3f2e6412b14a495d,2025-05-15,-33.010000,LA PAUSE COFFEE,,,food/coffee,maya/card
+3f3e27633bb9a371,2024-02-03,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+3f3f9f895bd6c1cb,2025-01-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+3f6cd3f167d3d257,2024-02-03,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+3fba954b541c59f5,2025-02-04,-447.350000,סופר גפן סניף 17,,Stocking up before the holiday,food/groceries,eitan/card
+3fc22c3095a97aed,2024-03-20,-68.060000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+3fe7e3e2a3b45360,2023-12-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+4021449a6a6f4f7d,2025-05-27,-750.000000,Transfer bit-checking,,,transfer/bit,maya/bit
+4077aeca6092b96e,2023-07-25,-365.770000,מי נווה ארזים,,,utilities/water,eitan/checking
+40846abecb4089f4,2025-06-02,-148.910000,בגדי אורן,,Shoes for Eitan,shopping/clothes,eitan/card
+40d1f25b30fd76cd,2024-10-06,-164.680000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+40e652aae5707971,2023-08-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+40e68853e2c9c288,2023-10-16,-116.680000,SHOPGLOBE.COM,,Yoga mat,shopping/online,maya/card
+40ea85fc9951c9e8,2025-01-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+40ebf3a597f59e64,2023-09-25,-321.390000,מי נווה ארזים,,,utilities/water,eitan/checking
+41021d099d8d05bf,2024-01-17,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+417f93f33a9c0135,2024-10-11,-39.270000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+418f96dba33f7090,2024-03-10,9500.000000,גלבוע הנדסה - מענק,,,income/bonus,eitan/checking
+41bd0f1d43ee23b5,2024-05-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+41c0b84bce07c540,2025-02-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+41ccd627e55a8117,2024-08-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+41d4b1cb9e5c8fdf,2024-02-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+4212b62893aa83d3,2024-06-17,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+422afd0fa45c063d,2024-12-25,-116.710000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+4230edf5e032e0ea,2023-06-04,-323.300000,BURGERS & CO TLV,,With Dana and Roni,food/dining out,eitan/card
+423a0f381a1958b0,2024-07-22,-143.590000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+424d583e3f002000,2025-06-10,-5032.360000,Transfer checking-card,,,transfer/card,eitan/checking
+425260ed0689d0f9,2023-12-28,-453.740000,סופר גפן - הדר,,,food/groceries,eitan/card
+42b14a0d495176a5,2024-03-10,-20.750000,PARKO* חניה,,Meeting in Tel Aviv,car/parking,maya/card
+42b543882eaac4e1,2025-01-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+42e8cb20c9f83333,2024-09-23,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+4304372092985292,2025-06-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+43406dc7b60e6343,2024-07-14,-369.720000,TASCA DO BAIRRO,,,vacation/food,eitan/card
+434186a469404883,2023-12-07,-44.700000,קפה נחת,,,food/coffee,maya/card
+4344d18367ab54b5,2023-08-16,-81.480000,פירות וירקות האחים,,,food/groceries,maya/card
+4357f402fab2d994,2025-05-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+435a185417cdab3c,2025-01-15,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+436c783ca6cdbfc1,2023-11-03,-24.590000,LA PAUSE COFFEE,,,food/coffee,maya/card
+436e96c9103806ed,2023-09-19,-290.670000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+43876fdec8564d26,2025-02-10,11790.650000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+43c0910582464696,2023-12-17,-104.500000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+43c980ec7f0d4276,2025-01-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+442385b37f0767c3,2024-09-03,-241.310000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+442721f536176e7f,2025-02-18,-38.910000,PARKO* חניה,,,car/parking,maya/card
+4478901de8b9be1e,2023-10-15,-527.080000,סופר גפן סניף 17,,,food/groceries,eitan/card
+44a8d07f065c7f6a,2023-08-03,-679.890000,סופר גפן סניף 17,,,food/groceries,eitan/card
+44aeba558a78be62,2024-11-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+44e35e56d792e015,2025-06-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+44eb4114a655c3e0,2025-03-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+450b2530051ffb54,2024-08-06,-18.170000,קפה נחת,,,food/coffee,maya/card
+45117fd02561151c,2023-06-01,52000.000000,Opening balance,,,reconciliation/opening balance,savings/savings
+451c0f7878ee7d47,2025-04-19,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+45b14a7585a6c2ea,2024-10-13,-117.150000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+45e1656e10df3330,2023-08-14,-58.630000,Market stall vegetables,,,food/groceries,cash/wallet
+45e90f673f448225,2023-09-04,-36.040000,פארמה פלוס 33,,,health/pharmacy,maya/card
+45eef5a98902bae3,2024-10-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+466166a7862d4bd7,2024-10-25,-149.800000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+467101bd131e794b,2025-05-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+469281d099846024,2023-06-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+46b3fd9c8a0b008f,2025-06-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+470423d8e5db7d20,2025-05-01,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+474065bb1edac14c,2024-12-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+478fe2f6a7888cad,2025-04-27,-526.960000,סופר גפן אונליין,,,food/groceries,eitan/card
+47f935fd381c5b36,2025-05-12,-297.870000,חומוס אליהו ובניו,,Lunch with Ofir,food/dining out,maya/card
+480594c6cc12b3e5,2024-01-19,-320.000000,TICKETZONE*,,"Concert, with Yael and Noam",leisure/culture,maya/card
+480e0958f6722bf0,2025-01-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+483010e59aa4ae37,2025-03-12,-5380.000000,מגן ביטוח - ביטוח רכב,,"Comprehensive + third party, for the year",car/insurance,eitan/checking
+483eb88182a8a72f,2023-11-08,-488.490000,סופר גפן - הדר,,,food/groceries,eitan/card
+484b3269aaa74213,2024-04-13,-18.780000,PARKO* חניה,,,car/parking,maya/card
+48822d4eab2dde52,2024-04-20,-660.040000,סופר גפן סניף 17,,,food/groceries,eitan/card
+489769584fded799,2025-04-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+4943ca52d43bf8c5,2023-10-06,-34.440000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+4954acc17de68bac,2024-06-18,-312.490000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+49827dd646af41c3,2024-12-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+49a46e954492e802,2024-07-23,-362.730000,סושי-לי רמת השרון,,,food/dining out,eitan/card
+49b86bf45af005fd,2023-12-16,-37.740000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+49b991a4e7af7b37,2024-03-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+49d2ce60945439f5,2024-05-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+49dc3091053651a9,2025-06-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+4a951b3402e61f82,2024-07-15,-87.200000,Bakery on the corner,,,food/groceries,cash/wallet
+4abb425bbc8ea08a,2024-04-10,-9930.600000,Transfer checking-card,,,transfer/card,maya/checking
+4ad08b16341bd917,2023-09-03,-256.310000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+4b1aa1a2f33aa3ef,2024-10-06,-167.490000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+4b4841fce2513763,2024-10-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+4b5101eb872b6625,2024-07-25,-100.000000,נועם ברק: יום הולדת שמח!,,,gifts/birthdays,maya/bit
+4b60f3b617e29e91,2023-08-17,-143.090000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+4b653b5f36a3f3c3,2025-02-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+4b693f7d03b49992,2024-03-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+4b7bd9008f73bd57,2024-11-02,-20.090000,LA PAUSE COFFEE,,,food/coffee,maya/card
+4b7d53ce09ee0e2f,2023-06-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+4ba2a283a76eab8d,2024-06-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+4bae8007503c4c19,2025-02-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+4bc62370dbfe6e20,2023-06-10,12688.550000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+4bc99f9b05ff2d81,2024-04-13,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+4bcfbbc715db3f58,2024-04-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+4bdd52aad0628a6f,2024-04-14,-99.900000,מסעדת הגפן הירוקה,,"Work lunch, not reimbursed",food/dining out,maya/card
+4bf0e28576e40bef,2024-10-28,-101.630000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+4c2c0a2a33d236bc,2024-09-10,12009.060000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+4c47126e05a2759c,2024-02-18,-637.510000,סופר גפן כפר יונה,,Shabbat dinner for 10,food/groceries,eitan/card
+4c9efed0ce6a59a6,2024-12-10,-152.640000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+4cc33ce9ccb0491f,2024-12-05,-624.610000,סופר גפן אונליין,,,food/groceries,eitan/card
+4ce609af18c4acd3,2024-06-10,-700.000000,שירה גל: מזל טוב!,,,gifts/weddings,maya/bit
+4cf531e1f949fd5f,2024-11-13,-601.320000,סופר גפן סניף 17,,,food/groceries,eitan/card
+4d18e27aeff8932c,2023-09-18,-32.850000,PARKO* חניה,,,car/parking,maya/card
+4d4c65b0ad08905b,2023-08-10,2126.040000,Transfer checking-card,,,transfer/card,maya/card
+4d5068daaff1b209,2025-01-10,11652.280000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+4d9077350dfc7f86,2025-02-03,-163.070000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+4d98b595968ac37a,2025-04-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+4d9fb5b4cf981e7a,2024-03-08,-93.840000,SHOPGLOBE.COM,,,shopping/online,maya/card
+4dbf872e953e0fb0,2024-11-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+4dc456be596d085b,2023-07-16,-62.510000,Bakery on the corner,,,food/groceries,cash/wallet
+4dd5acd791e4aad7,2023-09-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+4de3339e99a5f3f8,2025-01-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+4e2e34358c4abc53,2023-06-05,-3150.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+4e6a18ace1c16549,2023-11-14,-16.810000,קפה נחת,,,food/coffee,maya/card
+4e7bdf23964929a7,2024-04-05,-896.950000,סופר גפן אונליין,,,food/groceries,eitan/card
+4ea9466e7867e711,2024-10-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+4f39e88998451339,2024-12-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+4f4d65ec4cf01c6d,2024-11-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+4f715081488ec1e9,2023-09-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+4f7ea26909e8d4b1,2024-02-06,-275.650000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+4fe20dac6100649e,2025-02-17,-134.030000,פארמה פלוס 33,,,health/pharmacy,maya/card
+4ff8d39d666e317a,2024-04-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+501764016b0137b7,2024-03-17,-150.000000,Transfer card-bit,,,transfer/bit,maya/card
+5038553f40b2242a,2024-02-07,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+50a39d22ad6f2b79,2025-02-10,6661.970000,Transfer checking-card,,,transfer/card,maya/card
+50f6fed917024e70,2023-08-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+5119a6c10c807227,2025-01-20,120.000000,יעל שגיא: חלק שלי,,Paid back their share of dinner,food/dining out,maya/bit
+511e3892fb380024,2024-06-05,-72.490000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+516e90f0e49bedfc,2023-08-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+5170b4291cf96ed6,2024-12-03,-144.000000,קולנוע הכוכב,,,leisure/culture,maya/card
+51b3bd4e4070462b,2025-02-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+51c0d0549b95cbb8,2024-07-15,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+51dce4dc31218bfa,2024-11-02,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+52110c3466f81001,2023-11-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+521e004245bb0722,2024-09-04,-913.260000,סופר גפן אונליין,,,food/groceries,eitan/card
+526c1009f7661c70,2024-02-09,-44.130000,"קופ""ח שלום - השתתפות",,Dermatologist,health/doctor,maya/card
+526dcfca08802894,2024-02-24,-20.570000,PARKO* חניה,,,car/parking,maya/card
+52848386c0466593,2024-09-12,-250.000000,רוני אלמוג: יום הולדת שמח!,,,gifts/birthdays,maya/bit
+52a71ddbfef2eba0,2025-04-08,-163.590000,מסעדת הגפן הירוקה,,,food/dining out,eitan/card
+52ae4b23e470edfa,2025-04-26,-66.780000,פירות וירקות האחים,,,food/groceries,maya/card
+52cde2598ac4524f,2025-01-09,-240.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+52d5e98d9a24a824,2024-06-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+52d6a3c450a6b8b8,2023-06-10,-96.000000,קולנוע הכוכב,,,leisure/culture,maya/card
+53261f14d2174883,2025-04-11,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+535a03f28a1b5912,2024-02-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+53bf4d164ba79908,2023-06-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+53e7e861adac8c3e,2024-06-24,-40.090000,קפה נחת,,,food/coffee,maya/card
+540948adec7fe7c7,2024-05-02,-240.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+5422bf1a98d38873,2024-03-21,-472.290000,סופר גפן אונליין,,,food/groceries,eitan/card
+543ed6b3f75e3fa4,2024-04-14,-17.500000,LA PAUSE COFFEE,,,food/coffee,maya/card
+547091e1097cf32f,2023-11-20,-571.090000,סופר גפן סניף 17,,,food/groceries,eitan/card
+54a55642ad07ec7b,2024-06-04,100.000000,Transfer card-bit,,,transfer/bit,maya/bit
+54f6bb2c7c0ef2a5,2023-08-26,-23.300000,קפה נחת,,,food/coffee,maya/card
+55094d5bc1ce6078,2025-01-02,-61.180000,פארמה פלוס 33,,,health/pharmacy,maya/card
+554c284c4d841402,2025-01-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+5575a80b7a88b3e7,2025-01-10,-5530.730000,Transfer checking-card,,,transfer/card,eitan/checking
+55986f725195aabc,2023-08-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+55b0ec5fa41bfd07,2023-10-01,-181.590000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+56026ec01b674ab7,2025-04-03,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+56122bbcaaafc867,2024-01-22,-381.400000,סושי-לי רמת השרון,,,food/dining out,maya/card
+562e4288e1949cdc,2024-02-10,-4557.680000,Transfer checking-card,,,transfer/card,eitan/checking
+5660276ca07540cd,2023-07-17,-30.940000,LA PAUSE COFFEE,,,food/coffee,maya/card
+568b6356b2607781,2024-09-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+56aaf6180552a9a8,2025-04-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+56b16cb89d72e5fc,2025-02-16,-167.060000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+56c164ab51ea118d,2024-07-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+56d504ed8706ebda,2025-02-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+56e4a927fb541ac5,2023-10-25,-23.130000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+570d89de53515cc3,2024-11-06,-200.000000,דנה כץ: מתנה מכולנו,,,gifts/birthdays,maya/bit
+571f4eb30e23c088,2025-02-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+576d2943c991a06f,2024-08-17,-237.470000,בגדי אורן,,Shoes for Eitan,shopping/clothes,maya/card
+579db813e4644c82,2024-02-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+57c0f686411f0b86,2024-11-23,-138.100000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+57d896090c89094c,2024-04-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+57f76f46e5a80ffc,2024-08-17,-200.000000,דנה כץ: יום הולדת שמח!,,,gifts/birthdays,maya/bit
+58161f310d0fa148,2024-06-22,-1050.530000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+5848d1b852928b88,2024-03-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+58607fa76a893c37,2024-07-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+58b4145ae775dc0a,2023-06-03,-48.630000,"קופ""ח שלום - השתתפות",,Dermatologist,health/doctor,maya/card
+58e879833cdecca9,2025-05-11,-250.230000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+593d0567ae921a1b,2023-10-24,-201.780000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+597160bd0b023d59,2024-01-08,-54.500000,פארמה פלוס 33,,,health/pharmacy,maya/card
+597ff02c7ab13086,2024-07-10,-3459.090000,Transfer checking-card,,,transfer/card,maya/checking
+59875413961e3189,2023-11-12,-191.270000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+59e771f82912c9a8,2023-10-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+5a1f07e3ea731bd3,2024-12-03,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+5a36fe5426954291,2024-08-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+5a393b0ebb5b4fd0,2023-10-17,-260.470000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+5a58a2a551c22014,2024-10-10,4680.530000,Transfer checking-card,,,transfer/card,eitan/card
+5a9d62d072d541b9,2024-05-28,-91.440000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+5ae22f8c345a1693,2024-11-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+5b341964a1667cc3,2023-09-04,-261.690000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+5b3a011662e9add3,2023-10-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+5b5088d6852f6238,2024-03-22,-36.760000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+5b5687c7ffa4b42d,2025-03-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+5b81404135e0234e,2024-01-25,-159.040000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+5bcbda7118031310,2023-11-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+5bdc18c9035a6a4d,2024-09-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+5be4df5adc764590,2025-01-05,-33.690000,PARKO* חניה,,,car/parking,maya/card
+5c1e9b883320a575,2023-09-15,-199.250000,פירות וירקות האחים,,,food/groceries,maya/card
+5c4d18818ec8ba9d,2023-10-14,-39.450000,PARKO* חניה,,,car/parking,maya/card
+5c4fb4cefd261a3e,2025-02-11,-20.580000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+5c673cb090715f76,2025-01-10,2788.720000,Transfer checking-card,,,transfer/card,maya/card
+5ca29dd8c5e17416,2024-12-04,-240.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+5cb8067537892f61,2025-03-15,500.000000,Transfer bit-checking,,,transfer/bit,maya/checking
+5cbcce85b5e6ea44,2025-05-17,-588.660000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+5ce0fe77a61c5839,2025-02-12,-363.600000,פיצה נאפולי שלנו,,Lunch with Ofir,food/dining out,maya/card
+5cf5e74e6bf81a6e,2024-10-01,-60.000000,רוני אלמוג: פיצה ביום שישי,,,food/dining out,maya/bit
+5d469621a34e0555,2024-04-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+5db7f77069d15312,2024-03-11,-7840.000000,SKYBLUE AIR,,"Lisbon in July, booked early",vacation/flights,maya/card
+5dc0a1305c96ef3c,2023-07-02,-156.480000,מסעדת הגפן הירוקה,,With Dana and Roni,food/dining out,eitan/card
+5dd63246c27e6b7c,2024-10-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+5e04492c40102def,2024-09-18,-40000.000000,Withdrawal to Eitan's checking,,,transfer/savings,savings/savings
+5e137843c4be0ae4,2024-07-12,-45.480000,קפה נחת,,,food/coffee,maya/card
+5e4b8bd4b7126704,2024-07-14,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+5f174294aa116f78,2025-04-08,-26.030000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+5f20971fb28d96c1,2024-03-19,-40.560000,Market stall vegetables,,,food/groceries,cash/wallet
+5f656e0a09dcfd72,2023-09-05,-97.210000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+5f972ab3c9a24915,2023-10-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+5fc995c5cda5f54c,2025-05-10,5760.070000,Transfer checking-card,,,transfer/card,eitan/card
+5fcb14bbd5746d01,2024-10-10,2311.740000,Transfer checking-card,,,transfer/card,maya/card
+5fd0ed64918c7608,2024-11-06,-200.000000,Transfer card-bit,,,transfer/bit,maya/card
+5fd1ebe57bf0af1c,2023-10-14,-200.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+600b4758665c2152,2024-09-12,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+60148cf3bf90ed91,2024-02-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+602557c87d4e76e0,2025-03-15,-500.000000,Transfer bit-checking,,,transfer/bit,maya/bit
+602f6d0e9776fc9b,2023-08-19,-172.240000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+60382ee22b223110,2024-09-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+60591a877f95fa44,2024-04-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+605c53aaee553868,2024-07-10,4831.790000,Transfer checking-card,,,transfer/card,eitan/card
+60e659b6a160d7ff,2024-12-08,-53.390000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+60e7444854a052ff,2024-08-17,-200.000000,Transfer card-bit,,,transfer/bit,maya/card
+61235ff6a3a8a397,2024-06-10,200.000000,Transfer card-bit,,,transfer/bit,maya/bit
+617e24e589a6b52b,2024-04-21,-44.610000,קפה נחת,,,food/coffee,maya/card
+619e7ada8a5d47fb,2023-07-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+61cd5c29b5d603f8,2024-12-14,-1480.000000,צימר נוף הגליל,,"Two nights up north, Pita came too",leisure/weekend away,eitan/card
+62038a507e628e9c,2024-02-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+62265a9d1f6f6c12,2024-08-24,-60.020000,"קופ""ח שלום - השתתפות",,,health/doctor,maya/card
+622983ca5af2cfcd,2025-02-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+6232cc644226c488,2025-02-03,-929.580000,מוסך האחים גבאי,,Periodic service,car/service,eitan/card
+6367c0a6e027b20d,2023-09-05,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+6370d58904292ed2,2023-10-09,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+63f1735d94fca044,2024-05-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+644d2c9f8955dcdf,2024-06-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+647067cbc3153002,2025-04-28,-45.370000,"קופ""ח שלום - השתתפות",,,health/doctor,maya/card
+64a98d09e9db3674,2025-02-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+64b04c371cc426d7,2025-05-28,114.880000,Interest,,,savings/interest,savings/savings
+64d155636de470d5,2023-06-02,-156.170000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+653cff35ae577f0e,2025-01-20,-182.950000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+653ffc15b74e0d8e,2024-03-25,-234.450000,מי נווה ארזים,,,utilities/water,eitan/checking
+6549d6afe234fd47,2025-03-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+655b783854664fd7,2023-08-20,-380.000000,"מרפאת שיניים ד""ר לוין",,"Checkup and cleaning, both of us",health/dental,eitan/card
+65ad78dba8fdd588,2024-09-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+65eba862f05a8fc5,2023-10-13,-143.040000,פארמה פלוס 33,,,health/pharmacy,maya/card
+660534a72ab359c3,2024-02-23,-93.490000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+6607c9b1bf842022,2024-08-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+66195d39be41bf5b,2024-02-21,-269.270000,בגדי אורן,,,shopping/clothes,maya/card
+6651ff9b4dc1ed33,2024-01-13,-499.130000,סופר גפן סניף 17,,,food/groceries,eitan/card
+66a14270779dde0a,2025-05-17,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+66b2119cf97b0d86,2024-11-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+66c95a53c96bf505,2024-05-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+66d7d8229716e517,2024-04-04,-278.900000,FUELPOINT 117,,,car/fuel,eitan/card
+67067edae93e14d4,2025-03-25,-216.730000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+6710af910dd739b9,2024-01-21,-96.000000,פארמה פלוס 33,,,health/pharmacy,maya/card
+6710af910dd739b9,2024-01-21,-58.000000,פארמה פלוס 33,Sun hat for Yuval,,kids/clothes,maya/card
+67657a7e386aac91,2024-12-11,-35.650000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+67991a9ae848e1f0,2025-03-05,-170.670000,פירות וירקות האחים,,,food/groceries,maya/card
+67c667377dafc95f,2025-02-25,-493.930000,סופר גפן סניף 17,,,food/groceries,eitan/card
+67cb3cd896b19a35,2025-03-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+67d61ea52371bcfa,2023-10-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+67d721354ae2fee8,2025-02-21,-309.500000,סושי-לי רמת השרון,,"Work lunch, not reimbursed",food/dining out,maya/card
+67f74b37d7dbdb96,2024-10-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+6804fcb8257a8be3,2024-10-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+6806ffa8c95e959f,2024-01-18,-329.300000,FUELPOINT 117,,,car/fuel,eitan/card
+6831cb6eb9f89926,2025-06-06,-191.340000,FUELPOINT 117,,What was this? Ask Eitan,,eitan/card
+683654dc91b8d861,2024-12-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+683a7442deece6be,2024-10-02,-71.510000,Market stall vegetables,,,food/groceries,cash/wallet
+683e38d89a8ca4a4,2023-06-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+6873dc2bd1fd09dd,2024-11-10,3431.640000,Transfer checking-card,,,transfer/card,maya/card
+69189a8a265d2d21,2024-05-25,-148.050000,סושי-לי רמת השרון,,Lunch with Ofir,food/dining out,maya/card
+695bf8aa1568cd78,2024-12-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+698ece85421b0838,2023-11-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+69a4c5f20b50ceb8,2023-09-08,-240.380000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+69aabe537e8f5071,2024-06-05,-156.970000,פארמה פלוס 33,,Sunscreen and vitamins,health/pharmacy,maya/card
+69b786a3f369609b,2024-10-23,-28.440000,LA PAUSE COFFEE,,,food/coffee,maya/card
+69d76c8915245c26,2024-08-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+6a0dcd0f57a9ab0a,2025-02-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+6a2d7df1b881097b,2023-09-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+6a6902063a2d1562,2024-11-04,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+6a93669bf756eea1,2024-10-12,-96.000000,קולנוע הכוכב,,,leisure/culture,maya/card
+6aae29608bc6a793,2024-05-28,-38.210000,PARKO* חניה,,,car/parking,maya/card
+6ab5616e5fa55cd1,2025-02-24,-192.670000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+6af01b75f59b188c,2024-01-18,-672.460000,סופר גפן אונליין,,,food/groceries,eitan/card
+6b23f891ce2f079b,2025-05-02,-484.740000,סופר גפן - הדר,,,food/groceries,eitan/card
+6b3e55fe150d4447,2024-10-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+6b6481ee4f7bc2d9,2024-01-28,111.280000,Interest,,,savings/interest,savings/savings
+6b919463061a5347,2024-05-06,-204.820000,בית ונוי - נתניה,,,home/household,maya/card
+6bc072e895fcee54,2023-08-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+6bf140e1495dfc9f,2024-01-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+6bf7a94ce3d43f17,2024-05-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+6bfc58f7dc3858ec,2025-06-10,-3921.320000,Transfer checking-card,,,transfer/card,maya/checking
+6c21c2fef2a34dc3,2024-05-13,-15.090000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+6c305790df78e854,2023-10-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+6c61a1d69097a004,2025-03-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+6c7c8d1c1591560b,2024-08-03,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+6ca4a6ff9f4fbccc,2025-05-14,-58.470000,Market stall vegetables,,,food/groceries,cash/wallet
+6cb6b386846a653d,2024-09-23,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+6cd0582f37076261,2024-07-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+6cd3006493d5b95f,2025-04-07,-624.700000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+6ceee1c8dc4eb796,2025-01-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+6d03cf0195fd462f,2025-03-27,-42.220000,קפה נחת,,,food/coffee,maya/card
+6d04ee789bb984a8,2023-12-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+6d051605e1338542,2025-05-22,-138.700000,צעצועי הקסם,,Puzzle for the trip,kids/toys,maya/card
+6d3653d8cc2f1810,2024-10-02,-128.070000,פארמה פלוס 33,,,health/pharmacy,maya/card
+6d555a5e69a7a6d1,2025-06-01,-188.220000,KIDZONE KIDS,,,kids/clothes,maya/card
+6dbcbfabbf08ae96,2024-12-22,-226.640000,KIDZONE KIDS,,,kids/clothes,maya/card
+6dc4c3d7cdc2b182,2025-02-16,-19.670000,PARKO* חניה,,,car/parking,maya/card
+6e1891e3dff51bc7,2023-11-19,-320.000000,TICKETZONE*,,"Concert, with Yael and Noam",leisure/culture,maya/card
+6e644058515594b4,2025-05-17,-19.540000,קפה נחת,,,food/coffee,maya/card
+6e81cf8be03856da,2023-06-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+6f138af16d99dce1,2025-05-28,-124.320000,פארמה פלוס 33,,,health/pharmacy,maya/card
+6f57c15b9b4e23ac,2025-01-23,-367.870000,סופר גפן סניף 17,,,food/groceries,eitan/card
+6f866c98052cb4ac,2024-02-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+6f91938ea4b5de60,2024-03-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+6fb64e608e5bc860,2025-02-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+705f224faa89e8a8,2023-06-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+706740ccb5117f16,2025-01-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+70aa53ef19504089,2023-11-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+70b44c6f5b3ca160,2024-02-20,-35.460000,LA PAUSE COFFEE,,,food/coffee,maya/card
+70e99d74401b60c5,2024-02-24,-380.000000,"מרפאת שיניים ד""ר לוין",,"Checkup and cleaning, both of us",health/dental,eitan/card
+7168d821df34157c,2023-10-15,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+71695e0c171f70fa,2025-05-22,-174.950000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+7179ab6a629d6a22,2025-01-02,-28.300000,קפה נחת,,,food/coffee,maya/card
+71b0db65afb314da,2023-06-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+71d1b9253ba2fc45,2023-06-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+71d9830b97230d92,2024-03-06,-118.260000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+72148724f3c1bb09,2023-11-10,12372.210000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+722a71152759bcd8,2024-05-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+724a4975c3405c34,2024-07-14,-670.880000,סופר גפן סניף 17,,Hosting Eitan's parents,food/groceries,eitan/card
+724f4efa45493f86,2024-09-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+726045f41981a6b4,2023-10-10,11968.930000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+726f2637d7db4985,2024-02-21,-21.820000,קפה נחת,,,food/coffee,maya/card
+7299a441349350d8,2024-10-10,-4680.530000,Transfer checking-card,,,transfer/card,eitan/checking
+72c519476a0e7c46,2023-12-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+72c7e501f3107347,2023-07-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+72daf67d8547cff1,2023-10-25,-10.390000,PARKO* חניה,,,car/parking,maya/card
+7320d1d9dc3ac572,2025-06-11,-70.000000,Haircut (Eitan),,,,cash/wallet
+736febb61f5a044f,2024-08-28,95.890000,Interest,,,savings/interest,savings/savings
+7370649ce703d62d,2023-07-04,-200.000000,BIT,,Birthday gift (Bit),gifts/birthdays,maya/card
+73e0ccde8598af1c,2023-11-15,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+73feb37ace455528,2024-09-27,-96.100000,בית ונוי - נתניה,,,home/household,maya/card
+7465daa8014d88b0,2025-03-13,-158.240000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+746e897294b46579,2025-04-13,-142.990000,פירות וירקות האחים,,,food/groceries,maya/card
+749411928b1de90d,2024-04-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+74ce3a12f766c105,2024-07-28,119.600000,Interest,,,savings/interest,savings/savings
+74d2352022b30122,2023-06-28,-44.610000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+74e50f6fd6d0d124,2024-10-14,-192.450000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+74ea6c5d61229ad1,2024-07-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+74f33b0f2bb337e3,2025-02-10,-6661.970000,Transfer checking-card,,,transfer/card,maya/checking
+753a97416bed915c,2025-01-03,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+7567ded4361afe5e,2024-02-02,-1205.860000,מוסך האחים גבאי,,Periodic service,car/service,eitan/card
+7574b87890e93609,2024-09-12,-171.510000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+757d35f3603c91c1,2025-04-10,-7333.350000,Transfer checking-card,,,transfer/card,maya/checking
+75b57442ad3c50bd,2024-08-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+75d3b6da2ccf817e,2023-10-22,-38.790000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+75ed8c857c8e11f9,2025-06-08,-180.000000,ג'ימבורי כיף - חוג,,,,maya/card
+763f359959342c1a,2023-12-22,-198.510000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+764f4823c93a8a97,2024-04-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+7653dd5c04e538fd,2025-01-08,-411.480000,סופר גפן סניף 17,,,food/groceries,eitan/card
+766e06017d0098ee,2023-07-27,-494.940000,סופר גפן סניף 17,,,food/groceries,eitan/card
+770380f6f917f7dc,2024-09-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+770a37bc456e1126,2024-08-03,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+774a4dd8320039ae,2024-06-08,-93.830000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+77618de49aa7214d,2024-08-16,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+77b4fa82d5f58cd1,2025-02-02,-30.620000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+77c1a621d679b81b,2023-10-13,-487.400000,סופר גפן סניף 17,,,food/groceries,eitan/card
+77c1a621d679b81b,2023-10-13,-154.900000,סופר גפן סניף 17,Cleaning stuff and a new mop,,home/household,eitan/card
+7806b09b45935747,2025-05-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+781bf0ca6326a6be,2025-01-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+783eea6e32c4091a,2024-04-14,-240.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+78424b83d5d34a06,2024-12-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+784c8ec7230ff097,2025-04-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+78521461d97ad40c,2024-08-21,-169.570000,BURGERS & CO TLV,,Yuval's first restaurant without a meltdown,food/dining out,eitan/card
+785d615547b62df5,2025-03-21,-5420.000000,"מחשבים פלוס בע""מ",,Laptop for the freelance work,shopping/electronics,maya/card
+788b8f3fceb377ec,2023-10-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+79359cefc49d186d,2024-12-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+793c49c90b4ff48c,2023-10-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+794a01aff03955f7,2024-10-14,-762.700000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+797e9df93aff4201,2023-08-19,-272.800000,FUELPOINT 117,,,car/fuel,eitan/card
+79895e7b97a1f03a,2023-12-10,-4233.530000,Transfer checking-card,,,transfer/card,eitan/checking
+79a4d6afdd7a6cf0,2024-08-16,-33.870000,LA PAUSE COFFEE,,,food/coffee,maya/card
+79d4d3bd4f531e7d,2024-07-26,-240.400000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+79dd5127b2518bb5,2025-01-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+79e16880b614a903,2024-10-21,-340.030000,FASHION OUTLET 22,,,shopping/clothes,maya/card
+7a2ca3625233a891,2024-06-24,-639.520000,סופר גפן אונליין,,,food/groceries,eitan/card
+7a576ed21c76155a,2024-04-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+7a5f5c1453991bcd,2024-04-20,-81.600000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+7a6669e191bd13bd,2025-02-06,-685.000000,סופר גפן - הדר,,,food/groceries,eitan/card
+7a93bf42cf74c6ad,2023-07-10,2010.190000,Transfer checking-card,,,transfer/card,maya/card
+7b3197981b8a78a9,2025-05-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+7b375653731ccf55,2024-10-19,-99.070000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+7b625dcf860d1b5a,2024-07-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+7b7937ff5c70cd5a,2023-07-06,-103.680000,KIDZONE KIDS,,,kids/clothes,maya/card
+7bd0553e1befd30f,2025-06-10,12452.160000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+7c0467b74eb5bea1,2024-08-06,-7190.000000,"אלקטרו-בית בע""מ",,"New fridge: the old one died in the heatwave
+Five years of warranty, the receipt is in the drawer",home/appliances,maya/card
+7c086bd2da6c52fe,2024-11-06,200.000000,Transfer card-bit,,,transfer/bit,maya/bit
+7c0eb987343e5be5,2024-01-01,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+7c4e75d6fd422c6e,2024-04-09,-532.970000,סופר גפן - הדר,,,food/groceries,eitan/card
+7c7d613768a6d96c,2023-11-14,-41.410000,PARKO* חניה,,,car/parking,maya/card
+7cba95b8b525a66d,2023-12-02,-140.460000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+7cd56e7e708704e4,2024-12-24,-36.640000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+7d3fce52fc023ed1,2025-03-10,11981.780000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+7dce73d26b2016fe,2024-07-24,-138.520000,KIDZONE KIDS,,Winter coat for Yuval,kids/clothes,maya/card
+7e0621235ce3d4b6,2024-07-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+7e5626e1b0ee25b7,2025-01-06,-15.920000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+7ea1a4768de6131f,2025-05-21,-37.610000,PARKO* חניה,,,car/parking,maya/card
+7ed852568c34d055,2024-11-04,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+7f53c0a1347d1fca,2023-06-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+7f5d7af4e8e9a09d,2024-03-17,-150.000000,דנה כץ: מתנה ליום הולדת,,,gifts/birthdays,maya/bit
+7f80b0901610eb0d,2023-08-07,-119.090000,פירות וירקות האחים,,,food/groceries,maya/card
+7f992e2227f18f70,2023-10-25,-528.820000,סופר גפן - הדר,,,food/groceries,eitan/card
+7f9f97202ba3736f,2025-05-22,-44.960000,Bakery on the corner,,,food/groceries,cash/wallet
+7fd0c37d990de95f,2024-03-17,-114.780000,פארמה פלוס 33,,,health/pharmacy,maya/card
+7feed8048a906f60,2025-01-13,-436.470000,FASHION OUTLET 22,,,shopping/clothes,eitan/card
+7ffa2ffa848d91c2,2024-12-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+80454815d2676593,2025-03-07,2720.000000,מגן ביטוח בריאות - החזר,,40% of the crown back from the health insurance,health/reimbursement,eitan/checking
+808b381a595bf0f6,2025-02-03,-380.000000,"מרפאת שיניים ד""ר לוין",,"Checkup and cleaning, both of us",health/dental,eitan/card
+80c5f9da3daff5c7,2024-09-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+810321e36634c79b,2024-03-10,11821.470000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+816a7f33cc7ff840,2023-08-12,-150.000000,BIT,,Birthday gift (Bit),gifts/birthdays,maya/card
+8174f5b88d3f5b02,2023-07-05,-104.520000,SHOPGLOBE.COM,,,shopping/online,maya/card
+81969c71c7d2da72,2025-01-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+81ac1111d3e6e157,2024-02-01,-481.980000,סופר גפן - הדר,,,food/groceries,eitan/card
+81b7cf51620c6e29,2024-07-05,-51.840000,Market stall vegetables,,,food/groceries,cash/wallet
+81fa080f70ed6b25,2023-11-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+8220e92315ace969,2024-07-17,-14.330000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+824263bea5928a7b,2024-07-12,-180.070000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+826ae5a6c67927f7,2024-09-05,-310.110000,FUELPOINT 117,,,car/fuel,eitan/card
+826effd47c39682b,2024-12-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+82a83d4fe34a84e3,2024-01-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+82d6cf700c4f4ccd,2024-12-02,-39.620000,PARKO* חניה,,,car/parking,maya/card
+82df3db704d03655,2024-12-02,-139.840000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+82f0d8f09700caac,2024-05-10,-2160.930000,Transfer checking-card,,,transfer/card,maya/checking
+8324fcc5d677b08d,2023-11-10,-177.850000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+8345504c5cb4f059,2024-06-10,-3646.820000,Transfer checking-card,,,transfer/card,eitan/checking
+83872b398d9c5e62,2025-01-10,-2788.720000,Transfer checking-card,,,transfer/card,maya/checking
+8394e42abd895be1,2024-10-15,-171.570000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+846960a430879a53,2023-08-05,-78.200000,פארמה פלוס 33,,,health/pharmacy,maya/card
+847db0d4f90ba8e1,2024-12-26,-150.000000,עופר לוי: יום הולדת שמח!,,,gifts/birthdays,maya/bit
+85096528904b0315,2023-07-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+854207d4a8fe89ad,2023-09-17,-29.100000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+85962190c3dd8ffc,2024-04-07,200.000000,Transfer card-bit,,,transfer/bit,maya/bit
+859c685137d34038,2024-06-27,-281.070000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+85a80f2df5440637,2025-05-18,-25.140000,LA PAUSE COFFEE,,,food/coffee,maya/card
+85ad50713912b1b7,2024-06-05,-222.930000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+860250c94635d9a0,2023-09-16,-200.000000,BIT,,"Group gift, our share (Bit)",gifts/birthdays,maya/card
+86861d870ce3e814,2023-11-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+869d01946134760e,2024-06-28,98.120000,Interest,,,savings/interest,savings/savings
+869e1b2d3d262686,2024-08-21,-380.000000,"מרפאת שיניים ד""ר לוין",,"Checkup and cleaning, both of us",health/dental,eitan/card
+86cc520dbc20ebb9,2024-06-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+870b6ab63ba7bc72,2023-08-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+8785fd6aedf2e7b3,2023-09-09,-412.540000,BURGERS & CO TLV,,,food/dining out,eitan/card
+87eac3fbffce825b,2024-09-20,-133400.000000,"אוטו-סנטר השרון בע""מ",,"The new hybrid, finally
+First year's insurance included in the price",car/purchase,eitan/checking
+87eac3fbffce825b,2024-09-20,-4600.000000,"אוטו-סנטר השרון בע""מ","First year, bundled by the dealer","The new hybrid, finally
+First year's insurance included in the price",car/insurance,eitan/checking
+88156525c6e5f7ee,2023-10-21,-151.430000,KIDZONE KIDS,,Winter coat for Yuval,kids/clothes,maya/card
+8836c786a0ab609d,2023-07-12,-150.000000,BIT,,Birthday gift (Bit),gifts/birthdays,maya/card
+8838f25cd6ec72fd,2025-03-15,500.000000,Bank account: סבתא רינה: ליום הולדת של יובל,,"From Grandma Rina, for Yuval's birthday",income/gifts,maya/bit
+885a8acdf0475627,2024-04-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+88d2ea329c395eee,2024-04-06,-179.550000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+88fac2e4c137e6aa,2023-12-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+8914cbcbee9fa272,2025-02-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+893881d198bc5a39,2025-06-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+8951720800d14165,2025-01-25,-213.750000,מי נווה ארזים,,,utilities/water,eitan/checking
+897bdfea412b2941,2025-03-05,-144.980000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+8980564514b5176f,2025-03-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+8989395f6c7118dc,2024-11-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+898d680ad2846fcb,2023-08-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+89a6bd1a968ed2c5,2023-10-24,-33.090000,קפה נחת,,,food/coffee,maya/card
+89af46ae2ccaf8f5,2025-02-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+89d00a552b18caa7,2023-12-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+89dc2d420d7cb1e8,2024-02-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+89f9ddc18b918c1b,2023-08-20,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+8a03b19853672e36,2024-07-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+8a0d0491d92f4b89,2024-04-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+8a36344304fb3d70,2023-06-01,8420.300000,Opening balance,,,reconciliation/opening balance,maya/checking
+8aa9b2b76968d396,2024-08-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+8ada720003d70c34,2024-05-24,-89.500000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+8ae27d4325eb29b4,2023-12-14,-1480.000000,צימר נוף הגליל,,"Two nights up north, Pita came too",leisure/weekend away,eitan/card
+8b4796728033f203,2023-09-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+8b4a2f0f563d8085,2025-04-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+8b7c107e80a6c693,2024-03-02,-50.590000,פארמה פלוס 33,,,health/pharmacy,maya/card
+8b89e501761649a8,2023-09-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+8b913ddc1a42eb01,2023-12-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+8be463673eb78636,2025-05-02,-170.750000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+8c0f365d5d45d733,2024-12-07,-39.850000,PARKO* חניה,,,car/parking,maya/card
+8c70a821a88b6ed1,2024-05-07,-42.410000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+8c9557f9a2651726,2024-05-28,-29.130000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+8ca27a4b544f2c67,2025-03-23,-557.640000,סופר גפן אונליין,,,food/groceries,eitan/card
+8d0c5b67797a9505,2024-11-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+8d47752065bf0e4d,2024-09-09,360.000000,Transfer card-bit,,,transfer/bit,maya/bit
+8d513681aad51ee2,2025-04-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+8d6b457d85478e07,2024-08-18,-48.170000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+8da1ecbd02b79482,2024-08-10,5571.650000,Transfer checking-card,,,transfer/card,eitan/card
+8e1c5f40b591ea86,2024-04-23,-121.970000,צעצועי הקסם,,,kids/toys,maya/card
+8e350b80ff0d77c5,2025-01-19,-320.000000,TICKETZONE*,,"Concert, with Yael and Noam",leisure/culture,maya/card
+8e35df26cdf2f030,2024-01-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+8f18aa33d8f1403e,2024-03-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+8fc621ffd8203850,2024-07-17,-40.480000,PARKO* חניה,,Visiting Grandpa at the hospital,car/parking,maya/card
+8fd4399459e65323,2024-05-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+8fe4d10bd38d7a64,2023-08-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+8fee8cb67d55344f,2025-04-26,-179.830000,FUELPOINT 117,,,car/fuel,eitan/card
+9016894ba03f38d0,2025-01-18,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+903077636ff4124a,2023-11-04,-153.400000,פארמה פלוס 33,,,health/pharmacy,maya/card
+904d53243846b4cd,2024-08-10,-5571.650000,Transfer checking-card,,,transfer/card,eitan/checking
+909376c520337b8b,2024-07-26,-247.470000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+909a3c61cc7d97df,2023-10-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+90a1219eddee76c4,2023-06-01,-22.840000,קפה נחת,,,food/coffee,maya/card
+90a7796ae28b486e,2023-09-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+90b9ffc1330cf952,2024-04-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+914959a569b1be64,2024-10-05,150.000000,Transfer card-bit,,,transfer/bit,maya/bit
+91559d6d8645e786,2024-09-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+916a8aa079be84ca,2023-09-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+918375be9bc6f7ec,2025-01-15,-250.000000,דנה כץ: מתנה מכולנו,,"Roni's 40th, the group gift",gifts/birthdays,maya/bit
+91c7b43336537bc2,2024-07-03,800.000000,Transfer card-bit,,,transfer/bit,maya/bit
+91e01f881cae2cce,2025-06-01,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+91ee252357ec2b2c,2025-03-10,3239.650000,Transfer checking-card,,,transfer/card,maya/card
+91fce07ba030f011,2025-01-27,-135.710000,BURGERS & CO TLV,,Lunch with Ofir,food/dining out,eitan/card
+92268807cc606afe,2023-06-27,-30.670000,PARKO* חניה,,,car/parking,maya/card
+922c0b59900071ae,2025-05-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+923087e84f9edb35,2024-07-02,-102.010000,פארמה פלוס 33,,,health/pharmacy,maya/card
+924f5ddcfb301d7e,2025-04-10,11931.200000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+926f343d70e5c300,2023-11-01,-30.400000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+92a033f5798ad696,2025-01-21,-484.830000,סופר גפן - הדר,,,food/groceries,eitan/card
+92fb8883bbe529e7,2023-06-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+9303500db2f2325b,2023-11-12,-225.460000,סושי-לי רמת השרון,,,food/dining out,eitan/card
+9337a89485e43256,2024-02-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+9389c05a02465237,2023-10-22,-826.800000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+93a400535a1b1707,2025-03-10,-3239.650000,Transfer checking-card,,,transfer/card,maya/checking
+93d3c97d37f8a6f4,2024-01-18,-669.210000,סופר גפן סניף 17,,,food/groceries,eitan/card
+93d5d456cc3220fb,2025-01-07,-185.970000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+94114b0d0c6bc50c,2024-10-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+94b46df77d62be9e,2024-09-01,-143.580000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+955bd4f8a96391af,2025-06-10,5032.360000,Transfer checking-card,,,transfer/card,eitan/card
+9573ba57ed13f3a1,2023-10-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+95901a222b4149ab,2025-04-10,4068.900000,Transfer checking-card,,,transfer/card,eitan/card
+95ba99daed657b87,2023-12-08,-325.690000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+95e6fab2408895a1,2023-10-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+95fb912638002427,2023-12-17,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+962ea18a2c416604,2024-09-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+964610e42b09ad85,2024-10-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+9659f30dd07ae2be,2024-01-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+965c1de6c0c488cb,2025-05-12,-300.000000,Transfer card-bit,,,transfer/bit,maya/card
+966077ebfb3c1d4d,2023-07-18,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+967397118b668ec6,2024-07-08,-290.440000,PASTELARIA ESTRELA,,,vacation/food,maya/card
+967f6e68049836d3,2023-10-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+96828fe877c233a3,2024-07-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+970bb4997a9f0bdf,2024-10-08,-24.990000,PARKO* חניה,,,car/parking,maya/card
+97378cfe1f39c008,2024-10-14,-178.110000,חומוס אליהו ובניו,,,food/dining out,maya/card
+974fc26a9e899bb3,2024-12-10,3656.920000,Transfer checking-card,,,transfer/card,eitan/card
+979dc5517741c5e8,2024-07-17,-31.800000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+97a655aaac935390,2024-08-17,-16.420000,PARKO* חניה,,,car/parking,maya/card
+97b272303e06fbe7,2023-06-20,-63.800000,פירות וירקות האחים,,,food/groceries,maya/card
+97f325933d08ad0f,2024-06-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+981878ed4181016e,2023-12-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+9836ae4342013056,2024-03-10,6242.140000,Transfer checking-card,,,transfer/card,eitan/card
+985485d82ead499a,2025-05-18,-131.720000,חומוס אליהו ובניו,,,food/dining out,eitan/card
+9878c28be4797c57,2023-11-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+987a0fb983bf9d99,2024-09-10,10409.850000,Transfer checking-card,,,transfer/card,maya/card
+9916f9eefc7404e4,2024-12-09,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+994e1dbf6d6f18f2,2024-03-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+997e09b6d2566ef0,2025-01-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+99c9a48277749e88,2024-09-05,160.000000,רוני אלמוג: על הפיצה,,Paid back their share of dinner,food/dining out,maya/bit
+99ffdd58e40745e9,2023-11-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+9a1ca12b8de06477,2024-01-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+9a550826c5849494,2023-06-17,-32.800000,PARKO* חניה,,,car/parking,maya/card
+9a5d66d63fc1eb0e,2024-05-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+9a64664755c56f67,2024-11-18,-170.840000,FUELPOINT 117,,,car/fuel,eitan/card
+9a9ed0e2aeb23bf0,2024-11-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+9ac98d267642b489,2024-07-09,-291.550000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+9b00aa914f51d10d,2024-01-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+9ba1a5e39ba23d71,2024-06-10,-200.000000,נועם ברק: מתנה ליום הולדת,,,gifts/birthdays,maya/bit
+9be9a23df8a9c0c5,2023-06-28,99.040000,Interest,,,savings/interest,savings/savings
+9c77492934a6456a,2023-07-05,-3150.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+9c7ca6da8b425458,2024-11-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+9c816d5bbd83da86,2024-07-10,3459.090000,Transfer checking-card,,,transfer/card,maya/card
+9c9561a2b4b83c00,2025-06-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+9caad6c26d1c0687,2025-06-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+9cb721324df20558,2025-03-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+9d0d37683186623f,2024-01-19,-328.020000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+9d0daec4a1608040,2023-07-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+9d141cd3553e75ed,2024-03-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+9d5be06d08325811,2024-06-10,-398.570000,חומוס אליהו ובניו,,,food/dining out,maya/card
+9d755e471672b9a0,2025-06-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+9d7dbe3597a72e8d,2023-10-23,-139.880000,סושי-לי רמת השרון,,,food/dining out,maya/card
+9d8e99b81a0e402c,2024-05-27,-150.000000,יעל שגיא: מתנה ליום הולדת,,"Noam's birthday, with Ofir",gifts/birthdays,maya/bit
+9d9da635907b1c59,2023-08-28,138.590000,Interest,,,savings/interest,savings/savings
+9dc118a1a5261da8,2025-04-28,-505.890000,סופר גפן - הדר,,,food/groceries,eitan/card
+9dc5894009fa78d1,2024-05-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+9deac27bc28554c3,2024-03-08,-360.770000,סופר גפן כפר יונה,,Shabbat dinner for 10,food/groceries,eitan/card
+9e86c448956136da,2024-06-23,-39.690000,PARKO* חניה,,,car/parking,maya/card
+9ec7d4645351811e,2023-06-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+9ee54b11f274b9be,2024-04-28,115.010000,Interest,,,savings/interest,savings/savings
+9eec2ec9829541b3,2025-02-13,-200.000000,Transfer card-bit,,,transfer/bit,maya/card
+9f13036a7204938e,2025-01-24,-36.840000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+9face8fa85627ab8,2023-07-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+9fdc9928a85cb387,2024-03-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+a0435792ea6978eb,2025-04-15,160.000000,רוני אלמוג: חלק שלי,,Paid back their share of dinner,food/dining out,maya/bit
+a069efc4660e6024,2024-07-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+a09928d9a9d328ab,2024-12-11,-60.000000,יעל שגיא: פיצה ביום שישי,,,food/dining out,maya/bit
+a0c1363deb788951,2024-09-28,126.700000,Interest,,,savings/interest,savings/savings
+a0f6c0f933ad149f,2023-09-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+a0f6df7398991d37,2024-06-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+a0f8239c2636cf77,2024-08-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+a15d7cec864a33d2,2024-05-10,2160.930000,Transfer checking-card,,,transfer/card,maya/card
+a166543cb0d935bb,2023-09-26,-141.590000,פארמה פלוס 33,,,health/pharmacy,maya/card
+a1f8db4d0eb8b1ca,2023-12-05,-329.570000,BURGERS & CO TLV,,Lunch with Ofir,food/dining out,eitan/card
+a20dbde173319337,2023-06-12,-63.160000,Bakery on the corner,,,food/groceries,cash/wallet
+a241a9ca7364495e,2024-09-16,-204.010000,פירות וירקות האחים,,,food/groceries,maya/card
+a2527419f600c519,2024-06-23,-166.140000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+a25cb1c01d709d7d,2024-12-26,150.000000,Transfer card-bit,,,transfer/bit,maya/bit
+a26397b54054eb73,2023-06-27,-42.720000,SHOPGLOBE.COM,,,shopping/online,maya/card
+a28f37c7c505e4cb,2024-02-04,150.000000,Transfer card-bit,,,transfer/bit,maya/bit
+a2c304ea1e3137d8,2025-04-19,-18.890000,LA PAUSE COFFEE,,,food/coffee,maya/card
+a2dc9e30c47624fe,2024-04-13,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+a2f2500355792220,2023-11-22,-76.320000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+a32973e875792d0d,2023-07-16,-170.700000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+a332d3115db08124,2023-12-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+a34128d601e16d39,2024-06-10,3646.820000,Transfer checking-card,,,transfer/card,eitan/card
+a35c673e38ff9cee,2023-11-24,-483.570000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+a36cd150a47dc4c3,2025-03-24,-638.650000,סופר גפן - הדר,,,food/groceries,eitan/card
+a3ebde209596c824,2025-04-28,133.860000,Interest,,,savings/interest,savings/savings
+a3f61961c5e88fe4,2023-09-25,-36.260000,קפה נחת,,,food/coffee,maya/card
+a3f777d1ec69e222,2025-05-02,-67.400000,פירות וירקות האחים,,,food/groceries,maya/card
+a41f750d7a302ea7,2024-11-25,-205.190000,פירות וירקות האחים,,,food/groceries,maya/card
+a422cf5641903f94,2023-06-22,-1031.080000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+a4607f6485ee4158,2024-12-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+a4796a2216417576,2025-05-10,-5760.070000,Transfer checking-card,,,transfer/card,eitan/checking
+a48f8839f498734c,2024-02-05,-17.270000,קפה נחת,,,food/coffee,maya/card
+a4bd11bf9a81bd47,2024-01-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+a51aa609e4acdf21,2024-03-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+a533fef64dd965f6,2024-01-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+a5881f0de2f07759,2024-11-28,-180.320000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+a5cf3eda24f8adf1,2025-04-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+a5d7dd9171ec2c23,2023-07-13,-66.260000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+a5f6601077f8d086,2024-06-08,-45.130000,Bakery on the corner,,,food/groceries,cash/wallet
+a6066929808512ee,2023-06-27,-197.360000,פירות וירקות האחים,,,food/groceries,maya/card
+a60b9182a71b77e1,2024-04-03,-603.130000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+a618b46dbfe7b4ca,2024-02-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+a6ba5f14f53654ee,2023-10-10,1690.580000,Transfer checking-card,,,transfer/card,maya/card
+a74f01499028c507,2024-04-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+a7673bbe9676c045,2024-08-24,-192.060000,KIDZONE KIDS,,,kids/clothes,maya/card
+a7a05eb7da4e20b2,2024-02-19,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+a7ec6a299a77b7d4,2023-07-05,-665.720000,סופר גפן אונליין,,Party supplies for Yuval's birthday,food/groceries,eitan/card
+a7ff9ed8c1fc9dbb,2023-07-15,-118.560000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+a80df8eb02b926cc,2024-04-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+a87e3e51ad426c44,2023-10-23,-507.990000,סופר גפן סניף 17,,,food/groceries,eitan/card
+a8a03b385addfb22,2024-10-20,-199.720000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+a8c83bf9b8c15afd,2025-02-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+a8e8b6509e2ab50e,2024-04-19,-222.830000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+a8fa0f9548fc1fcb,2025-04-04,-709.650000,סופר גפן אונליין,,,food/groceries,eitan/card
+a8fafdfb3493e7d8,2024-01-19,-348.230000,בית ונוי - נתניה,,,home/household,maya/card
+a8fd4e68c35524f6,2024-05-08,-155.310000,פארמה פלוס 33,,,health/pharmacy,maya/card
+a91da239590d06ef,2023-11-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+a93a38193de0a9fc,2025-03-10,-12408.490000,Transfer checking-card,,,transfer/card,eitan/checking
+a940d37cc4d1e2b9,2024-01-18,-202.170000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+a95bb895d8884040,2024-10-05,-150.000000,Transfer card-bit,,,transfer/bit,maya/card
+a9c1be81bf2a737c,2025-04-18,-200.870000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+a9ea6f4e651142d1,2024-03-11,-250.000000,עופר לוי: מתנה מכולנו,,Shira's birthday,gifts/birthdays,maya/bit
+a9fe1345f64c038e,2024-09-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+aa4063a85f272dd5,2025-04-28,-137.500000,Cash count,,"Counted 4540.20 in the wallet, 137.50 less than its rows: small spending nobody wrote down",reconciliation/cash count,cash/wallet
+aa6c3cbaf4b2dcd6,2024-02-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+aa80d01d3a8ccd4c,2023-08-01,-368.400000,סושי-לי רמת השרון,,Date night,food/dining out,eitan/card
+aac33c75364ac0e8,2025-04-10,7333.350000,Transfer checking-card,,,transfer/card,maya/card
+aaeac4706e047a68,2024-11-28,121.850000,Interest,,,savings/interest,savings/savings
+aaef707ae791eabe,2024-02-09,-80.940000,Bakery on the corner,,,food/groceries,cash/wallet
+aaf9b60bf3e27ae4,2025-06-14,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+ab35ea2aa3ac8efe,2024-12-10,3162.460000,Transfer checking-card,,,transfer/card,maya/card
+ababc1157a19f7bc,2024-07-10,-28.330000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+abb772273e2c875c,2023-11-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+abc8ec1a52c3c117,2023-08-23,-324.310000,FUELPOINT 117,,,car/fuel,eitan/card
+abfc95649443513d,2024-11-18,-23.700000,PARKO* חניה,,,car/parking,maya/card
+ac2b7dc5ec703664,2024-02-07,-91.870000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+ac3e97aa030f2df8,2023-11-01,-120.070000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+ac5fa68d5d7101fd,2023-09-10,2254.660000,Transfer checking-card,,,transfer/card,maya/card
+ac6879bd8412dec6,2023-12-10,4233.530000,Transfer checking-card,,,transfer/card,eitan/card
+ac744e084ffd8bd5,2024-11-11,-157.120000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+ac7b0f0871706147,2025-06-10,3921.320000,Transfer checking-card,,,transfer/card,maya/card
+ac8011eb486c5799,2025-06-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+ac87da7ef68bb5ec,2025-01-11,-173.950000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+ac9571c05043127f,2025-05-10,12511.660000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+accdc608a0b608d1,2023-11-10,-2099.260000,Transfer checking-card,,,transfer/card,maya/checking
+ace535f308a99357,2023-10-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+aceebbf1f2518700,2025-04-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+acf2fa221cf80e7c,2024-08-06,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+acfd0f0d1d5d2e4a,2024-01-24,-200.000000,שירה גל: יום הולדת שמח!,,"Noam's birthday, with Ofir",gifts/birthdays,maya/bit
+ad14363daf8211f4,2024-10-10,11782.100000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+ad58eedc49beeb57,2024-07-06,-555.960000,סופר גפן סניף 17,,,food/groceries,eitan/card
+ad79a4a7a8afbeb9,2023-12-03,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+ad84d63f233c6137,2024-08-12,200.000000,Transfer card-bit,,,transfer/bit,maya/bit
+ad94fc3bed6e52d6,2024-07-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+addf29a5b5ffa331,2024-06-17,-27.380000,PARKO* חניה,,,car/parking,maya/card
+adf4013f182bd297,2024-09-10,-10409.850000,Transfer checking-card,,,transfer/card,maya/checking
+ae088b7f100a6094,2023-07-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+ae28df55ad4958f1,2023-10-14,-315.030000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+ae5b992ea97fe01c,2023-07-19,-23.670000,LA PAUSE COFFEE,,,food/coffee,maya/card
+ae5d266e0d951609,2023-06-19,-23.270000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+ae5f19a0fb7113b6,2025-05-12,-300.000000,נועם ברק,,"A Bit payment to Noam Barak without a memo. It's the price of the concert tickets, so I tagged it leisure/culture. Correct?",leisure/culture,maya/bit
+aef58bf8853cdf21,2024-02-10,-2948.430000,Transfer checking-card,,,transfer/card,maya/checking
+af0b3a6fc1d26cea,2023-07-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+af2313bd6d47ec02,2025-01-03,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+af28e52619ba0dd2,2025-01-15,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+af2f64e446953d99,2024-11-06,-209.510000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+af71f5d1c4b51dda,2024-12-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+afeebc3c817371e8,2023-06-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+b00b6392a4c38288,2023-09-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+b028db22766cffce,2025-01-10,5530.730000,Transfer checking-card,,,transfer/card,eitan/card
+b04244782a531bf0,2023-11-15,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+b0667264ddeece80,2025-05-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+b07c17acb1a40b15,2025-01-26,-35.670000,LA PAUSE COFFEE,,,food/coffee,maya/card
+b09e0927fb5bdec3,2023-10-28,113.780000,Interest,,,savings/interest,savings/savings
+b0b3cc2f5ae492a2,2025-03-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+b0e51c57070a6c1b,2025-02-03,-18.990000,LA PAUSE COFFEE,,,food/coffee,maya/card
+b0f98ea0792478b3,2024-12-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+b133ec876c2b5f86,2024-07-03,-800.000000,עופר לוי: מזל טוב!,,,gifts/weddings,maya/bit
+b15e02d4be502139,2024-09-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+b16366b88f8ee60e,2023-08-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+b1683786529f9e1c,2024-03-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+b18881dfe30b0b7e,2025-03-14,-28.480000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+b1d75436e135bf1b,2024-10-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+b1df5eaa673b56f2,2024-01-22,-27.360000,LA PAUSE COFFEE,,,food/coffee,maya/card
+b1e951749f01ade2,2024-06-04,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+b25d036c85dffd6f,2023-09-07,-47.570000,Market stall vegetables,,,food/groceries,cash/wallet
+b282130c093a77ab,2023-06-22,-482.230000,סופר גפן - הדר,,,food/groceries,eitan/card
+b2ce9b77fb1a1be7,2024-10-14,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+b2f5826315e4b3c4,2025-06-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+b321761358589501,2025-02-13,-200.000000,דנה כץ: מתנה ליום הולדת,,"Roni's 40th, the group gift",gifts/birthdays,maya/bit
+b3588a2fcc54110a,2025-03-20,-240.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+b36336725662a564,2025-01-21,-124.980000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+b372074feb286cae,2024-05-12,-101.200000,פארמה פלוס 33,,Allergy pills,health/pharmacy,maya/card
+b37566d555f87599,2024-03-10,-1675.080000,Transfer checking-card,,,transfer/card,maya/checking
+b39288a913a6da9c,2025-04-03,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+b3af67bc390d0b6d,2023-11-10,4772.800000,Transfer checking-card,,,transfer/card,eitan/card
+b3d30deae3eb303d,2023-12-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+b3d782a55fd6e1c5,2024-02-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+b3fe79961eeb35ea,2025-03-10,12408.490000,Transfer checking-card,,,transfer/card,eitan/card
+b40bfb2810d76738,2025-03-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+b48dd757443eb15f,2024-05-05,-479.450000,סופר גפן סניף 17,,,food/groceries,eitan/card
+b4c41c7a60a36ad6,2024-07-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+b4c99ffbebcabc8d,2025-06-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+b4d1a25cbf6dd4ea,2025-01-21,-102.060000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+b4f6525d557eb149,2024-02-14,-232.060000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+b50d11b4dbdbe712,2024-08-10,-194.150000,פירות וירקות האחים,,,food/groceries,maya/card
+b5118285ca014c99,2024-06-10,700.000000,Transfer card-bit,,,transfer/bit,maya/bit
+b5146f907c305edf,2024-12-19,-100.000000,נועם ברק: יום הולדת שמח!,,,gifts/birthdays,maya/bit
+b515d0dea817f5c6,2024-10-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+b562deb6a245f80d,2024-04-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+b571955b2eb9e15b,2024-06-15,-33.600000,LA PAUSE COFFEE,,,food/coffee,maya/card
+b5920a0e3c28248a,2024-01-10,-240.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+b5aad9a33750930c,2024-03-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+b5b3ba9a8d69058a,2024-05-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+b6049b969865e723,2023-12-02,-148.090000,פארמה פלוס 33,,Sunscreen and vitamins,health/pharmacy,maya/card
+b63f83e3ab1f7e44,2023-12-26,-101.740000,SHOPGLOBE.COM,,,shopping/online,maya/card
+b6436bfac2d49320,2024-10-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+b651be1281a0a43c,2024-01-10,1394.470000,Transfer checking-card,,,transfer/card,maya/card
+b65b8675113675eb,2023-07-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+b6647a0ae9b25360,2024-03-26,-272.950000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+b66ce76679c28eb1,2024-09-12,-29.610000,PARKO* חניה,,,car/parking,maya/card
+b690bbb503ef4c7d,2024-08-17,200.000000,Transfer card-bit,,,transfer/bit,maya/bit
+b6fc21aa382af8a2,2024-11-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+b72455ab8dc6c6bd,2023-10-25,-66.670000,פארמה פלוס 33,,,health/pharmacy,maya/card
+b75b48c265708419,2024-09-14,-95.200000,מסעדת הגפן הירוקה,,Date night,food/dining out,eitan/card
+b77a45cfcca39e1e,2025-06-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+b78c7e2fce80d7d7,2024-11-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+b7a684fcebeeae7e,2024-06-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+b7bc34f60df92f28,2024-09-20,60000.000000,הלוואה 0548217,,,transfer/loan,eitan/checking
+b803e2ab39eab516,2025-02-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+b80e90ad0a2b177f,2024-05-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+b81ea811e1d8ff36,2024-10-20,-811.490000,סופר גפן סניף 17,,Hosting Eitan's parents,food/groceries,eitan/card
+b83604620be5d92a,2024-11-26,-124.140000,פארמה פלוס 33,,,health/pharmacy,maya/card
+b84c6aa3e40c3e70,2025-06-07,-26.910000,PARKO* חניה,,,,maya/card
+b869e175eec18bda,2023-08-12,-430.570000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+b87caa726b50d841,2023-09-10,-26.760000,LA PAUSE COFFEE,,,food/coffee,maya/card
+b8884f46f1480642,2025-02-09,-138.040000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+b8889bdc33a9cf90,2024-08-22,-116.000000,בית ונוי - נתניה,,,home/household,maya/card
+b8dcff0225594132,2024-01-17,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+b8dda37c75f9f20e,2024-10-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+b90bdaee672de21f,2024-03-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+b91713a4393cf3bd,2024-03-02,-58.780000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+b934ed258724a404,2024-07-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+b93e6a9f01efaf77,2024-09-02,-100.620000,SHOPGLOBE.COM,,Yoga mat,shopping/online,maya/card
+b9ad9da3ceea6d4d,2024-07-26,-12.010000,PARKO* חניה,,,car/parking,maya/card
+b9be385f5daa2fbb,2023-12-07,-150.000000,BIT,,Birthday gift (Bit),gifts/birthdays,maya/card
+b9f17fa890293541,2023-11-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+ba5cecb167540886,2025-04-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+ba7e7b1e334bc33d,2025-02-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+ba85957c407e6afe,2024-02-10,11713.790000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+ba8f9470e6ee0eb6,2025-01-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+bad352b4ded510c7,2024-09-25,-303.850000,מי נווה ארזים,,,utilities/water,eitan/checking
+bada2833941b9f46,2024-02-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+bb4ab15ff8cb0c8b,2023-11-06,-55.680000,פארמה פלוס 33,,,health/pharmacy,maya/card
+bb4d8476ce317724,2024-01-05,-50.390000,פירות וירקות האחים,,,food/groceries,maya/card
+bb7153968ce24dbe,2024-06-05,-606.930000,סופר גפן - הדר,,,food/groceries,eitan/card
+bb8a83206b68dc3a,2024-02-04,-150.000000,רוני אלמוג: מתנה מכולנו,,,gifts/birthdays,maya/bit
+bb95d59f84f464aa,2025-04-10,-4068.900000,Transfer checking-card,,,transfer/card,eitan/checking
+bbaccd6ae84d3db0,2025-05-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+bbb24fae4a9df41e,2023-09-15,-12.940000,PARKO* חניה,,,car/parking,maya/card
+bbfd5853fcb40b92,2024-07-10,-136.860000,TASCA DO BAIRRO,,,vacation/food,eitan/card
+bc152f817ff2e014,2024-03-10,-449.310000,סופר גפן סניף 17,,,food/groceries,eitan/card
+bc71cd89e020cbd3,2024-03-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+bc856a618a28f1e5,2023-12-02,-291.380000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+bccb8c102a4bc510,2024-06-10,1965.020000,Transfer checking-card,,,transfer/card,maya/card
+bcd74b5b85eb6a4e,2024-03-21,-29.530000,PARKO* חניה,,,car/parking,maya/card
+bce2e3f306aa8c86,2025-03-23,-193.770000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+bd17b4ba414be404,2024-12-04,-13.760000,PARKO* חניה,,,car/parking,maya/card
+bd2c43d7d2e76b14,2025-05-10,-89.160000,KIDZONE KIDS,,,kids/clothes,maya/card
+bd470134e8a93f17,2025-01-22,-22.940000,PARKO* חניה,,,car/parking,maya/card
+bd87cdff9b2249f2,2024-11-10,-4682.700000,Transfer checking-card,,,transfer/card,eitan/checking
+bd8d7ee839aeeff8,2024-10-05,-44.450000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+bd8eff37656cf00e,2024-10-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+bdeec2683212d69c,2023-08-16,-670.870000,סופר גפן - הדר,,,food/groceries,eitan/card
+bdf9b45ad29653ac,2024-11-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+be5cd14811020c72,2025-05-19,-113.580000,פארמה פלוס 33,,Sunscreen and vitamins,health/pharmacy,maya/card
+be6115f4e6bbe547,2025-02-08,-39.810000,PARKO* חניה,,,car/parking,maya/card
+be884d7c392782e5,2024-12-19,-100.000000,Transfer card-bit,,,transfer/bit,maya/card
+be89fdeeb426e945,2024-02-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+bea1e7b1dc2e44ae,2024-03-28,-30.230000,PARKO* חניה,,,car/parking,maya/card
+bea3f0ef71edd91d,2024-08-23,-34.740000,קפה נחת,,,food/coffee,maya/card
+bf19d32b195726e4,2025-02-10,4569.420000,Transfer checking-card,,,transfer/card,eitan/card
+bf223f995af47926,2024-08-16,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+bf5ac9779167d81f,2023-07-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+bf77609febc04ed9,2024-11-25,-243.470000,מי נווה ארזים,,,utilities/water,eitan/checking
+bfc7272891d3cec9,2024-11-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+bfdbf3c601e78ed9,2024-03-17,-150.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+c016dd2572875091,2023-11-11,-21.940000,PARKO* חניה,,,car/parking,maya/card
+c02fb6d6d8f13553,2025-06-01,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+c06f6ef0648833be,2024-11-19,-17.680000,PARKO* חניה,,,car/parking,maya/card
+c0a688f3c2fbe820,2023-08-18,-228.550000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+c0ad7f3ec42a7f80,2024-01-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+c0b3c2bdf733d91b,2023-12-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+c0b479e41b480a34,2024-03-25,-146.580000,BURGERS & CO TLV,,,food/dining out,maya/card
+c0ed0e273e9108a8,2024-01-09,-33.540000,PARKO* חניה,,Meeting in Tel Aviv,car/parking,maya/card
+c0fe6a3124810da4,2023-08-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+c1094c16b38c25b0,2023-06-21,-195.470000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+c1227e2ba87712f4,2024-08-06,-588.080000,סופר גפן סניף 17,,,food/groceries,eitan/card
+c128cfc2a63646ba,2024-07-21,-157.070000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+c12c22c13312617d,2025-02-15,-108.580000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+c146d66bbac58610,2024-06-14,-520.110000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+c1b5a49f98a8f253,2025-01-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+c1c37e03608c35ea,2023-11-05,-265.830000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+c1cf4e62dda98dcb,2024-03-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+c235e3936cc94bdb,2024-04-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+c27cafe0fd099594,2024-11-15,-38.940000,PARKO* חניה,,,car/parking,maya/card
+c2a00e3ebc66ef5b,2023-08-18,-381.350000,סופר גפן כפר יונה,,Stocking up before the holiday,food/groceries,eitan/card
+c2da969b580afa79,2023-09-10,11906.420000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+c2de1b3367cef141,2025-04-22,-764.400000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+c3040a9b038679d4,2023-11-14,-198.490000,BURGERS & CO TLV,,Yuval's first restaurant without a meltdown,food/dining out,maya/card
+c330614142c23cb9,2025-05-04,-1280.000000,בית ונוי - נתניה,,"Over twice the largest earlier charge here. Tagged home/household: is it furniture, and should it be a one-off?",home/household,maya/card
+c3412178dfb83ab9,2024-10-09,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+c34612770561801e,2025-06-12,-41.050000,SHOPGLOBE.COM,,,,maya/card
+c364312d8faa7068,2024-04-23,-673.110000,סופר גפן סניף 17,,,food/groceries,eitan/card
+c36b49b93af499b3,2023-12-20,-162.780000,FASHION OUTLET 22,,,shopping/clothes,eitan/card
+c391386e410489da,2024-12-10,-3162.460000,Transfer checking-card,,,transfer/card,maya/checking
+c39fd8fc000372e5,2024-11-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+c3b95b023cb97c7a,2023-06-01,320.000000,Opening balance,,,reconciliation/opening balance,cash/wallet
+c3cc5e60be9b29fe,2023-12-17,-35.400000,LA PAUSE COFFEE,,,food/coffee,maya/card
+c3fc6087ba50b61b,2025-04-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+c44fa74edf90e316,2025-05-28,-120.000000,עופר לוי: פיצה ביום שישי,,,food/dining out,maya/bit
+c46027ff7c9d6642,2024-03-17,-314.090000,פיצה נאפולי שלנו,,Date night,food/dining out,eitan/card
+c46613539828ff86,2025-03-22,-163.310000,פירות וירקות האחים,,,food/groceries,maya/card
+c472d0d4ec76be9f,2024-06-20,-70.610000,Market stall vegetables,,,food/groceries,cash/wallet
+c49f015bfec25f8c,2023-08-08,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+c4a208b38a9bdb18,2023-12-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+c4aeb3b567414ebe,2023-12-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+c4ce72d0fb39d23d,2024-06-17,-256.670000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+c4dfd755e75c02e5,2025-05-10,2574.930000,Transfer checking-card,,,transfer/card,maya/card
+c52c2d0905095ea1,2024-10-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+c53c4cca98f98ffe,2024-05-13,-105.030000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+c5a2a6ddad82f692,2024-07-08,-1780.000000,RENTAROAD PORTUGAL,,,vacation/car,maya/card
+c5e6b77650552ad5,2025-06-07,-79.340000,FRESHWAY EXPRESS 041,,,,maya/card
+c611e170eb1420e0,2025-05-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+c6cad96f4267be8d,2025-05-23,-419.820000,פיצה נאפולי שלנו,,Yuval's first restaurant without a meltdown,food/dining out,eitan/card
+c6cb83a0e29a52ae,2024-08-01,-23.530000,LA PAUSE COFFEE,,,food/coffee,maya/card
+c6d0bb225d88786f,2023-06-20,-115.930000,פארמה פלוס 33,,,health/pharmacy,maya/card
+c6e5ed4da2f4468f,2024-05-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+c75ffbfe5eb22a8b,2024-03-18,-42.300000,LA PAUSE COFFEE,,,food/coffee,maya/card
+c79ab9f1db6ebccc,2024-12-10,12460.170000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+c85f447c541f3a01,2024-09-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+c87784dfc54e186e,2025-04-25,-150.000000,נועם ברק: מתנה ליום הולדת,,,gifts/birthdays,maya/bit
+c87dac3c337b39f1,2024-12-28,96.550000,Interest,,,savings/interest,savings/savings
+c8de82463469fce7,2025-04-26,-109.590000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+c8ea41dd7f466af4,2023-11-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+c90a93544b00befe,2023-12-11,-30.910000,PARKO* חניה,,,car/parking,maya/card
+c929d04ccb95441d,2023-11-25,-140.870000,KIDZONE KIDS,,,kids/clothes,maya/card
+c96cebc36dee3b1d,2023-09-26,-765.950000,סופר גפן - הדר,,,food/groceries,eitan/card
+c9957381fa323765,2023-12-19,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+ca1cf0dbf1756eba,2023-11-21,-583.490000,סופר גפן סניף 17,,,food/groceries,eitan/card
+ca2526e9217f560e,2023-09-05,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+ca493624b0350df5,2025-05-12,300.000000,Transfer card-bit,,,transfer/bit,maya/bit
+ca574a699d8f616e,2024-12-10,-3656.920000,Transfer checking-card,,,transfer/card,eitan/checking
+ca8d2d01e98c621f,2024-10-09,-317.680000,פיצה נאפולי שלנו,,Lunch with Ofir,food/dining out,eitan/card
+ca8fac494eda3e81,2023-08-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+cab134f69e7e4b4e,2025-01-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+cab7890fdceaf2f0,2023-08-23,-154.210000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+caf2592cdf25d9cb,2024-12-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+cb11f30f4f5e0702,2023-11-04,-281.100000,FUELPOINT 117,,,car/fuel,eitan/card
+cbb29b229fdb1c3b,2024-06-15,-82.350000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+cbe8258b8ae38586,2025-02-10,-56.080000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+cc32457b48995466,2024-07-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+cc32999e4119b0b5,2025-06-10,-171.740000,FRESHWAY EXPRESS 041,,,,maya/card
+cc3cd05d80e91c9a,2025-05-25,-200.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+cc3ec4d0b81b8707,2023-08-10,-2126.040000,Transfer checking-card,,,transfer/card,maya/checking
+cc4b8af69e2a9ebf,2024-11-01,60.000000,נועם ברק: על הפיצה,,Paid back their share of dinner,food/dining out,maya/bit
+cc542f2712d393c9,2023-06-20,-140.330000,פירות וירקות האחים,,,food/groceries,maya/card
+cc87121033fd94de,2024-02-22,-696.830000,זרם פלוס חשמל לבית,,,utilities/electricity,eitan/checking
+cc950082c3518a1c,2024-04-06,-239.800000,FASHION OUTLET 22,,,shopping/clothes,maya/card
+cc950082c3518a1c,2024-04-06,-149.900000,FASHION OUTLET 22,Shirt for Ofir's birthday,,gifts/birthdays,maya/card
+cca9c72f0ae25af3,2024-12-09,-166.750000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+ccb9e3b58fd16a88,2024-12-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+ccde1de117e05562,2024-06-10,-700.000000,Transfer card-bit,,,transfer/bit,maya/card
+cd188e040985d159,2025-04-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+cd1a53c9b3252d73,2023-07-28,104.360000,Interest,,,savings/interest,savings/savings
+cd391a973df8b229,2024-03-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+cd587bb9b2fe47cd,2023-06-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+cd66c4dbca0a8d66,2023-11-12,-351.610000,"וטרינר ד""ר אורן שחר",,"Ear infection, again",pets/vet,maya/card
+cd99e97642aad3c2,2023-10-01,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+cdde48392a1b1c74,2025-04-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+ce0a91d95fa8a368,2024-07-28,-21.920000,LA PAUSE COFFEE,,,food/coffee,maya/card
+ce5f24f389bd09bf,2024-12-22,-182.200000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+ce869fca4b3bf1a5,2024-10-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+ce8800c01ad3f89f,2024-12-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+cea31183ef0beeaa,2023-07-19,-172.060000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+cea6e57776fd7244,2023-08-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+ceaab337a9e41ae8,2023-08-10,-5022.900000,Transfer checking-card,,,transfer/card,eitan/checking
+ced15ecb02bef6d3,2025-01-22,-198.890000,FUELPOINT 117,,,car/fuel,eitan/card
+ced76b010e2a209d,2023-10-11,-33.490000,PARKO* חניה,,,car/parking,maya/card
+cedcb47d28064af7,2023-12-27,-607.800000,סופר גפן אונליין,,,food/groceries,eitan/card
+cedd6c509d3f6bc0,2024-07-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+cefc06b5834ae4c8,2024-03-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+cf0108495cbcd09d,2024-06-19,-500.920000,סופר גפן - הדר,,,food/groceries,eitan/card
+cf39260129bc793c,2024-01-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+cfa7688d819a8923,2024-07-28,-484.130000,סופר גפן - הדר,,,food/groceries,eitan/card
+d00029f2f5e53025,2025-04-19,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+d04f65ee411dd7a2,2023-09-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+d06eb0668cc4eda2,2023-12-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+d0a83de90aa605fb,2024-03-28,102.540000,Interest,,,savings/interest,savings/savings
+d0beb5b991ad1af1,2025-04-04,-119.700000,פארמה פלוס 33,,,health/pharmacy,maya/card
+d0e933b06c2f4b87,2023-06-18,-304.070000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+d1114b6e537bbdad,2023-06-12,-39.520000,קפה נחת,,,food/coffee,maya/card
+d14363275fe6e5fd,2025-06-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+d144c65631a4af4a,2023-07-22,-143.030000,פארמה פלוס 33,,,health/pharmacy,maya/card
+d15bc9b5f6865c09,2025-05-18,2840.000000,החזר מס הכנסה,,Refund for the year before last: the daycare credit points,income/tax refund,maya/checking
+d18d590d1d7138db,2023-08-12,-100.000000,BIT,,Birthday gift (Bit),gifts/birthdays,maya/card
+d19f17805a5d7a9b,2024-02-19,-271.680000,סושי-לי רמת השרון,,,food/dining out,eitan/card
+d1cf88f1e487cc4e,2025-04-23,-164.380000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+d1ecd80d51d4ff86,2024-02-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+d234e62f7556cccd,2024-05-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+d24b253a55fd359f,2025-05-14,-120.400000,פירות וירקות האחים,,,food/groceries,maya/card
+d25da985777d9ce6,2024-12-05,-469.140000,סופר גפן אונליין,,Shabbat dinner for 10,food/groceries,eitan/card
+d28b4e09b1439d7c,2025-04-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+d28e1e5c63cc13d1,2024-07-10,-4831.790000,Transfer checking-card,,,transfer/card,eitan/checking
+d2d68c70fc58734c,2024-11-28,-120.000000,נועם ברק: פיצה ביום שישי,,,food/dining out,maya/bit
+d3154dad3c49bc22,2023-09-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+d3163282b3564901,2024-06-13,-33.940000,LA PAUSE COFFEE,,,food/coffee,maya/card
+d31dd73b1dc165ce,2024-11-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+d322a95f331b7134,2024-05-03,-83.050000,Bakery on the corner,,,food/groceries,cash/wallet
+d3c663b456bfa1b5,2024-08-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+d3ecfea86cbd7fe9,2023-10-15,-200.000000,Transfer checking-cash,,,transfer/cash,eitan/checking
+d4050fd7ed9c4f02,2024-01-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+d45bf432f5829144,2025-05-03,-22.010000,PARKO* חניה,,,car/parking,maya/card
+d46e1b1dd36c82b4,2024-11-19,-320.000000,TICKETZONE*,,"Concert, with Yael and Noam",leisure/culture,maya/card
+d4717f690d9bb590,2023-08-16,-89.900000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+d47daa656e0a78bf,2023-07-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+d49ba9f33bbc14d3,2024-08-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+d4a33db68f0b4e63,2023-12-23,-100.000000,BIT,,Birthday gift (Bit),gifts/birthdays,maya/card
+d53c2cea3cb96bd4,2023-11-25,-272.070000,מי נווה ארזים,,,utilities/water,eitan/checking
+d56ad4c46ffd5642,2023-11-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+d61e58f16c566f6c,2024-02-02,-510.140000,סופר גפן סניף 17,,,food/groceries,eitan/card
+d6242fb4e72e10b9,2024-06-04,-100.000000,רוני אלמוג: מתנה ליום הולדת,,,gifts/birthdays,maya/bit
+d626ea645afb771c,2024-12-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+d64c5752242bd878,2023-06-09,-168.830000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+d6862b88a482db36,2023-12-28,126.500000,Interest,,,savings/interest,savings/savings
+d68ae337b7257274,2025-02-14,-9.900000,CLOUDSAFE 200GB,,,subscriptions/cloud,maya/card
+d69faa83857dc341,2023-08-08,-35.720000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+d6a69949d47d25ca,2024-05-10,9755.390000,Transfer checking-card,,,transfer/card,eitan/card
+d6e6d9cea6754661,2025-05-25,-329.910000,מי נווה ארזים,,,utilities/water,eitan/checking
+d70ec361801e8927,2024-01-14,-36.870000,קפה נחת,,,food/coffee,maya/card
+d73dcedba2729ca9,2025-02-13,200.000000,Transfer card-bit,,,transfer/bit,maya/bit
+d7595e58720e2670,2025-05-23,-166.860000,בגדי אורן,,,shopping/clothes,eitan/card
+d7b23dce9b3e1207,2025-01-28,-23.570000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+d7b6a336b3795dae,2025-04-23,-95.960000,פיצה נאפולי שלנו,,,food/dining out,maya/card
+d7e7f7881e5791d3,2024-12-03,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+d7ec5230cc72c328,2024-11-08,-46.070000,Market stall vegetables,,,food/groceries,cash/wallet
+d80563a77faf8138,2024-12-18,-143.460000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+d8229e110345be0c,2024-02-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+d88a31310c003b44,2023-08-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+d8bc6a6b3ca8f89e,2024-01-24,-200.000000,Transfer card-bit,,,transfer/bit,maya/card
+d8c4c32f89b429c4,2024-10-23,-89.600000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+d8e588bd2854937b,2024-08-18,-56.520000,פירות וירקות האחים,,,food/groceries,maya/card
+d8f0e2a7b6caee07,2024-07-10,-260.000000,OCEANARIO LISBOA,,Yuval's favourite day,vacation/activities,eitan/card
+d907cc4d19e50dc7,2024-02-09,-14.430000,LA PAUSE COFFEE,,,food/coffee,maya/card
+d92f3bd688aa0c12,2023-08-10,5022.900000,Transfer checking-card,,,transfer/card,eitan/card
+d98deb55dfab70c2,2024-08-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+d9b0b7e7095c6251,2024-05-28,-88.810000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+d9ca13845f1234a7,2025-01-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+da078fc0a8ee1aaf,2024-06-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+da4b142127b9c5be,2025-05-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+da5f04ebff633870,2023-12-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+da952a47cc790ccb,2024-11-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+dab69cc57085aa79,2024-03-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+dab8d8826bfb6d2d,2025-03-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+dac94decde5b2915,2024-02-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+dace97fffc318b75,2024-05-03,-127.950000,BURGERS & CO TLV,,,food/dining out,eitan/card
+daf511d85337b3bc,2025-05-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+db04ed92df9f448d,2024-08-26,-61.630000,פירות וירקות האחים,,,food/groceries,maya/card
+db1b62d0b2278eee,2025-03-20,-205.730000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+db270a4f74cd5da9,2023-07-26,-60.310000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+db59463da5fed8f0,2024-01-03,-151.280000,FASHION OUTLET 22,,End of season sale,shopping/clothes,maya/card
+db648dbe60270da0,2024-10-28,-512.890000,סופר גפן סניף 17,,,food/groceries,eitan/card
+db67f683dc837fcc,2023-12-26,-71.020000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+db8222be2585335a,2023-12-01,-112.090000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+dbb45b64045c7f39,2023-07-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+dc846ded034d54b6,2025-03-11,-45.220000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+dc924bc731613477,2023-09-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+dcaa6eace5209a17,2025-02-22,120.000000,שירה גל: על המסעדה,,Paid back their share of dinner,food/dining out,maya/bit
+dcbb936cdbd489ba,2024-12-09,-19.120000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+dcc3aaf03554c22e,2024-09-22,-33.920000,LA PAUSE COFFEE,,,food/coffee,maya/card
+dccaec41fb9a37bf,2024-06-06,-200.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+dccd361585c4e497,2024-06-18,-192.500000,פירות וירקות האחים,,,food/groceries,maya/card
+dce62ba18fd40644,2024-07-25,-331.520000,מי נווה ארזים,,,utilities/water,eitan/checking
+dd137098783b1457,2024-01-10,-1394.470000,Transfer checking-card,,,transfer/card,maya/checking
+dd26352e12771051,2024-09-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+dd50b5bff088947d,2025-04-19,-180.400000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+dd53b0906b17c4d1,2024-10-11,-17.200000,PARKO* חניה,,,car/parking,maya/card
+dd58cc727934754f,2023-07-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+dd880be1903df76a,2024-06-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+dd9b569efdaafdfc,2024-12-02,-288.670000,סושי-לי רמת השרון,,"Work lunch, not reimbursed",food/dining out,maya/card
+dde768a5bcd6f392,2024-01-01,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+de26dec185853214,2023-09-28,117.700000,Interest,,,savings/interest,savings/savings
+de56958d2cfb2b5c,2024-01-24,200.000000,Transfer card-bit,,,transfer/bit,maya/bit
+de5e330374b032c8,2024-04-17,-3420.000000,מוסך האחים גבאי,,"Gearbox, again
+The mechanic says it's not worth fixing next time",car/service,eitan/card
+de6097d76c60e87a,2025-01-04,-60.000000,רוני אלמוג: ארוחה אצל דנה,,,food/dining out,maya/bit
+de694d2c50791006,2023-08-15,-559.390000,סופר גפן - הדר,,,food/groceries,eitan/card
+debc51dd27224a6a,2023-12-08,-14.360000,קפה נחת,,,food/coffee,maya/card
+dede9afd9b1f4068,2024-05-09,-93.840000,SHOPGLOBE.COM,,Phone case,shopping/online,maya/card
+dee7e05f836894eb,2024-08-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+defd3b0de139ca49,2023-07-11,-28.750000,LA PAUSE COFFEE,,,food/coffee,maya/card
+df1f02c3b16bebec,2024-06-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+df5dee43f645361b,2024-02-06,-97.330000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+df617ffc41915b2b,2023-11-06,-382.770000,FASHION OUTLET 22,,Dress for the wedding,shopping/clothes,maya/card
+df9fa2ff92a3b725,2024-06-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+dfe7c3ec59e41e9e,2023-09-02,-552.830000,סופר גפן - הדר,,,food/groceries,eitan/card
+e01bed9cac189c27,2024-04-28,-94.260000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+e04864bd2a90cdef,2025-06-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+e082612c0aa1aef7,2023-10-08,-331.060000,בגדי אורן,,,shopping/clothes,eitan/card
+e0acbb8d43c5dcff,2025-05-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+e0d990d6424f668a,2025-05-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+e0dfccf41142c05b,2024-09-18,40000.000000,זיכוי מפיקדון חיסכון,,,transfer/savings,eitan/checking
+e102a8b7c0462da4,2024-05-12,-227.660000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+e136908c2a8ce17b,2024-01-25,-599.170000,סופר גפן - הדר,,,food/groceries,eitan/card
+e1466b3c86072c72,2025-02-12,-43.010000,Bakery on the corner,,,food/groceries,cash/wallet
+e1846f60550ddb9e,2024-03-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+e19151eb80154f7a,2023-10-01,-190.750000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+e196587663782df2,2024-08-10,-3000.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+e1b01ec937189929,2023-09-14,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+e1bec3f7ac2840a2,2024-09-28,-139.170000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+e1c53b761b55a5ec,2023-06-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+e1d8d525a01fb029,2024-07-08,-231.630000,PASTELARIA ESTRELA,,,vacation/food,eitan/card
+e2056dadedad2520,2024-11-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+e26c9f2e6542f1a2,2023-10-04,-87.590000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+e28205a3d40c23f0,2023-11-22,-119.880000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+e2901db1a330812a,2025-04-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+e29d6842fa20194d,2024-07-15,200.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+e2b92a96b15f5a33,2025-05-02,60.000000,שירה גל: על הפיצה,,Paid back their share of dinner,food/dining out,maya/bit
+e2e64a05fc288544,2025-01-15,1720.000000,החזר הלוואה 0548217,,,transfer/loan,loan/car
+e2eba3279dd65736,2024-05-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+e2fc2f9739cca064,2023-06-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+e3004e3765b240df,2023-12-10,12676.910000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+e30679a6c760b1f3,2025-01-11,-128.700000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+e318455745f289f7,2024-03-23,120.000000,שירה גל: על המסעדה,,Paid back their share of dinner,food/dining out,maya/bit
+e34a6aac7de314d7,2025-02-03,-666.150000,סופר גפן סניף 17,,Shabbat dinner for 10,food/groceries,eitan/card
+e34a837bdca6aafb,2023-10-10,5107.400000,Transfer checking-card,,,transfer/card,eitan/card
+e36111ecba26d76e,2025-01-20,-1920.000000,ATHENS PLAKA SUITES,,"Three nights
+Grandma Rina had Yuval and Pita",vacation/lodging,maya/card
+e36e0b73b6a519ba,2024-10-15,-1720.000000,החזר הלוואה 0548217,,,transfer/loan,eitan/checking
+e373c32ad35a08ce,2024-04-16,-1148.000000,משרד התחבורה אגרת רישוי,,,car/license,eitan/card
+e3a5109c7ee0b1d5,2023-07-10,-2010.190000,Transfer checking-card,,,transfer/card,maya/checking
+e3c1f978751eda69,2025-01-20,-268.070000,TAVERNA TO STEKI,,,vacation/food,eitan/card
+e3ce28a77c19f0ba,2023-12-10,2837.630000,Transfer checking-card,,,transfer/card,maya/card
+e3dd6cf07a281f8a,2025-02-12,-169.790000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+e3ecee5c32f7e825,2024-08-10,11118.420000,Transfer checking-card,,,transfer/card,maya/card
+e46f6158b1ea0c91,2024-01-12,-13.790000,PARKO* חניה,,Visiting Grandpa at the hospital,car/parking,maya/card
+e4931a5fdd533e3c,2025-06-14,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+e4eeca77877e6024,2025-04-16,-16.160000,LA PAUSE COFFEE,,,food/coffee,maya/card
+e4f5b00b85cdc788,2024-07-05,-9.320000,PARKO* חניה,,,car/parking,maya/card
+e52f6b279c12f05d,2025-04-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+e542ff199e1abd73,2024-06-18,-148.550000,פארמה פלוס 33,,,health/pharmacy,maya/card
+e551a5ad82722b13,2023-08-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+e62b845f6fab5ba1,2024-01-21,-42.430000,קפה נחת,,,food/coffee,maya/card
+e639ac0b617d29d7,2023-06-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+e6578b0172eced2c,2025-06-03,-127.680000,פארמה פלוס 33,,Allergy pills,health/pharmacy,maya/card
+e65f6f13bf5175d6,2023-10-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+e674249f89cab820,2024-07-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+e67a2b205c7027e7,2024-06-01,-61.430000,SHOPGLOBE.COM,,Yoga mat,shopping/online,maya/card
+e67c5fed7f6dd0bd,2024-09-10,-677.700000,סופר גפן סניף 17,,Hosting Eitan's parents,food/groceries,eitan/card
+e69958b8a6d7625d,2024-06-14,-113.220000,BURGERS & CO TLV,,,food/dining out,eitan/card
+e6b45007446e7583,2024-05-21,-324.320000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+e6f5db97fbffaf74,2024-01-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+e716f3b6404835f6,2024-11-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+e721e45bb43edc89,2024-11-13,-183.130000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+e7336ed21cdb7101,2023-10-07,-283.070000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+e765fe96505e9a23,2024-01-13,-71.730000,Market stall vegetables,,,food/groceries,cash/wallet
+e7934d5ff1e882bb,2024-10-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+e79695451481fe80,2024-07-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+e7a5c04c4b084149,2024-10-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+e7b98634868ab045,2023-09-05,-80.720000,פירות וירקות האחים,,,food/groceries,maya/card
+e7cccf798d1bdd79,2024-01-25,-129.560000,SHOPGLOBE.COM,,Bike lights,shopping/online,maya/card
+e7fe7a60ddde280d,2024-04-13,-24.350000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+e8062a312f3bd97c,2024-04-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+e8086ebc0fd89264,2024-10-24,700.000000,Transfer card-bit,,,transfer/bit,maya/bit
+e82368183205009d,2025-03-28,-12.900000,דמי ניהול חשבון,,,fees/bank,eitan/checking
+e84f8bf3f2cf9f0a,2023-08-18,-29.120000,LA PAUSE COFFEE,,,food/coffee,maya/card
+e85bdfb357dd30d0,2025-03-04,-28.010000,LA PAUSE COFFEE,,,food/coffee,maya/card
+e869175080a4535a,2023-06-28,-70.000000,Haircut (Eitan),,,health/grooming,cash/wallet
+e86e32f3aa8941fc,2024-09-10,4988.270000,Transfer checking-card,,,transfer/card,eitan/card
+e87a8cb482639f9d,2024-11-22,-247.400000,KIDZONE KIDS,,Rain boots,kids/clothes,maya/card
+e87fc1b5f5c802a6,2024-09-09,-360.000000,Transfer card-bit,,,transfer/bit,maya/card
+e8a65c648691f177,2024-08-16,-267.850000,סושי-לי רמת השרון,,With Dana and Roni,food/dining out,maya/card
+e8b4c8a111ed8cb8,2023-09-02,-219.000000,כושר פלוס - מנוי חודשי,,"The gym's summer promo month
+counts as fun, not health",health/fitness,eitan/card
+e8cc4eeaeb248337,2023-06-19,-56.500000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+e8e672f7344bffd7,2023-08-08,-129.100000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+e9171fed55081a16,2024-07-03,-800.000000,Transfer card-bit,,,transfer/bit,maya/card
+e93b4608eabc4732,2025-03-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+e948d305e0e582a7,2024-04-19,-324.910000,FASHION OUTLET 22,,End of season sale,shopping/clothes,eitan/card
+e98e592e8e3d5854,2023-12-27,-285.630000,FUELPOINT 117,,,car/fuel,eitan/card
+e9909aa5b2edbed7,2025-03-28,113.850000,Interest,,,savings/interest,savings/savings
+e9985d088fdd2a67,2024-05-02,-219.000000,כושר פלוס - מנוי חודשי,,,health/fitness,eitan/card
+e9cc0ada66e91008,2025-06-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+e9e1d974846113d5,2023-07-25,-16.820000,LA PAUSE COFFEE,,,food/coffee,maya/card
+ea0a96089cbd56cb,2023-08-15,-981.970000,מוסך האחים גבאי,,Periodic service,car/service,eitan/card
+ea177512c4eb77ac,2024-12-23,-47.700000,Bakery on the corner,,,food/groceries,cash/wallet
+ea4377f8027923e5,2024-03-19,-535.360000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+ea4b762e42ca5aac,2023-06-08,-495.500000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+ea65f1207962bbd5,2024-10-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+eaa1e5f9da866a73,2025-05-09,15210.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+eaab7d157036665b,2023-07-13,-274.350000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+eae46c42a13b1e3e,2023-10-08,-110.120000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+eaedb229ee4d2876,2025-04-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+eaf2d6102bdaf700,2025-05-28,120.000000,Transfer card-bit,,,transfer/bit,maya/bit
+eaf90e0eeb354c2b,2023-09-10,2500.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+eb09ad180dcbba52,2023-12-21,-240.000000,Babysitter (Noa),,,kids/babysitting,cash/wallet
+eb110ec8d04438ac,2023-07-02,-599.030000,סופר גפן סניף 17,,,food/groceries,eitan/card
+eb1ed7d134afb155,2025-03-25,-108.400000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+eb543e15ed900dc0,2024-03-21,-23.650000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+eb972924e6caa26f,2024-04-10,-4482.190000,Transfer checking-card,,,transfer/card,eitan/checking
+eba9329f45cb9897,2024-10-25,-199.430000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+ebd9d2949862a143,2024-12-28,-506.210000,סופר גפן - הדר,,Shabbat dinner for 10,food/groceries,eitan/card
+ec04f4737125cd29,2025-03-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+ec66c224a09ef2bf,2024-01-10,-6779.350000,Transfer checking-card,,,transfer/card,eitan/checking
+ec7a8c4c45157450,2025-05-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+ec93a479a94f8b3b,2024-03-10,-6242.140000,Transfer checking-card,,,transfer/card,eitan/checking
+ecef078e953d2b7b,2025-01-22,-329.950000,TAVERNA TO STEKI,,,vacation/food,eitan/card
+ecf04f0d482fb03e,2024-01-03,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+ed39a8698e701236,2024-08-27,560.000000,Transfer bit-checking,,,transfer/bit,maya/checking
+ed4a86cbd3ea4461,2023-10-23,-21.190000,קפה נחת,,,food/coffee,maya/card
+ee121a65b373fe2f,2024-10-10,-887.270000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+ee316f7645610e0c,2025-03-11,-180.500000,מסעדת הגפן הירוקה,,,food/dining out,maya/card
+ee4fabe7dd4b9922,2023-07-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+ee5b8cfa44cfbc96,2023-09-10,-6382.190000,Transfer checking-card,,,transfer/card,eitan/checking
+ee6cd10088f30ec9,2024-05-08,-180.000000,ג'ימבורי כיף - חוג,,,kids/activities,maya/card
+ee92b5d54b2c5be5,2024-07-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+ee98f9b9b785a878,2025-04-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+eef8fa33b2c23176,2024-12-05,-3407.040000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+ef002c3d0ab4ce44,2024-08-02,-864.060000,מוסך האחים גבאי,,Periodic service,car/service,eitan/card
+ef1adad77a0bdead,2025-02-14,-238.060000,חיות ועוד - סניף 3,,Pita's food,pets/food,eitan/card
+ef334cd8775249b3,2024-04-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+ef8bce89feb18fea,2023-09-11,-91.900000,FOODRUSH*THAI BOX,,,food/delivery,eitan/card
+ef8c714640cdcc04,2024-03-28,85.000000,Transfer card-bit,,,transfer/bit,maya/bit
+efcc1700268df81f,2024-08-20,173.000000,ביטוח לאומי - קצבת ילדים,,,income/child allowance,maya/checking
+efec91e47d5b0f53,2025-02-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+efff8cd0cbdc01aa,2024-09-04,38000.000000,זיכוי - דוד שמעוני,,Sold the old car to a neighbour's son,income/car sale,eitan/checking
+f016c41b1c729d2f,2024-03-11,250.000000,Transfer card-bit,,,transfer/bit,maya/bit
+f02267da9a53cd04,2024-10-22,-19.710000,קפה נחת,,,food/coffee,maya/card
+f047c23ce6b48b50,2025-05-27,750.000000,Transfer bit-checking,,,transfer/bit,maya/checking
+f06b64d8fadbefb9,2023-11-15,-108.340000,מסעדת הגפן הירוקה,,,food/dining out,maya/card
+f086bc24e791b1e5,2024-09-03,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+f098c79c680cf260,2023-06-15,-101.300000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+f09ce210129c842a,2024-10-13,-328.680000,מסעדת הגפן הירוקה,,With Dana and Roni,food/dining out,maya/card
+f0a158ecaabfd7cc,2024-07-01,-6650.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+f0a5053f261fbab5,2024-06-10,12343.500000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+f0a91df7e39f219c,2023-07-05,-96.000000,קולנוע הכוכב,,,leisure/culture,maya/card
+f0ae936f37048299,2024-01-09,13960.000000,"משכורת - אורבית תוכנה בע""מ",,,income/salary,maya/checking
+f0c9891e335fc8ec,2024-09-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+f1363202ee3423bb,2025-02-05,-186.000000,מגן ביטוח בריאות,,,health/insurance,eitan/checking
+f147959fc812c85b,2025-03-21,-243.710000,KIDZONE KIDS,,,kids/clothes,maya/card
+f14fe5aff9436b17,2024-05-03,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+f150e8fc33712369,2023-11-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+f17e672751b106de,2023-12-07,-193.980000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+f18008623196e344,2023-12-03,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+f1b56d2c5378c0ec,2024-10-06,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+f1b9f8303e810b59,2024-04-03,-8.800000,PARKO* חניה,,,car/parking,maya/card
+f1c2bf993539f6df,2023-07-18,-212.980000,חומוס אליהו ובניו,,,food/dining out,eitan/card
+f1d45aad5cd49ec9,2025-06-11,-471.000000,סופר גפן אונליין,,,,eitan/card
+f1e073ae65092641,2023-11-10,-4772.800000,Transfer checking-card,,,transfer/card,eitan/checking
+f2817e17a1b3b854,2023-06-06,-280.670000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+f2ae726fd8a2d406,2025-05-03,-222.800000,דלקן 24 - צומת השרון,,,car/fuel,eitan/card
+f2e3ac6a9e18547d,2024-04-10,4482.190000,Transfer checking-card,,,transfer/card,eitan/card
+f2e9ab0cc7d83ffe,2024-12-22,-225.520000,פיצה נאפולי שלנו,,,food/dining out,eitan/card
+f2f5ba818f5f4d7f,2024-12-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+f3343915ec16352c,2024-12-14,-504.290000,סופר גפן - הדר,,,food/groceries,eitan/card
+f35e1186edcd7682,2024-10-24,-700.000000,Transfer card-bit,,,transfer/bit,maya/card
+f36e8eee53bfe79a,2024-09-02,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+f3aa3fc33aa1eb01,2024-03-11,-250.000000,Transfer card-bit,,,transfer/bit,maya/card
+f3b73867782568f2,2024-02-06,-508.410000,סופר גפן סניף 17,,,food/groceries,eitan/card
+f3e195db69cdd60a,2023-07-10,-4588.010000,Transfer checking-card,,,transfer/card,eitan/checking
+f3e7d0f68660f5e4,2025-05-16,-250.000000,עופר לוי: מתנה ליום הולדת,,Daycare friend's birthday party,gifts/birthdays,maya/bit
+f3ee66a9df7cc59d,2024-06-12,-21.900000,SONGWAVE PREMIUM,,,subscriptions/streaming,maya/card
+f3f10714c6655aa9,2024-06-04,-100.000000,Transfer card-bit,,,transfer/bit,maya/card
+f4186c0a51bf1bd0,2025-03-10,-21.070000,PARKO* חניה,,,car/parking,maya/card
+f4346e0eecd45aa9,2024-01-27,-23.700000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+f4672a47ef8454fe,2024-04-04,-39.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+f492fb6a891f296d,2024-08-10,11738.140000,גלבוע הנדסה - משכורת,,,income/salary,eitan/checking
+f4c555d913d523c8,2023-08-12,-10.730000,PARKO* חניה,,,car/parking,maya/card
+f4d11cd48440ce59,2024-04-06,400.000000,Transfer checking-cash,,,transfer/cash,cash/wallet
+f4e618bc83d3d81b,2023-09-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+f5147966442f0506,2025-02-25,-45.310000,"קפה תמרה בע""מ",,,food/coffee,maya/card
+f52b99b9fb2b941b,2024-09-23,-250.000000,דנה כץ: מתנה מכולנו,,"Roni's 40th, the group gift",gifts/birthdays,maya/bit
+f53e8d78d4f16bcd,2024-03-15,-500.000000,Transfer bit-checking,,,transfer/bit,maya/bit
+f57d0d382671d233,2025-02-22,-81.160000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+f610638c96527f80,2024-03-15,-1184.000000,עיריית נווה ארזים - ארנונה,,,housing/municipal tax,eitan/checking
+f62906a68937b969,2025-02-19,-172.040000,בגדי אורן,,,shopping/clothes,maya/card
+f6335c425430f340,2024-02-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+f65d967375d7eac3,2024-10-04,-44.900000,STREAMBOX* MONTHLY,,,subscriptions/streaming,maya/card
+f66b1b4c3019484a,2024-05-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+f6779d39f9c72cd5,2023-10-03,-124.460000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+f67a5f936c24c92e,2023-10-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,maya/card
+f69e421e8de978b1,2024-08-10,3000.000000,הפקדה לחיסכון,,,savings/deposit,savings/savings
+f6bf0a739fcc284e,2025-04-04,-681.390000,סופר גפן כפר יונה,,,food/groceries,eitan/card
+f6cd0840efc63511,2024-05-10,-9755.390000,Transfer checking-card,,,transfer/card,eitan/checking
+f6d47703fe3c22d6,2024-03-10,1675.080000,Transfer checking-card,,,transfer/card,maya/card
+f6d8f3e18ba0024c,2024-06-10,-1965.020000,Transfer checking-card,,,transfer/card,maya/checking
+f709cbdb4f5ba7d0,2024-08-28,-161.300000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card
+f734980fca7ca10c,2024-11-25,-129.510000,FOODRUSH*SUSHI LI,,,food/delivery,eitan/card
+f740698ba37eca31,2024-09-20,-60000.000000,"Dealer loan, 35 payments, no interest",,,transfer/loan,loan/car
+f745f8ebaab1330c,2024-02-04,-150.000000,Transfer card-bit,,,transfer/bit,maya/card
+f77b93b092165658,2025-03-20,-15.250000,LA PAUSE COFFEE,,,food/coffee,maya/card
+f8488ae2a9900247,2023-09-22,-89.680000,Bakery on the corner,,,food/groceries,cash/wallet
+f84b6a67162531b7,2024-08-11,-4200.000000,העברה - מאיה רוזן,,,transfer/household,eitan/checking
+f8acdea159d3d875,2025-03-25,-238.810000,מי נווה ארזים,,,utilities/water,eitan/checking
+f8dc98e4746435b5,2024-07-01,-440.820000,"וטרינר ד""ר אורן שחר",,Ate something in the park,pets/vet,maya/card
+f909dc912042db4d,2023-10-01,-400.000000,Transfer checking-cash,,,transfer/cash,maya/checking
+f916436f840a83e1,2025-03-06,-76.380000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+f9232f40370e318f,2024-02-26,-133.060000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+f978ff5c6a9a985a,2023-10-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+f9a4e8bcf707c09c,2025-04-21,-415.150000,בית ונוי - נתניה,,Bedding,home/household,maya/card
+f9ec28b3e7ef2ce0,2024-01-27,-26.730000,LA PAUSE COFFEE,,,food/coffee,maya/card
+f9ed9a4787f64dd5,2025-02-03,-196.910000,בית ונוי - נתניה,,Bedding,home/household,maya/card
+f9edda81c877f36b,2024-07-09,-134.010000,PASTELARIA ESTRELA,,,vacation/food,eitan/card
+f9f5bcc817ec08f7,2024-06-16,450.000000,אורית מ.: עגלה,,Sold Yuval's old stroller,income/second-hand,maya/bit
+fa0a23e2d4fbf9ad,2024-07-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+fa602699d62f9ba5,2025-05-24,-44.590000,קפה נחת,,,food/coffee,maya/card
+fa9551e321051b92,2023-07-08,-138.030000,FOODRUSH*HUMMUS ELIYA,,,food/delivery,eitan/card
+fabe38b8967d2bb0,2024-07-13,-183.470000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+fac97c7cb23db2f7,2024-03-10,-311.800000,דלקן 24 - כביש 4,,,car/fuel,eitan/card
+fafa26ef761d5edd,2024-12-19,100.000000,Transfer card-bit,,,transfer/bit,maya/bit
+fbbb219bfb933b0e,2023-07-26,-192.790000,פירות וירקות האחים,,,food/groceries,maya/card
+fc126700d2c4e2c2,2025-04-11,-10.750000,PARKO* חניה,,,car/parking,maya/card
+fc5ef45bd0278f60,2023-07-23,-638.670000,סופר גפן אונליין,,,food/groceries,eitan/card
+fc772f6f68921ad3,2024-08-17,-82.110000,Bakery on the corner,,,food/groceries,cash/wallet
+fc8fefe9441daf40,2025-05-04,-462.710000,סופר גפן סניף 17,,,food/groceries,eitan/card
+fc906288609033bb,2025-03-07,-606.940000,סופר גפן - הדר,,Stocking up before the holiday,food/groceries,eitan/card
+fc941b32856792f5,2025-01-16,-42.410000,קפה נחת,,,food/coffee,maya/card
+fcc4378d5803d16d,2024-01-11,4200.000000,זיכוי - איתן רוזן,,,transfer/household,maya/checking
+fcc9868a7b1745f9,2023-06-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+fd2ffc43982e19db,2023-09-15,-157.540000,פירות וירקות האחים,,,food/groceries,maya/card
+fd34eb3ae2454867,2024-02-21,-62.190000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+fd45781bfa6c1ff0,2024-09-10,-4988.270000,Transfer checking-card,,,transfer/card,eitan/checking
+fd4ba98a6f069150,2024-12-05,-117.160000,מסעדת הגפן הירוקה,,,food/dining out,maya/card
+fd6f71a79cb4394c,2023-11-03,-99.900000,סיבנט אינטרנט,,,utilities/internet,eitan/card
+fd7419930b1869da,2025-03-03,-250.000000,שלומי ועד הבית: ועד בית,,,housing/building committee,maya/bit
+fdc0b0cf8c70ac45,2024-11-10,4682.700000,Transfer checking-card,,,transfer/card,eitan/card
+fdc16698c0f8f546,2024-04-05,-3276.000000,גן הדובונים - שכר לימוד,,,kids/daycare,maya/checking
+fe0cb443ad2e02f4,2023-10-10,-1690.580000,Transfer checking-card,,,transfer/card,maya/checking
+fe6b806dce3f1a93,2024-01-01,-167.120000,FRESHWAY MARKET 12,,,food/groceries,maya/card
+fe705b2eb7ee846f,2023-12-28,-12.900000,דמי ניהול חשבון,,,fees/bank,maya/checking
+fe8a867544dea6a8,2024-08-16,-457.900000,סופר גפן - הדר,,,food/groceries,eitan/card
+fe9e9269204484c0,2023-06-06,-59.000000,"גל סלולר בע""מ",,,utilities/mobile,eitan/card
+feb8f955da55477c,2025-06-11,-262.060000,חיות ועוד - סניף 3,,,,eitan/card
+fed86fea97aee182,2024-04-10,-144.640000,FRESHWAY EXPRESS 041,,,food/groceries,maya/card
+fef2f0984207a9c4,2023-07-01,-6400.000000,"שכ""ד - יעקב גולן",,,housing/rent,maya/checking
+ff13610eda1b8b8f,2023-10-10,-2500.000000,הפקדה לחיסכון,,,savings/deposit,maya/checking
+ff337f4cc23ce406,2024-08-27,-394.630000,BURGERS & CO TLV,,Lunch with Ofir,food/dining out,maya/card
+ff78e4a551eb2051,2023-10-09,-100.000000,BIT,,"Group gift, our share (Bit)",gifts/birthdays,maya/card
+ff9dc17587562a73,2024-11-07,-103.410000,FOODRUSH*PIZZA NAPOLI,,,food/delivery,eitan/card

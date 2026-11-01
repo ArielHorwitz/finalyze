@@ -1,0 +1,190 @@
+{
+  "about": "The web app's keyboard shortcuts: every action, by scope (where it is active), with its default keys. Read by the web app (web/src/lib/keymap.ts) and the server (finalyze/keymap.py), which both check clashes with it. An action has keys that can be changed (keys, or a direction: the key of one of the four directions, with shift: true to reorder), and fixed keys that can't. inInputs: also while typing in a field. navigation: a page, its key a letter after the go key. single: exactly one key. Contexts are scopes active together, where a key can't do two actions.",
+  "directions": {"left": "h", "down": "j", "up": "k", "right": "l"},
+  "shifted": {";": ":", ",": "<", ".": ">", "/": "?", "[": "{", "]": "}", "'": "\""},
+  "reserved": ["Enter", "Escape", "Tab", "Space", "Backspace", "Delete", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"],
+  "scopes": [
+    { "id": "global", "title": "Everywhere", "actions": [
+      {"id": "help.open", "description": "Show keyboard shortcuts", "keys": ["?"]},
+      {"id": "agent.show", "description": "Agent instructions: show the URL to copy", "keys": ["@"]},
+      {"id": "app.ingest", "description": "Ingest now, without the preview (on the Ingest page, with it)", "keys": ["I"]},
+      {"id": "app.leaveField", "description": "Leave the field, so the shortcuts work again", "fixed": ["Escape"], "inInputs": true}
+    ] },
+    { "id": "go", "title": "Pages, after the go key", "actions": [
+      {"id": "go.prefix", "description": "Go to a page: then the page's letter", "keys": ["g"], "single": true},
+      {"id": "go.dashboard", "description": "Go to Dashboard", "keys": ["d"], "navigation": true},
+      {"id": "go.transactions", "description": "Go to Transactions", "keys": ["t"], "navigation": true},
+      {"id": "go.ingest", "description": "Go to Ingest", "keys": ["i"], "navigation": true},
+      {"id": "go.annotate", "description": "Go to Annotate", "keys": ["a"], "navigation": true},
+      {"id": "go.orphans", "description": "Go to Orphans", "keys": ["o"], "navigation": true},
+      {"id": "go.tags", "description": "Go to Tags", "keys": ["g"], "navigation": true},
+      {"id": "go.rules", "description": "Go to Rules", "keys": ["r"], "navigation": true},
+      {"id": "go.accounts", "description": "Go to Accounts", "keys": ["c"], "navigation": true},
+      {"id": "go.settings", "description": "Go to Settings", "keys": ["s"], "navigation": true},
+      {"id": "go.glossary", "description": "Go to Glossary", "keys": ["l"], "navigation": true}
+    ] },
+    { "id": "list", "title": "Lists", "actions": [
+      {"id": "list.down", "description": "Next row", "fixed": ["ArrowDown"], "direction": "down"},
+      {"id": "list.up", "description": "Previous row", "fixed": ["ArrowUp"], "direction": "up"},
+      {"id": "list.first", "description": "First row", "fixed": ["Home"]},
+      {"id": "list.last", "description": "Last row", "fixed": ["End"]},
+      {"id": "list.pageDown", "description": "15 rows down", "fixed": ["PageDown"]},
+      {"id": "list.pageUp", "description": "15 rows up", "fixed": ["PageUp"]}
+    ] },
+    { "id": "selection", "title": "Selection", "actions": [
+      {"id": "select.toggle", "description": "Select the row", "keys": ["x"], "fixed": ["Space"]},
+      {"id": "select.all", "description": "Select all rows shown", "keys": ["Ctrl+a"]},
+      {"id": "select.clear", "description": "Clear the selection", "keys": ["Ctrl+Backspace"]}
+    ] },
+    { "id": "reorder", "title": "Reordering (Rules, Accounts)", "actions": [
+      {"id": "reorder.up", "description": "Move it up (earlier)", "fixed": ["Shift+ArrowUp"], "direction": "up", "shift": true},
+      {"id": "reorder.down", "description": "Move it down (later)", "fixed": ["Shift+ArrowDown"], "direction": "down", "shift": true}
+    ] },
+    { "id": "dialog", "title": "Dialogs", "actions": [
+      {"id": "dialog.close", "description": "Close", "fixed": ["Escape"], "inInputs": true},
+      {"id": "dialog.confirm", "description": "Confirm or save", "fixed": ["Enter"]},
+      {"id": "dialog.commit", "description": "Save, merge or apply (dialogs with several fields)", "keys": ["Ctrl+Enter"], "inInputs": true}
+    ] },
+    { "id": "annotate", "title": "Annotate", "actions": [
+      {"id": "annotate.acceptAll", "description": "Accept every guess shown", "keys": ["A"]},
+      {"id": "annotate.batch", "description": "Batch edit the selected rows' tags, kind, description or review", "keys": ["b"]},
+      {"id": "annotate.queue", "description": "Switch the queue: untagged, needs review, custom", "keys": ["m"]}
+    ] },
+    { "id": "transactions", "title": "Transactions", "actions": [
+      {"id": "transactions.batch", "description": "Batch apply tags, kind, description or review to the selected rows (or, explicitly, all matching)", "keys": ["b"]},
+      {"id": "transactions.nextPage", "description": "Next page", "keys": ["]"]},
+      {"id": "transactions.previousPage", "description": "Previous page", "keys": ["["]},
+      {"id": "transactions.reverse", "description": "Reverse the sort order", "keys": ["o"]}
+    ] },
+    { "id": "edits", "title": "Edits (Annotate, Transactions)", "actions": [
+      {"id": "edits.submit", "description": "Submit all edits", "keys": ["Ctrl+Enter"], "inInputs": true},
+      {"id": "edits.submitSelected", "description": "Submit the edits of the selected rows", "keys": ["Ctrl+Shift+Enter"], "inInputs": true}
+    ] },
+    { "id": "filters", "title": "Filters (Annotate, Transactions)", "actions": [
+      {"id": "filters.search", "description": "Search (filter the transactions)", "keys": ["/"]}
+    ] },
+    { "id": "table", "title": "Transaction rows (Annotate, Transactions)", "actions": [
+      {"id": "table.edit", "description": "Edit the row, from its description (Tab and Shift+Tab move between fields as their columns go; in a description, Enter is done and Shift+Enter adds a line; in a tag, Enter picks a suggestion and goes on to the kind)", "keys": ["i"], "fixed": ["Enter"]},
+      {"id": "table.leave", "description": "Leave the input", "fixed": ["Escape"], "inInputs": true},
+      {"id": "table.accept", "description": "Accept the guess (of the selected rows, or this one)", "keys": ["a"]},
+      {"id": "table.review", "description": "Toggle needs-review", "keys": ["r"]},
+      {"id": "table.split", "description": "Split: add a part", "keys": ["s"]},
+      {"id": "table.oneOff", "description": "One-off: set the row (or selected rows) as a one-off, or back to the tag's kind", "keys": ["O"]},
+      {"id": "table.selectDown", "description": "Select the row and move down", "keys": ["X"]},
+      {"id": "table.undo", "description": "Undo the edits of the row (or selected rows)", "keys": ["u"]},
+      {"id": "table.clear", "description": "Empty the tags and descriptions (deletes the annotation on submit)", "fixed": ["Delete"]}
+    ] },
+    { "id": "amount", "title": "A part's amount (in a split)", "actions": [
+      {"id": "amount.fill", "description": "Fill the rest of the transaction's amount", "keys": ["="], "inInputs": true}
+    ] },
+    { "id": "dashboard", "title": "Dashboard", "actions": [
+      {"id": "dashboard.view.overview", "description": "View: Overview", "keys": ["o"]},
+      {"id": "dashboard.view.balance", "description": "View: Balance", "keys": ["b"]},
+      {"id": "dashboard.view.flow", "description": "View: Cash flow", "keys": ["c"]},
+      {"id": "dashboard.view.breakdown", "description": "View: Breakdown", "keys": ["k"]},
+      {"id": "dashboard.view.trends", "description": "View: Trends", "keys": ["t"]},
+      {"id": "dashboard.view.monthly", "description": "View: Monthly", "keys": ["m"]},
+      {"id": "dashboard.view.ledger", "description": "View: Ledger", "keys": ["s"]},
+      {"id": "dashboard.nextView", "description": "Next view", "keys": ["]"]},
+      {"id": "dashboard.previousView", "description": "Previous view", "keys": ["["]},
+      {"id": "dashboard.nextPeriod", "description": "Next period preset (3M, 6M, 12M, 24M, YTD, all)", "keys": ["p"]},
+      {"id": "dashboard.previousPeriod", "description": "Previous period preset", "keys": ["P"]},
+      {"id": "dashboard.periodBack", "description": "Move the period back by its length", "keys": [","]},
+      {"id": "dashboard.periodForward", "description": "Move the period forward", "keys": ["."]},
+      {"id": "dashboard.kind", "description": "Switch between expenses and incomes", "keys": ["i"]},
+      {"id": "dashboard.nextRolling", "description": "Next rolling window", "keys": ["w"]},
+      {"id": "dashboard.previousRolling", "description": "Previous rolling window", "keys": ["W"]},
+      {"id": "dashboard.groups", "description": "Every group in cash flows and breakdowns, or the spending groups", "keys": ["e"]},
+      {"id": "dashboard.oneOffs", "description": "Include one-offs in averages and trends", "keys": ["O"]},
+      {"id": "dashboard.netByTag", "description": "Net incomes and expenses by tag", "keys": ["n"]},
+      {"id": "dashboard.reload", "description": "Reload", "keys": ["R"]}
+    ] },
+    { "id": "breakdown", "title": "Dashboard: Breakdown", "actions": [
+      {"id": "breakdown.mode", "description": "Breakdown: switch between total, rolling and month", "keys": ["v"]},
+      {"id": "breakdown.previousMonth", "description": "Breakdown: previous month", "fixed": ["ArrowLeft"], "direction": "left"},
+      {"id": "breakdown.nextMonth", "description": "Breakdown: next month", "fixed": ["ArrowRight"], "direction": "right"}
+    ] },
+    { "id": "trends", "title": "Dashboard: Trends", "actions": [
+      {"id": "trends.mode", "description": "Trends: switch between rolling means and monthly sums", "keys": ["v"]},
+      {"id": "trends.stacked", "description": "Trends: lines or stacked bars", "keys": ["x"]},
+      {"id": "trends.subtags", "description": "Trends: by tag or by subtag", "keys": ["u"]}
+    ] },
+    { "id": "monthly", "title": "Dashboard: Monthly", "actions": [
+      {"id": "monthly.more", "description": "Monthly: one more month", "keys": ["+", "="]},
+      {"id": "monthly.fewer", "description": "Monthly: one month less", "keys": ["-"]}
+    ] },
+    { "id": "ledger", "title": "Dashboard: Ledger", "actions": [
+      {"id": "ledger.search", "description": "Ledger: search", "keys": ["/"]}
+    ] },
+    { "id": "drill", "title": "Dashboard: the rows behind a number", "actions": [
+      {"id": "drill.open", "description": "Open the rows in Transactions, to annotate them", "keys": ["a"], "fixed": ["Enter"]}
+    ] },
+    { "id": "tags", "title": "Tags", "actions": [
+      {"id": "tags.edit", "description": "Edit color and kind", "keys": ["e"], "fixed": ["Enter"]},
+      {"id": "tags.kind", "description": "Next kind (regular, transfer, saving, one-off)", "keys": ["x"], "fixed": ["Space"]},
+      {"id": "tags.rename", "description": "Rename", "keys": ["n"]},
+      {"id": "tags.merge", "description": "Merge into another", "keys": ["m"]},
+      {"id": "tags.delete", "description": "Delete (only when unused)", "keys": ["d"], "fixed": ["Delete"]},
+      {"id": "tags.create", "description": "Create a tag or subtag", "keys": ["c"]}
+    ] },
+    { "id": "rules", "title": "Rules", "actions": [
+      {"id": "rules.edit", "description": "Edit the rule", "keys": ["e"], "fixed": ["Enter"]},
+      {"id": "rules.create", "description": "Create a rule", "keys": ["c"]},
+      {"id": "rules.delete", "description": "Delete the rule", "keys": ["d"], "fixed": ["Delete"]}
+    ] },
+    { "id": "accounts", "title": "Accounts", "actions": [
+      {"id": "accounts.cycle", "description": "Account: next group. Group: other role", "keys": ["x"], "fixed": ["Space"]},
+      {"id": "accounts.edit", "description": "Edit (group and color, or name, role and color)", "keys": ["e"], "fixed": ["Enter"]},
+      {"id": "accounts.create", "description": "Create a group", "keys": ["c"]},
+      {"id": "accounts.delete", "description": "Delete the group (only when empty)", "keys": ["d"], "fixed": ["Delete"]}
+    ] },
+    { "id": "orphans", "title": "Orphans", "actions": [
+      {"id": "orphans.delete", "description": "Delete the selected orphans (or this one)", "keys": ["d"], "fixed": ["Delete"]}
+    ] },
+    { "id": "ingest", "title": "Ingest", "actions": [
+      {"id": "ingest.run", "description": "Ingest the raw files", "keys": ["Ctrl+Enter"]},
+      {"id": "ingest.check", "description": "Check the raw files again", "keys": ["R"]},
+      {"id": "ingest.upload", "description": "Upload raw files", "keys": ["u"]}
+    ] },
+    { "id": "settings", "title": "Settings", "actions": [
+      {"id": "settings.netByTag", "description": "Default: net incomes and expenses by tag", "keys": ["n"]},
+      {"id": "settings.completeMonths", "description": "Default: monthly figures of complete months only", "keys": ["t"]},
+      {"id": "settings.nextWindow", "description": "Default: the next rolling average", "keys": ["w"]},
+      {"id": "settings.previousWindow", "description": "Default: the previous rolling average", "keys": ["W"]},
+      {"id": "settings.moreMonths", "description": "Default: one more month in the monthly view", "keys": ["+", "="]},
+      {"id": "settings.fewerMonths", "description": "Default: one month less", "keys": ["-"]},
+      {"id": "settings.editColor", "description": "Edit the label's color", "keys": ["e"], "fixed": ["Enter"]},
+      {"id": "settings.removeColor", "description": "Remove the label's color", "keys": ["d"]},
+      {"id": "settings.editConfig", "description": "Edit the config file", "keys": ["c"]},
+      {"id": "settings.saveConfig", "description": "Save the config file", "keys": ["Ctrl+Enter"], "inInputs": true},
+      {"id": "settings.discardConfig", "description": "Discard the changes to the config", "keys": ["u"]},
+      {"id": "settings.shortcuts", "description": "Edit the keyboard shortcuts", "keys": ["s"]}
+    ] },
+    { "id": "glossary", "title": "Glossary", "actions": [
+      {"id": "glossary.search", "description": "Glossary: search", "keys": ["/"]}
+    ] },
+    { "id": "agent", "title": "Agent API popover", "actions": [
+      {"id": "agent.copy", "description": "Copy the URL", "keys": ["c", "y"], "fixed": ["Enter"], "inInputs": true},
+      {"id": "agent.open", "description": "Open the instructions", "keys": ["o"], "inInputs": true}
+    ] }
+  ],
+  "contexts": [
+    {"name": "Annotate", "scopes": ["global", "go", "annotate", "edits", "filters", "table", "amount", "list", "selection"]},
+    {"name": "Transactions", "scopes": ["global", "go", "transactions", "edits", "filters", "table", "amount", "list", "selection"]},
+    {"name": "Dashboard", "scopes": ["global", "go", "dashboard"]},
+    {"name": "Dashboard: Breakdown", "scopes": ["global", "go", "dashboard", "breakdown"]},
+    {"name": "Dashboard: Trends", "scopes": ["global", "go", "dashboard", "trends"]},
+    {"name": "Dashboard: Monthly", "scopes": ["global", "go", "dashboard", "monthly"]},
+    {"name": "Dashboard: Ledger", "scopes": ["global", "go", "dashboard", "ledger"]},
+    {"name": "Dashboard: the rows behind a number", "scopes": ["drill", "dialog", "go"]},
+    {"name": "Tags", "scopes": ["global", "go", "tags", "list"]},
+    {"name": "Rules", "scopes": ["global", "go", "rules", "list", "reorder"]},
+    {"name": "Accounts", "scopes": ["global", "go", "accounts", "list", "reorder"]},
+    {"name": "Orphans", "scopes": ["global", "go", "orphans", "list", "selection"]},
+    {"name": "Ingest", "scopes": ["global", "go", "ingest"]},
+    {"name": "Settings", "scopes": ["global", "go", "settings", "list"]},
+    {"name": "Glossary", "scopes": ["global", "go", "glossary"]},
+    {"name": "Dialogs", "scopes": ["dialog", "go"]},
+    {"name": "Agent API popover", "scopes": ["agent", "dialog"]}
+  ]
+}

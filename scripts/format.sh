@@ -2,10 +2,10 @@
 set -e
 
 if [[ "$*" == *"--check"* ]]; then
-    ruff check --select I
-    ruff format --check
+    uv run ruff check --select I
+    uv run ruff format --check
 else
-    ruff check --select I --fix
-    ruff format
+    uv run ruff check --select I --fix
+    uv run ruff format
 fi
 

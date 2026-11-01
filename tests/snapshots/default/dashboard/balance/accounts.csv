@@ -1,0 +1,9 @@
+account,source,account_source,group,balance,change
+cash,wallet,cash/wallet,spending,5016.770000,5016.770000
+eitan,card,eitan/card,spending,-1451.210000,-1451.210000
+eitan,checking,eitan/checking,spending,33634.420000,33634.420000
+loan,car,loan/car,debt,-44520.000000,-44520.000000
+maya,bit,maya/bit,spending,0.000000,0.000000
+maya,card,maya/card,spending,-1656.040000,-1656.040000
+maya,checking,maya/checking,spending,76215.700000,76215.700000
+savings,savings,savings/savings,savings,82839.170000,82839.170000
